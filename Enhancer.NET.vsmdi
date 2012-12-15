@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestList name="Extension Methods" id="4c5e12d5-981d-4611-af47-10ce4f6a06a4" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <Description>Tests all the extension methods fuctionality.
+Included tests are fully functional.</Description>
+    <TestLinks>
+      <TestLink id="b2225e32-6ac8-84a3-e1e9-45cf51e1fd8a" name="FormatToStringTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="ab3dc743-1198-d547-a1ec-99e7dde072e7" name="ResizeToContentTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="108999bd-ea75-1672-6c40-f6109b6b2dd1" name="IsFalseTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="f0283e57-403a-5038-5606-055253cb7a81" name="ScaleTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="bd307314-6984-55d1-76b5-c6d8f6745300" name="AddManyTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="7ce87219-f041-b8a5-f00a-56927f637330" name="AddGenericTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="4f409f46-6d59-650c-51e2-bbf90b3c32b5" name="IsTrueTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="0d3330ed-05a9-383b-8f49-204175e4c616" name="LastSpecifierCharTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="718bbb2d-e08d-8f81-ecd3-737ecfd372ef" name="AddTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="f660b275-786c-9c70-f735-766f31bdfd84" name="FirstSpecifierCharTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="Lists of Tests" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <RunConfiguration id="ba272b12-ba90-45f8-af6f-d94ff03dfa8f" name="Local" storage="local.testsettings" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestList>
+  <TestList name="Window Forms" id="c7c5da83-f1a4-4ae0-966c-1a5bab697212" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <Description>Tests all the Window Forms class.</Description>
+    <TestLinks>
+      <TestLink id="ff28e696-5fd2-929d-96d8-497d17db9b63" name="InputDialogConstructorTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="938c5b34-0097-69d0-cabb-7f68b5a47680" name="CloseTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="48c7eacb-d081-8ff9-6561-bf85e9532d2c" name="CastArrayTest1" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="9cb26c16-a167-4833-6a15-e8e1fa7a86d8" name="ShowDialogTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="17e2a53a-cd8b-8a65-ccab-f2ad8dcf5563" name="ValuesTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="4294fceb-57b6-9957-8d21-c8c2ad855b8d" name="CastArrayTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="de92356e-67be-e51c-6820-166c5ac759df" name="fixHeightTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="729cdf2e-7ce4-0f29-efc3-c9f678a72639" name="PredicateTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="157f3d59-ef62-96f4-0d7b-102afedfb507" name="ShipoutTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="Structure Operators" id="e258559b-ed8c-47c0-bd0a-b8f0ccaf6560" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <Description>Tests Enhancer's structures operators.</Description>
+    <TestLinks>
+      <TestLink id="a931651d-f367-3232-e274-2ee255003af1" name="op_InequalityTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="b4db2f7d-d13b-2046-0da9-47fbbe8b1a2e" name="op_MultiplyTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="5c33edfd-58e3-080e-9b6e-42448b8e57e7" name="op_EqualityTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="System Calls" id="f65e7826-9e77-4880-bbfe-3aed3bb16da5" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <Description>Tests all the functions that are exceeds the boundaries of the .NET framework
+Included tests are fully functional.</Description>
+    <TestLinks>
+      <TestLink id="99916421-772f-9195-2fb0-3d943b5ca8ec" name="LoadDialogResultCaptionTest" storage="enhancertest\bin\debug\enhancertest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+</TestLists>

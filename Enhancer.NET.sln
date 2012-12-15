@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer", "Enhancer\Enhancer.csproj", "{19F16EBD-2B97-4098-886A-0D07DAF22969}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3D795EC9-F901-44EC-9462-C7FEF1FED9F6}"
+	ProjectSection(SolutionItems) = preProject
+		Enhancer.NET.vsmdi = Enhancer.NET.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhancerTest", "EnhancerTest\EnhancerTest.csproj", "{8D1957EB-153A-4B20-AEF7-7BD62B5CA6C3}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Enhancer.NET.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19F16EBD-2B97-4098-886A-0D07DAF22969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F16EBD-2B97-4098-886A-0D07DAF22969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F16EBD-2B97-4098-886A-0D07DAF22969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F16EBD-2B97-4098-886A-0D07DAF22969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1957EB-153A-4B20-AEF7-7BD62B5CA6C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1957EB-153A-4B20-AEF7-7BD62B5CA6C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1957EB-153A-4B20-AEF7-7BD62B5CA6C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1957EB-153A-4B20-AEF7-7BD62B5CA6C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
