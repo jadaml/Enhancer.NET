@@ -7,10 +7,22 @@ namespace Enhancer.Containers
 {
     public class GenericCyclingVector<T> : ICollection<T>
     {
+        /// <summary>
+        /// The maximum size of the vector.
+        /// </summary>
         ulong _size;
+        /// <summary>
+        /// The index of the first element.
+        /// </summary>
         ulong _first;
+        /// <summary>
+        /// The number of element that the vector stores. (Or the length of the vector.)
+        /// </summary>
         ulong _length;
 
+        /// <summary>
+        /// The actual vector.
+        /// </summary>
         T[] _vector;
 
         public class CyclingVectorEnumerator : IEnumerator<T>
@@ -103,13 +115,29 @@ namespace Enhancer.Containers
             }
         }
 
+        /// <summary>
+        /// Previews the first element without removing it.
+        /// </summary>
+        /// <returns>The first element of the vector, or the default value
+        /// of T if there is no element in the vector.</returns>
         public T peek()
         {
+            // This is a dirty trick, altough it is a design bug, because it wasn't always like this:
+            // To let the GC properly free objects, I need to default(T) out all value that are
+            // not part of the stored vector, so all other values become default(T). Hence if the
+            // vector is "empty", _fist definitely will point to an element, that has default(T) in it.
+            // NOTE: Problem could arise from not initializing it with the default value.
+            // NOTE: Problem could arise if the removing behaviour is removed.
             return _vector[_first];
         }
 
+        /// <summary>
+        /// Removes the first element of the vector.
+        /// </summary>
+        /// <returns>The removed first element, or the default value if no item could be removed.</returns>
         public T pop()
         {
+            if (_length == 0) return default(T);
             T output = _vector[_first];
             // To allow GC to collect unused objects.
             _vector[_first] = default(T);
@@ -118,6 +146,11 @@ namespace Enhancer.Containers
             return output;
         }
 
+        /// <summary>
+        /// Push a new element in the vector, if that is possible.
+        /// </summary>
+        /// <param name="value">The value to add to the Vector.</param>
+        /// <returns><c>true</c> if the push was successfull, <c>false</c> otherwise.</returns>
         public bool push(T value)
         {
             if (_length == _size)
@@ -165,6 +198,9 @@ namespace Enhancer.Containers
             get { return (int)_length; }
         }
 
+        /// <summary>
+        /// Determinates if the vector can be modified.
+        /// </summary>
         public bool IsReadOnly
         {
             get { return false; }

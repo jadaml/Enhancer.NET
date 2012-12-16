@@ -22,7 +22,7 @@ namespace Enhancer
             return rect;
         }
 
-        private static Action EmptyDelegate = delegate() { };
+        private static Action EmptyDelegate = delegate() { ; };
 
         public static void Refresh(this UIElement uiElement)
         {

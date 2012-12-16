@@ -220,62 +220,63 @@ namespace Enhancer.Test
         /// <summary>
         ///A test for peek
         ///</summary>
-        public void peekTestHelper<T>()
-        {
-            long maxSize = 0; // TODO: Initialize to an appropriate value
-            GenericCyclingVector<T> target = new GenericCyclingVector<T>(maxSize); // TODO: Initialize to an appropriate value
-            T expected = default(T); // TODO: Initialize to an appropriate value
-            T actual;
-            actual = target.peek();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         [TestMethod()]
         public void peekTest()
         {
-            peekTestHelper<GenericParameterHelper>();
+            GenericCyclingVector_Accessor<GenericParameterHelper> vector =
+                new GenericCyclingVector_Accessor<GenericParameterHelper>(10);
+            GenericParameterHelper value = new GenericParameterHelper(1);
+            vector.push(value);
+            ulong preFirst = vector._first, preLength = vector._length;
+            Assert.AreEqual(value, vector.peek(), "Peek gives different value.");
+            Assert.AreEqual(preFirst, vector._first, "Object changed from peek.");
+            Assert.AreEqual(preLength, vector._length, "Object changed from peek.");
+            Assert.AreEqual(value, vector._vector[preFirst], "Object changed from peek.");
         }
 
         /// <summary>
         ///A test for pop
         ///</summary>
-        public void popTestHelper<T>()
-        {
-            long maxSize = 0; // TODO: Initialize to an appropriate value
-            GenericCyclingVector<T> target = new GenericCyclingVector<T>(maxSize); // TODO: Initialize to an appropriate value
-            T expected = default(T); // TODO: Initialize to an appropriate value
-            T actual;
-            actual = target.pop();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         [TestMethod()]
         public void popTest()
         {
-            popTestHelper<GenericParameterHelper>();
+            GenericCyclingVector_Accessor<GenericParameterHelper> vector =
+                new GenericCyclingVector_Accessor<GenericParameterHelper>(10);
+            ulong preFirst = vector._first;
+            Assert.AreEqual(default(GenericParameterHelper), vector.pop(), "Poped some value.");
+            Assert.AreEqual(preFirst, vector._first, "Possible inconsistent state of vector.");
+            GenericParameterHelper value = new GenericParameterHelper(1);
+            vector.push(value);
+            Assert.AreEqual(value, vector.pop(), "Poped different value.");
+            for (int i = 0; i < 9; ++i)
+            {
+                vector.push(value); vector.pop();
+            }
+            try
+            {
+                vector.push(value);
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Push thrown an exception, but it shouldn't.");
+            }
         }
 
         /// <summary>
         ///A test for push
         ///</summary>
-        public void pushTestHelper<T>()
-        {
-            long maxSize = 0; // TODO: Initialize to an appropriate value
-            GenericCyclingVector<T> target = new GenericCyclingVector<T>(maxSize); // TODO: Initialize to an appropriate value
-            T value = default(T); // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = target.push(value);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         [TestMethod()]
         public void pushTest()
         {
-            pushTestHelper<GenericParameterHelper>();
+            GenericCyclingVector_Accessor<GenericParameterHelper> vector =
+                new GenericCyclingVector_Accessor<GenericParameterHelper>(10);
+            for (int i = 0; i < 10; ++i)
+            {
+                GenericParameterHelper value = new GenericParameterHelper(i);
+                Assert.IsTrue(vector.push(value), "Unable to push element");
+                Assert.AreSame(value, vector._vector[vector._first + vector._length - 1], "The vector stored a different value.");
+            }
+            Assert.IsFalse(vector.push(new GenericParameterHelper(-1)), "Was able to push element");
         }
 
         /// <summary>
@@ -299,19 +300,11 @@ namespace Enhancer.Test
         /// <summary>
         ///A test for IsReadOnly
         ///</summary>
-        public void IsReadOnlyTestHelper<T>()
-        {
-            long maxSize = 0; // TODO: Initialize to an appropriate value
-            GenericCyclingVector<T> target = new GenericCyclingVector<T>(maxSize); // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = target.IsReadOnly;
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         [TestMethod()]
         public void IsReadOnlyTest()
         {
-            IsReadOnlyTestHelper<GenericParameterHelper>();
+            GenericCyclingVector<GenericParameterHelper> target = new GenericCyclingVector<GenericParameterHelper>(10);
+            Assert.IsFalse(target.IsReadOnly, "That is not the nature of this class.");
         }
 
         /// <summary>

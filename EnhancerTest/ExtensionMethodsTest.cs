@@ -257,6 +257,12 @@ namespace Enhancer.Test
             Assert.AreEqual(10, list.Count);
             for (i = 0; i < list.Count; ++i)
                 Assert.AreEqual<int>(i, list[i]);
+
+            list.Clear();
+            ExtensionMethods.Add<int>(list, 5, 10);
+            Assert.AreEqual(10, list.Count);
+            for (i = 0; i < list.Count; ++i)
+                Assert.AreEqual<int>(5, list[i]);
         }
     }
 }
