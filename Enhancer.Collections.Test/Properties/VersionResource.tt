@@ -63,7 +63,7 @@ PRODUCTVERSION <#= major #>, <#= minor #>, <#= build #>, <#= patch #>
 FILEFLAGSMASK  VS_FFI_FILEFLAGSMASK
 #ifdef DEBUG
 FILEFLAGS      (<#= string.Join("|", debugFileFlags) #>)
-#elif
+#else
 FILEFLAGS      (<#= string.Join("|", fileFlags) #>)
 #endif
 FILEOS         VOS_NT
