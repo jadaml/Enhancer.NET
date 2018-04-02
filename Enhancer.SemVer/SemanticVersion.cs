@@ -482,6 +482,8 @@ namespace Enhancer.Assemblies
                 throw new FormatException();
             }
 
+            format = format ?? "3";
+
             return $"{Major:#0}.{Minor:#0}.{Patch:#0}"
                  + ((format == "1" || format == "3") && PreRelease.Count != 0 ? $"-{Join(".", PreRelease)}" : "")
                  + ((format == "2" || format == "3") && MetaData.Count   != 0 ? $"+{Join(".", MetaData)}"   : "");

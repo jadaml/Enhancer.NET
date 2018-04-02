@@ -105,7 +105,8 @@ namespace Enhancer
         /// </summary>
         /// <param name="hInstance">A handle to an instance of the module whose executable file
         /// contains the string resource. To get the handle to the application itself, call the
-        /// <see cref="GetModuleHandle"/> function with <c>NULL</c>.</param>
+        /// <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms683199(v=vs.85).aspx">GetModuleHandle</see>
+        /// function with <c>NULL</c>.</param>
         /// <param name="uID">The identifier of the string to be loaded.</param>
         /// <param name="lpBuffer">The buffer is to receive the string.</param>
         /// <param name="nBufferMax">The size of the buffer, in characters. The string is truncated
@@ -113,14 +114,15 @@ namespace Enhancer
         /// parameter is 0, then <i>lpBuffer</i> receives a read-only pointer to the resource itself.</param>
         /// <returns>If the function succeeds, the return value is the number of characters
         /// copied into the buffer, not including the terminating null character, or zero if the
-        /// string resource does not exist. To get extended error information, call <see cref="GetLastError"/>.</returns>
+        /// string resource does not exist. To get extended error information, call
+        /// <see cref="Marshal.GetLastWin32Error"/>.</returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int LoadString(IntPtr hInstance, uint uID, StringBuilder lpBuffer, int nBufferMax);
 
         /// <summary>
         /// Loads the specified module into the address space of the calling process. The specified
         /// module may cause other modules to be loaded.<br/>
-        /// For additional load options, use the <see cref="LoadLibraryEx"/> function.
+        /// For additional load options, use the LoadLibraryEx function.
         /// </summary>
         /// <param name="lpFileName">The name of the module. This can be either a library module
         /// (a .dll file) or an executable module (an .exe file). The name specified is the file

@@ -8,7 +8,7 @@ uint minor = 0;
 uint patch = 0;
 
 string preReleaseStage = "alpha";
-uint   preReleaseLevel = 0;
+uint   preReleaseLevel = 1;
 
 string build        = Environment.GetEnvironmentVariable("BUILD_NUMBER") ?? "0";
 string revision     = Environment.GetEnvironmentVariable("REVISION_NUMBER") ?? "0";
