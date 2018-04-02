@@ -48,7 +48,7 @@ buildMetaData = from identifier in buildMetaData
                    && (!(identifier is string) || (string)identifier != "" && (string)identifier != "0")
                 select identifier;
 
-string productVersion = $"{major}.{minor}.{revision}"
+string productVersion = $"{major}.{minor}.{patch}"
                       + (preRelease.Any() ? $"-{string.Join(".", preRelease)}" : "")
                       + $"+{string.Join(".", buildMetaData)}";
 

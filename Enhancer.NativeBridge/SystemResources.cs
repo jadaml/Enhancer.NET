@@ -17,13 +17,14 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Enhancer
 {
+    /// <summary>
+    /// This class provides an interface to retrieve some common resources from the system.
+    /// </summary>
     public static class SystemResources
     {
         private enum DialogResultCaption : uint
@@ -41,26 +42,59 @@ namespace Enhancer
             Continue = 810,
         }
 
+        /// <summary>
+        /// Gets the string resource for the string "OK".
+        /// </summary>
         public static string Ok => LoadDialogResultCaption(DialogResultCaption.Ok);
 
+        /// <summary>
+        /// Gets the string resource for the string "Cancel".
+        /// </summary>
         public static string Cancel => LoadDialogResultCaption(DialogResultCaption.Cancel);
 
+        /// <summary>
+        /// Gets the string resource for the string "Abort".
+        /// </summary>
         public static string Abort => LoadDialogResultCaption(DialogResultCaption.Abort);
 
+        /// <summary>
+        /// Gets the string resource for the string "Retry".
+        /// </summary>
         public static string Retry => LoadDialogResultCaption(DialogResultCaption.Retry);
 
+        /// <summary>
+        /// Gets the string resource for the string "Ignore".
+        /// </summary>
         public static string Ignore => LoadDialogResultCaption(DialogResultCaption.Ignore);
 
+        /// <summary>
+        /// Gets the string resource for the string "Yes".
+        /// </summary>
         public static string Yes => LoadDialogResultCaption(DialogResultCaption.Yes);
 
+        /// <summary>
+        /// Gets the string resource for the string "No".
+        /// </summary>
         public static string No => LoadDialogResultCaption(DialogResultCaption.No);
 
+        /// <summary>
+        /// Gets the string resource for the string "Close".
+        /// </summary>
         public static string Close => LoadDialogResultCaption(DialogResultCaption.Close);
 
+        /// <summary>
+        /// Gets the string resource for the string "Help".
+        /// </summary>
         public static string Help => LoadDialogResultCaption(DialogResultCaption.Help);
 
+        /// <summary>
+        /// Gets the string resource for the string "Try Again".
+        /// </summary>
         public static string TryAgain => LoadDialogResultCaption(DialogResultCaption.TryAgain);
 
+        /// <summary>
+        /// Gets the string resource for the string "Continue".
+        /// </summary>
         public static string Continue => LoadDialogResultCaption(DialogResultCaption.Continue);
 
         private static readonly IntPtr user32lib = LoadLibrary(Environment.SystemDirectory + "\\User32.dll");
@@ -82,6 +116,7 @@ namespace Enhancer
         /// string resource does not exist. To get extended error information, call <see cref="GetLastError"/>.</returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int LoadString(IntPtr hInstance, uint uID, StringBuilder lpBuffer, int nBufferMax);
+
         /// <summary>
         /// Loads the specified module into the address space of the calling process. The specified
         /// module may cause other modules to be loaded.<br/>
@@ -103,8 +138,8 @@ namespace Enhancer
         /// point character (.) in the module name string.</param>
         /// <returns>If the function succeeds, the return value is a handle to the module.<br/>
         /// If the function fails, the return value is NULL. To get extended error information,
-        /// call <see cref="GetLastError"/>.</returns>
-        [DllImport("kernel32")]
+        /// call <see cref="Marshal.GetLastWin32Error"/>.</returns>
+        [DllImport("kernel32", SetLastError = true)]
         private static extern IntPtr LoadLibrary(string lpFileName);
 
         /// <summary>

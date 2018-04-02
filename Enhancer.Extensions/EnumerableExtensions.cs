@@ -22,33 +22,87 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Enhancer.Extensions
 {
+    /// <summary>
+    /// This class provides additional extension methods related to collections.
+    /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// Check if a given value is contained in a collection
+        /// </summary>
+        /// <typeparam name="T">The type of the value to check for.</typeparam>
+        /// <param name="value">The value to check for.</param>
+        /// <param name="args">The collection in which the value should be searched for.</param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> can be find in the specified collection,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAnyOf<T>(this T value, params T[] args)
         {
             return IsAnyOf(value, args.AsEnumerable());
         }
 
+        /// <summary>
+        /// Check if a given value is contained in a collection
+        /// </summary>
+        /// <typeparam name="T">The type of the value to check for.</typeparam>
+        /// <param name="value">The value to check for.</param>
+        /// <param name="collection">The collection in which the value should be searched for.</param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> can be find in the specified collection,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAnyOf<T>(this T value, IEnumerable<T> collection)
         {
             return collection.Contains(value);
         }
 
+        /// <summary>
+        /// Checks if a value is not part of the specified collection.
+        /// </summary>
+        /// <typeparam name="T">The type of the value to look for.</typeparam>
+        /// <param name="value">The value to look for.</param>
+        /// <param name="args">The collection that should not contain the value.</param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> could not be found in the specified collection,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNeitherOf<T>(this T value, params T[] args)
         {
             return IsNeitherOf(value, args.AsEnumerable());
         }
 
+        /// <summary>
+        /// Checks if a value is not part of the specified collection.
+        /// </summary>
+        /// <typeparam name="T">The type of the value to look for.</typeparam>
+        /// <param name="value">The value to look for.</param>
+        /// <param name="collection">The collection that should not contain the value.</param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> could not be found in the specified collection,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNeitherOf<T>(this T value, IEnumerable<T> collection)
         {
             return !collection.Contains(value);
         }
 
+        /// <summary>
+        /// Checks if the collection have at least <paramref name="count"/> number of elements.
+        /// </summary>
+        /// <param name="collection">The collection to check.</param>
+        /// <param name="count">The number of elements the collection should have.</param>
+        /// <returns>
+        /// <see langword="true"/> if the collection have at least <paramref name="count"/> number of elements,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
         public static bool HaveAtLeast(this IEnumerable collection, int count)
         {
             int i;
@@ -60,6 +114,15 @@ namespace Enhancer.Extensions
             return i >= count;
         }
 
+        /// <summary>
+        /// Checks if the collection does not have more then <paramref name="count"/> number of elements.
+        /// </summary>
+        /// <param name="collection">The collection to check.</param>
+        /// <param name="count">The number of elements the collection should have.</param>
+        /// <returns>
+        /// <see langword="true"/> if the collection have at most <paramref name="count"/> number of elements,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
         public static bool HaveAtMost(this IEnumerable collection, int count)
         {
             int i;
@@ -71,6 +134,15 @@ namespace Enhancer.Extensions
             return i <= count;
         }
 
+        /// <summary>
+        /// Checks if the collection have exactly <paramref name="count"/> number of elements.
+        /// </summary>
+        /// <param name="collection">The collection to check.</param>
+        /// <param name="count">The number of elements the collection should have.</param>
+        /// <returns>
+        /// <see langword="true"/> if the collection have exactly <paramref name="count"/> number of elements,
+        /// otherwise <see langword="false"/>.
+        /// </returns>
         public static bool HaveExactly(this IEnumerable collection, int count)
         {
             int i;
@@ -82,24 +154,62 @@ namespace Enhancer.Extensions
             return i == count;
         }
 
+        /// <summary>
+        /// Select a random element from a list.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the list.</typeparam>
+        /// <param name="list">The list to select from.</param>
+        /// <param name="random">The random object to select with.</param>
+        /// <param name="offset">The lower bound to start the element selection from.</param>
+        /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T RandomElement<T>(this IList<T> list, Random random, int offset = 0)
         {
             return Select(random, list, offset, list.Count - offset);
         }
 
+        /// <summary>
+        /// Select a random element from a list.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the list.</typeparam>
+        /// <param name="list">The list to select from.</param>
+        /// <param name="random">The random object to select with.</param>
+        /// <param name="offset">The lower bound to start the element selection from.</param>
+        /// <param name="count">
+        /// The number of consecutive element that can be selected starting from <paramref name="offset"/>.
+        /// </param>
+        /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T RandomElement<T>(this IList<T> list, Random random, int offset, int count)
         {
             return Select(random, list, offset, count);
         }
 
+        /// <summary>
+        /// Select a random element from a list.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the list.</typeparam>
+        /// <param name="list">The list to select from.</param>
+        /// <param name="random">The random object to select with.</param>
+        /// <param name="offset">The lower bound to start the element selection from.</param>
+        /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Select<T>(this Random random, IList<T> list, int offset = 0)
         {
             return Select(random, list, offset, list.Count - offset);
         }
 
+        /// <summary>
+        /// Select a random element from a list.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the list.</typeparam>
+        /// <param name="list">The list to select from.</param>
+        /// <param name="random">The random object to select with.</param>
+        /// <param name="offset">The lower bound to start the element selection from.</param>
+        /// <param name="count">
+        /// The number of consecutive element that can be selected starting from <paramref name="offset"/>.
+        /// </param>
+        /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         public static T Select<T>(this Random random, IList<T> list, int offset, int count)
         {
             if (random == null)
@@ -125,6 +235,12 @@ namespace Enhancer.Extensions
             return list[random.Next(offset, count + offset)];
         }
 
+        /// <summary>
+        /// Adds a value by the specified amount to the collection.
+        /// </summary>
+        /// <param name="list">The collection to add to.</param>
+        /// <param name="value">The value to add to the collection many times.</param>
+        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add(this IList list, object value, int amount)
         {
             if (list.IsReadOnly)
@@ -138,8 +254,28 @@ namespace Enhancer.Extensions
             }
         }
 
-        public static void AddMany(this IList list, Type type, int amount, params object[] args) => AddMany(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
+        /// <summary>
+        /// Adds many object instance to the collection by the specified amount, invoking the same constructor
+        /// for a given type.
+        /// </summary>
+        /// <param name="list">The collection to add the instances to.</param>
+        /// <param name="type">The type of the instance to create.</param>
+        /// <param name="amount">The number of times an object should be added to the collection.</param>
+        /// <param name="args">The arguments for the constructor.</param>
+        public static void AddMany(this IList list, Type type, int amount, params object[] args)
+        {
+            AddMany(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
+        }
 
+        /// <summary>
+        /// Adds many object instance to the collection by the specified amount, invoking the same constructor
+        /// for a given type.
+        /// </summary>
+        /// <param name="list">The collection to add the instances to.</param>
+        /// <param name="type">The type of the instance to create.</param>
+        /// <param name="signature">The signature of the constructor to invoke.</param>
+        /// <param name="amount">The number of times an object should be added to the collection.</param>
+        /// <param name="args">The arguments for the constructor.</param>
         public static void AddMany(this IList list, Type type, Type[] signature, int amount, params object[] args)
         {
             ConstructorInfo ctor;
@@ -160,6 +296,13 @@ namespace Enhancer.Extensions
             }
         }
 
+        /// <summary>
+        /// Adds the objects returned by the specified <paramref name="function"/> by the specified amount
+        /// to the collection.
+        /// </summary>
+        /// <param name="list">The collection to add to.</param>
+        /// <param name="function">The function that generates the objects to add to the collection.</param>
+        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add(this IList list, Func<object> function, int amount)
         {
             if (list.IsReadOnly)
@@ -174,13 +317,12 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Adds many amount of the same function to the collection.
+        /// Adds a value by the specified amount to the collection.
         /// </summary>
         /// <typeparam name="TSource">The base type of the collection</typeparam>
-        /// <param name="collection">The collection to add to
-        /// (You can also call this function as if would be defined in this object.)</param>
-        /// <param name="function">The object to add to the collection</param>
-        /// <param name="amount">The amount of times to add the object to the collection</param>
+        /// <param name="collection">The collection to add to.</param>
+        /// <param name="value">The value to add to the collection many times.</param>
+        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add<TSource>(this ICollection<TSource> collection, TSource value, int amount)
         {
             if (collection.IsReadOnly)
@@ -194,6 +336,14 @@ namespace Enhancer.Extensions
             }
         }
 
+        /// <summary>
+        /// Adds the objects returned by the specified <paramref name="function"/> by the specified amount
+        /// to the collection.
+        /// </summary>
+        /// <typeparam name="TSource">The base type of the collection</typeparam>
+        /// <param name="collection">The collection to add to.</param>
+        /// <param name="function">The function that generates the objects to add to the collection.</param>
+        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add<TSource>(this ICollection<TSource> collection, Func<TSource> function, int amount)
         {
             if (collection.IsReadOnly)

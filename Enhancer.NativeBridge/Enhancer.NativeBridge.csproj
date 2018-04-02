@@ -29,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Enhancer.NativeBridge.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <Win32Resource>Properties\VersionResource.res</Win32Resource>
