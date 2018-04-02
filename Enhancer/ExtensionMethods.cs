@@ -139,6 +139,25 @@ namespace Enhancer
             window.WindowState = __preState;
         }
 
+        /// <summary>
+        /// Converts the value of the current <see cref="TimeSpan"/> object to its equivalent string representation
+        /// by using the specified format, with some of its format specified being optional.
+        /// </summary>
+        /// <param name="timeSpan">The <see cref="TimeSpan"/> object to convert.</param>
+        /// <param name="format">The format specifier.</param>
+        /// <returns>The string representation of the <see cref="TimeSpan"/> object.</returns>
+        /// <remarks>
+        /// <para>
+        /// With this method, you can specifies some specifier being optional, if the specified field otherwise 0.
+        /// </para>
+        /// <code>
+        /// string format = "[h][h]':'mm':'ss";
+        /// Console.WriteLine((new TimeSpan(0, 32, 16)).FormatToString(format));
+        /// // Outputs: :32:16
+        /// Console.WriteLine((new TimeSpan(5, 42, 27)).FormatToString(format));
+        /// // Outputs: 05:42:27
+        /// </code>
+        /// </remarks>
         public static string FormatToString(this TimeSpan timeSpan, string format)
         {
             StringBuilder _format = new StringBuilder();

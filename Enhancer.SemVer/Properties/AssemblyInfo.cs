@@ -1,53 +1,56 @@
 ﻿/* Copyright (c) 2018, Ádám L. Juhász
  *
- * This file is part of EnhancerTest.
+ * This file is part of Enhancer.SemVer.
  *
- * EnhancerTest is free software: you can redistribute it and/or modify
+ * Enhancer.SemVer is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * EnhancerTest is distributed in the hope that it will be useful,
+ * Enhancer.SemVer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with EnhancerTest.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Enhancer.SemVer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EnhancerTest")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Eötvös Loránd Tudományegyetem")]
-[assembly: AssemblyProduct("EnhancerTest")]
-[assembly: AssemblyCopyright("Copyright © Eötvös Loránd Tudományegyetem 2012")]
+[assembly: AssemblyTitle("Enhancer.NET Semantic Version")]
+[assembly: AssemblyDescription("Provides Semantic Version support for .NET")]
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Enhancer.NET")]
+[assembly: AssemblyCopyright("Copyright © 2018, Ádám L. Juhász")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("522627e6-2d61-443d-866e-1de38b186d6f")]
+[assembly: Guid("a375d80d-5d09-4292-98ef-efe27bc3b56a")]
 
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version 
+//      Minor Version
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+// [assembly: AssemblyVersion("1.0.*")]
