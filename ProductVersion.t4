@@ -36,11 +36,11 @@ IEnumerable<object> buildMetaData;
 
 if (build == "0" || revision == "0")
 {
-    buildMetaData = new object[] { user, machine, specialBuild };
+    buildMetaData = new object[] { user, machine, Environment.OSVersion.Platform, specialBuild };
 }
 else
 {
-    buildMetaData = new object[] { build, revision, specialBuild };
+    buildMetaData = new object[] { build, revision, Environment.OSVersion.Platform, specialBuild };
 }
 
 buildMetaData = from identifier in buildMetaData
@@ -53,7 +53,7 @@ string productVersion = $"{major}.{minor}.{patch}"
                       + $"+{string.Join(".", buildMetaData)}";
 
 preRelease = from identifier in preRelease
-             select identifier is string ? $@"""{identifier}""" : identifier;
+             select identifier is string ? $@"""{identifier}""" : (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
 buildMetaData = from identifier in buildMetaData
-                select identifier is string ? $@"""{identifier}""": identifier;
+                select identifier is string ? $@"""{identifier}""": (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
 #>
