@@ -402,10 +402,7 @@ namespace Enhancer.Assemblies
         /// Returns the string representation of the current instance.
         /// </summary>
         /// <returns>The string representing the semantic version instance.</returns>
-        public override string ToString()
-        {
-            return ToString("3", null);
-        }
+        public override string ToString() => ToString(null, null);
 
         /// <summary>
         /// Returns the string representation of the current instance.

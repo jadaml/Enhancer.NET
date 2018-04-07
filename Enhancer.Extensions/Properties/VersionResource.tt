@@ -104,6 +104,28 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "További kiterjesztett függvényeket nyújt .NET környezethez"
+            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "InternalName",     "Enhancer.Extensions"
+            VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
+            VALUE "OriginalFilename", "Enhancer.Extensions.dll"
+<#
+            if (build == "0" || revision == "0")
+            {
+#>
+            VALUE "PrivateBuild",     "Built by <#= UserPrincipal.Current.DisplayName #> on <#= Environment.MachineName #>"
+<#
+            }
+#>
+            VALUE "ProductName",      "Enhancer.NET"
+            VALUE "ProductVersion",   "<#= productVersion #>"
+<#
+            if (!string.IsNullOrEmpty(specialBuild))
+            {
+#>
+            VALUE "SpecialBuild",     "<#= specialBuild #>"
+<#
+            }
+#>
         }
     }
 

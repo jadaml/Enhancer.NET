@@ -25,7 +25,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".rc" #>
+<#@ output extension=".generated.rc" #>
 <#@ include file="..\..\ProductVersion.t4" #>
 <#@ include file="FileVersion.tt" #>
 <#
@@ -104,6 +104,28 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "Semantic Version támogatást nyújt .NET környezethez"
+            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "InternalName",     "Enhancer.SemVer"
+            VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
+            VALUE "OriginalFilename", "Enhancer.SemVer.dll"
+<#
+            if (build == "0" || revision == "0")
+            {
+#>
+            VALUE "PrivateBuild",     "Built by <#= UserPrincipal.Current.DisplayName #> on <#= Environment.MachineName #>"
+<#
+            }
+#>
+            VALUE "ProductName",      "Enhancer.NET"
+            VALUE "ProductVersion",   "<#= productVersion #>"
+<#
+            if (!string.IsNullOrEmpty(specialBuild))
+            {
+#>
+            VALUE "SpecialBuild",     "<#= specialBuild #>"
+<#
+            }
+#>
         }
     }
 
