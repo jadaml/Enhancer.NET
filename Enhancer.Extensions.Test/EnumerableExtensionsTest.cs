@@ -29,28 +29,65 @@ namespace Enhancer.Extensions.Test
     [TestFixture]
     public class EnumerableExtensionsTest
     {
-        [Test(TestOf = typeof(EnumerableExtensions))]
-        public void HaveAtLeast()
+        private static ValueTuple<bool, int, int>[] _haveAtLeastSource = new ValueTuple<bool, int, int>[]
         {
-            IsTrue (new object[3].HaveAtLeast(2), "Count 2 failed");
-            IsTrue (new object[3].HaveAtLeast(3), "Count 3 failed");
-            IsFalse(new object[3].HaveAtLeast(4), "Count 4 failed");
+            (true, 3, 2),
+            (true, 3, 3),
+            (false, 3, 4),
+        };
+        private static ValueTuple<bool, int, int>[] _haveAtMostSource = new ValueTuple<bool, int, int>[]
+        {
+            (false, 3, 2),
+            (true, 3, 3),
+            (true, 3, 4),
+        };
+        private static ValueTuple<bool, int, int>[] _haveExactlySource = new ValueTuple<bool, int, int>[]
+        {
+            (false, 3, 2),
+            (true, 3, 3),
+            (false, 3, 4),
+        };
+
+        [TestOf(typeof(EnumerableExtensions))]
+        [TestCaseSource(nameof(_haveAtLeastSource))]
+        public void HaveAtLeast(ValueTuple<bool, int, int> input)
+        {
+            if (input.Item1)
+            {
+                IsTrue(new object[input.Item2].HaveAtLeast(input.Item3), "Count {0} failed", input.Item3);
+            }
+            else
+            {
+                IsFalse(new object[input.Item2].HaveAtLeast(input.Item3), "Count {0} failed", input.Item3);
+            }
         }
 
-        [Test(TestOf = typeof(EnumerableExtensions))]
-        public void HaveAtMost()
+        [TestOf(typeof(EnumerableExtensions))]
+        [TestCaseSource(nameof(_haveAtMostSource))]
+        public void HaveAtMost(ValueTuple<bool, int, int> input)
         {
-            IsFalse(new object[3].HaveAtMost(2), "Count 2 failed");
-            IsTrue (new object[3].HaveAtMost(3), "Count 3 failed");
-            IsTrue (new object[3].HaveAtMost(4), "Count 4 failed");
+            if (input.Item1)
+            {
+                IsTrue(new object[input.Item2].HaveAtMost(input.Item3), "Count {0} failed", input.Item3);
+            }
+            else
+            {
+                IsFalse(new object[input.Item2].HaveAtMost(input.Item3), "Count {0} failed", input.Item3);
+            }
         }
 
-        [Test(TestOf = typeof(EnumerableExtensions))]
-        public void HaveExactly()
+        [TestOf(typeof(EnumerableExtensions))]
+        [TestCaseSource(nameof(_haveExactlySource))]
+        public void HaveExactly(ValueTuple<bool, int, int> input)
         {
-            IsFalse(new object[3].HaveExactly(2), "Count 2 failed");
-            IsTrue (new object[3].HaveExactly(3), "Count 3 failed");
-            IsFalse(new object[3].HaveExactly(4), "Count 4 failed");
+            if (input.Item1)
+            {
+                IsTrue(new object[input.Item2].HaveExactly(input.Item3), "Count {0} failed", input.Item3);
+            }
+            else
+            {
+                IsFalse(new object[input.Item2].HaveExactly(input.Item3), "Count {0} failed", input.Item3);
+            }
         }
     }
 }

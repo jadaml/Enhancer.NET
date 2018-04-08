@@ -107,13 +107,28 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveAtLeast(this IEnumerable collection, int count)
         {
-            int i;
+            Type        type;
+            int         i;
             IEnumerator enumerator;
 
-            for (i = 0, enumerator = collection.GetEnumerator(); i < count && enumerator.MoveNext(); ++i)
-            { }
+            if (collection is Array)
+            {
+                return ((Array)collection).Length >= count;
+            }
 
-            return i >= count;
+            if (collection is ICollection)
+            {
+                return ((ICollection)collection).Count >= count;
+            }
+
+            if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            {
+                return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) >= count;
+            }
+
+            for (i = 0, enumerator = collection.GetEnumerator(); i < count && enumerator.MoveNext(); ++i) ;
+
+            return i == count;
         }
 
         /// <summary>
@@ -127,11 +142,26 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveAtMost(this IEnumerable collection, int count)
         {
-            int i;
+            Type        type;
+            int         i;
             IEnumerator enumerator;
 
-            for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i)
-            { }
+            if (collection is Array)
+            {
+                return ((Array)collection).Length <= count;
+            }
+
+            if (collection is ICollection)
+            {
+                return ((ICollection)collection).Count <= count;
+            }
+
+            if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            {
+                return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) <= count;
+            }
+
+            for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i) ;
 
             return i <= count;
         }
@@ -147,8 +177,24 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveExactly(this IEnumerable collection, int count)
         {
-            int i;
+            Type        type;
+            int         i;
             IEnumerator enumerator;
+
+            if (collection is Array)
+            {
+                return ((Array)collection).Length == count;
+            }
+
+            if (collection is ICollection)
+            {
+                return ((ICollection)collection).Count == count;
+            }
+
+            if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            {
+                return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) == count;
+            }
 
             for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i)
             { }
