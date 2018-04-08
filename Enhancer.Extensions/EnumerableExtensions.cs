@@ -20,8 +20,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using static Enhancer.Extensions.Properties.Resources;
 
 namespace Enhancer.Extensions
 {
@@ -355,6 +357,170 @@ namespace Enhancer.Extensions
             {
                 collection.Add(function.Invoke());
             }
+        }
+
+        public static int Count(this IEnumerable collection)
+        {
+            Type        genericType;
+            int         count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (collection is Array)
+            {
+                return ((Array)collection).Length;
+            }
+
+            if (collection is ICollection)
+            {
+                return ((ICollection)collection).Count;
+            }
+
+            if ((genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            {
+                return (int)genericType.GetProperty("Count").GetValue(collection);
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 count >= 0 && enumerator.MoveNext();
+                 ++count) ;
+
+            if (count < 0)
+            {
+                throw new OverflowException(CollectionOverflowInt32MaxValue);
+            }
+
+            return count;
+        }
+
+        public static int Count(this IEnumerable collection, Predicate<object> predicate)
+        {
+            Type genericType;
+            int count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (collection is Array)
+            {
+                return ((Array)collection).Length;
+            }
+
+            if (collection is ICollection)
+            {
+                return ((ICollection)collection).Count;
+            }
+
+            if ((genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            {
+                return (int)genericType.GetProperty("Count").GetValue(collection);
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 count >= 0 && enumerator.MoveNext();
+                 count += predicate(enumerator.Current) ? 1 : 0) ;
+
+            if (count < 0)
+            {
+                throw new OverflowException(CollectionOverflowInt32MaxValue);
+            }
+
+            return count;
+        }
+
+        public static long LongCount(this IEnumerable collection)
+        {
+            long count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (collection is Array)
+            {
+                return ((Array)collection).LongLength;
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 count >= 0 && enumerator.MoveNext();
+                 ++count) ;
+
+            if (count < 0)
+            {
+                throw new OverflowException(CollectionOverflowInt64MaxValue);
+            }
+
+            return count;
+        }
+
+        public static long LongCount(this IEnumerable collection, Predicate<object> predicate)
+        {
+            long        count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (collection is Array)
+            {
+                return ((Array)collection).LongLength;
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 count >= 0 && enumerator.MoveNext();
+                 count += predicate(enumerator.Current) ? 1 : 0) ;
+
+            if (count < 0)
+            {
+                throw new OverflowException(CollectionOverflowInt64MaxValue);
+            }
+
+            return count;
+        }
+
+        public static BigInteger BigCount(this IEnumerable collection)
+        {
+            BigInteger  count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 enumerator.MoveNext();
+                 ++count) ;
+
+            return count;
+        }
+
+        public static BigInteger BigCount(this IEnumerable collection, Predicate<object> predicate)
+        {
+            BigInteger count;
+            IEnumerator enumerator;
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            for (count = 0, enumerator = collection.GetEnumerator();
+                 enumerator.MoveNext();
+                 count += predicate(enumerator.Current) ? 1 : 0) ;
+
+            return count;
         }
     }
 }
