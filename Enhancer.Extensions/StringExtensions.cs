@@ -32,7 +32,7 @@ namespace Enhancer.Extensions
         /// <returns>The separated words transformed from the specified string value.</returns>
         public static string ToUserFriendlyString(this string value)
         {
-            StringBuilder result = new StringBuilder(value.Length * 2);
+            StringBuilder result = new StringBuilder();
 
             for (int i = 0; i < value.Length; ++i)
             {
@@ -44,7 +44,7 @@ namespace Enhancer.Extensions
 
                 switch (value[i])
                 {
-                    case char ch when !char.IsUpper(value[i - 1]) && char.IsUpper(ch)
+                    case char ch when char.IsLower(value[i - 1]) && char.IsUpper(ch)
                                    || !char.IsNumber(value[i - 1]) && char.IsNumber(ch)
                                    || char.IsNumber(value[i - 1]) && !char.IsNumber(ch)
                                    || i < value.Length - 1 && char.IsUpper(value[i - 1]) && char.IsUpper(ch) && char.IsLower(value[i + 1]):
@@ -55,6 +55,9 @@ namespace Enhancer.Extensions
                         break;
                     case char ch when value[i - 1] == '_':
                         result.Append(char.ToUpper(ch));
+                        break;
+                    default:
+                        result.Append(value[i]);
                         break;
                 }
             }
