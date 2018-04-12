@@ -25,7 +25,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".rc" #>
+<#@ output extension=".generated.rc" #>
 <#@ include file="..\..\ProductVersion.t4" #>
 <#@ include file="FileVersion.tt" #>
 <#

@@ -96,7 +96,7 @@ namespace Enhancer.Assemblies
         /// </remarks>
         public static bool ValidIdentifier(string identifier)
         {
-            return identifier.Length > 0
+            return identifier != null && identifier.Length > 0
             // only digits and no leading zero.
                 && (identifier.All(c => c >= '0' && c <= '9') && (identifier.Length == 1 || identifier.First() != '0')
             // Have other than digits but only alphanumeric, and hyphen.
@@ -200,7 +200,7 @@ namespace Enhancer.Assemblies
                             identifiers.Clear();
                         }
                         break;
-                    case ParsingPhase.MetaData:
+                    default: // ParsingPhase.MetaData
                         ProcessIdentifiers(c);
                         break;
                 }
@@ -208,9 +208,6 @@ namespace Enhancer.Assemblies
 
             switch (phase)
             {
-                case ParsingPhase.Major:
-                case ParsingPhase.Minor:
-                    throw Error();
                 case ParsingPhase.Patch:
                     Patch = ProcessVersionNode(null).Value;
                     break;
@@ -222,6 +219,8 @@ namespace Enhancer.Assemblies
                     ProcessIdentifiers(null);
                     MetaData = identifiers.ToArray();
                     break;
+                default:
+                    throw Error();
             }
 
             uint? ProcessVersionNode(char? c)
@@ -245,7 +244,7 @@ namespace Enhancer.Assemblies
                             case ParsingPhase.Minor:
                                 phase = ParsingPhase.Patch;
                                 break;
-                            case ParsingPhase.Patch:
+                            default:
                                 throw Error();
                         }
                         break;
@@ -361,7 +360,6 @@ namespace Enhancer.Assemblies
         /// <param name="patch">Specifies the patch node for the version.</param>
         /// <param name="preRelease">Defines the identifiers of the pre-release node for the version.</param>
         /// <param name="metadata">Defines the identifiers of the build meta-data node for the version.</param>
-        [ExcludeFromCodeCoverage]
         public SemanticVersion(uint major, uint minor, uint patch, IEnumerable<object> preRelease, IEnumerable<object> metadata)
             : this(major, minor, patch,
                   (preRelease ?? throw new ArgumentNullException(nameof(preRelease))).Select(ObjectAsString),
@@ -388,8 +386,8 @@ namespace Enhancer.Assemblies
                 throw new ArgumentException("Meta-data identifiers can only contain ASCII alphanumeric characters, and hyphens.", nameof(metadata));
             }
 
-            preRelease = preRelease.Select(identifier => identifier ?? "");
-            metadata   = metadata  .Select(identifier => identifier ?? "");
+            preRelease = preRelease.Where(identifier => !IsNullOrEmpty(identifier));
+            metadata   = metadata  .Where(identifier => !IsNullOrEmpty(identifier));
 
             Major      = major;
             Minor      = minor;
@@ -537,7 +535,6 @@ namespace Enhancer.Assemblies
         /// have the same amount of identifiers, and all of them are equal one another, and they appear in the same
         /// order, otherwise <see langword="false"/>.
         /// </returns>
-        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             return Equals(obj as SemanticVersion);
@@ -732,7 +729,6 @@ namespace Enhancer.Assemblies
         /// This comparing function strictly follows the rules of what is specified in the https://semver.org
         /// specification's 11th point.
         /// </remarks>
-        [ExcludeFromCodeCoverage]
         int IComparable.CompareTo(object obj)
         {
             return CompareTo(obj as SemanticVersion ?? throw new ArgumentException("The parameter is not the expected type.", nameof(obj)));
