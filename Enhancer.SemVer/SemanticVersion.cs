@@ -76,7 +76,7 @@ namespace Enhancer.Assemblies
         /// <value>
         /// <see langword="true"/> if the current version identifies an initial release, otherwise <see langword="false"/>.
         /// </value>
-        public bool IsInitial => Major == 0;
+        public bool IsDevelopmentVersion => Major == 0;
 
         /// <summary>
         /// Gets a value indicating whether the current version is a pre-release.
