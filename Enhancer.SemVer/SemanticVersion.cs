@@ -504,7 +504,7 @@ namespace Enhancer.Assemblies
         public object Clone()
         {
             // Calling clone since these are arrays anyway, hence they do not really copy anything.
-            return new SemanticVersion(Major, Minor, Patch, PreRelease.ToArray().Clone(), MetaData.ToArray().Clone());
+            return new SemanticVersion(Major, Minor, Patch, (object[])PreRelease.ToArray().Clone(), (object[])MetaData.ToArray().Clone());
         }
 
         /// <summary>
@@ -890,33 +890,6 @@ namespace Enhancer.Assemblies
             }
 
             return a.CompareTo(b) >= 0;
-        }
-
-        /// <summary>
-        /// Converts the specified semantic version to a <see cref="Version"/>.
-        /// </summary>
-        /// <param name="version">The version to convert.</param>
-        /// <remarks>
-        /// The converted version will only have it's major and minor node set.
-        /// The <see cref="Patch"/>, <see cref="PreRelease"/> and <see cref="MetaData"/> values will not be transferred
-        /// to the result by any means.
-        /// </remarks>
-        public static explicit operator Version(SemanticVersion version)
-        {
-            return new Version((int)version.Major, (int)version.Minor);
-        }
-
-        /// <summary>
-        /// Converts the specified <see cref="Version"/> to a <see cref="SemanticVersion"/>.
-        /// </summary>
-        /// <param name="version">The version to convert.</param>
-        /// <remarks>
-        /// The converted version will only have it's major and minor node set.
-        /// The <see cref="Patch"/> node will be zero.
-        /// </remarks>
-        public static explicit operator SemanticVersion(Version version)
-        {
-            return new SemanticVersion((uint)version.Major, (uint)version.Minor, 0);
         }
     }
 }
