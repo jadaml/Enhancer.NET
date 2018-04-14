@@ -11,11 +11,11 @@ uint   preReleaseLevel = 1;
 string build        = Environment.GetEnvironmentVariable("BUILD_NUMBER") ?? "0";
 string revision     = Environment.GetEnvironmentVariable("REVISION_NUMBER") ?? "0";
 string specialBuild = Environment.GetEnvironmentVariable("SPECIAL_BUILD");
-string gitCommit    = Environment.GetEnvironmentVariable("GIT_COMMIT");
+string gitCommit    = Environment.GetEnvironmentVariable("GIT_COMMIT") ?? "";
 
 if (gitCommit.Length > 10)
 {
-    gitCommit = gitCommit.SubString(0, 10);
+    gitCommit = gitCommit.Substring(0, 10);
 }
 
 string user    = Environment.UserName;
