@@ -11,6 +11,7 @@ uint   preReleaseLevel = 1;
 string build        = Environment.GetEnvironmentVariable("BUILD_NUMBER") ?? "0";
 string revision     = Environment.GetEnvironmentVariable("REVISION_NUMBER") ?? "0";
 string specialBuild = Environment.GetEnvironmentVariable("SPECIAL_BUILD");
+string gitCommit    = Environment.GetEnvironmentVariable("GIT_COMMIT");
 
 string user    = Environment.UserName;
 string machine = Environment.MachineName;
@@ -33,7 +34,7 @@ if (build == "0" || revision == "0")
 }
 else
 {
-    buildMetaData = new object[] { build, revision, Environment.OSVersion.Platform, specialBuild };
+    buildMetaData = new object[] { build, gitCommit, Environment.OSVersion.Platform, specialBuild };
 }
 
 buildMetaData = from identifier in buildMetaData
