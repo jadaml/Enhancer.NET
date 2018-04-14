@@ -24,7 +24,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".generated.cs" #>
-<#@ include file="..\..\ProductVersion.t4" #>
+<#@ include file="../../ProductVersion.t4" #>
 <#@ include file="FileVersion.tt" #>
 <#
 Version assemblyVersion = new Version((int)major, 0);

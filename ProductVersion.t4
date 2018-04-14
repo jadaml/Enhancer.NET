@@ -1,5 +1,3 @@
-<#@ assembly name="System.DirectoryServices.AccountManagement" #>
-<#@ import namespace="System.DirectoryServices.AccountManagement" #>
 <#
 //// VERSION CONFIGURATION /////////////////////////////////////////////////////
 
@@ -14,14 +12,9 @@ string build        = Environment.GetEnvironmentVariable("BUILD_NUMBER") ?? "0";
 string revision     = Environment.GetEnvironmentVariable("REVISION_NUMBER") ?? "0";
 string specialBuild = Environment.GetEnvironmentVariable("SPECIAL_BUILD");
 
-string user    = "";
-string machine = "";
+string user    = Environment.UserName;
+string machine = Environment.MachineName;
 
-if (build == "0" || revision == "0")
-{
-    user     = Environment.UserName;
-    machine  = Environment.MachineName;
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 #>
