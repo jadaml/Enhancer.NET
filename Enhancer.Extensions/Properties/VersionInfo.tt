@@ -51,7 +51,7 @@ partial class VersionInfo
     internal const string _productVersionString  = "<#= productVersion #>";
 
     private static readonly Version         _assemblyVersion = new Version(<#= assemblyVersion.Major #>, <#= assemblyVersion.Minor #>);
-    private static readonly Version         _fileVersion     = new Version(<#= major #>, <#= minor #>, <#= build #>, <#= revision #>);
+    private static readonly Version         _fileVersion     = new Version(<#= fileMajor #>, <#= fileMinor #>, <#= build #>, <#= revision #>);
     private static readonly SemanticVersion _productVersion  = new SemanticVersion(<#= major #>, <#= minor #>, <#= patch #>,
 <#
             if (preRelease.Any())
