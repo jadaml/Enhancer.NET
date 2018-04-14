@@ -13,6 +13,11 @@ string revision     = Environment.GetEnvironmentVariable("REVISION_NUMBER") ?? "
 string specialBuild = Environment.GetEnvironmentVariable("SPECIAL_BUILD");
 string gitCommit    = Environment.GetEnvironmentVariable("GIT_COMMIT");
 
+if (gitCommit.Length > 10)
+{
+    gitCommit = gitCommit.SubString(0, 10);
+}
+
 string user    = Environment.UserName;
 string machine = Environment.MachineName;
 
