@@ -14,7 +14,7 @@ namespace Enhancer.Extensions.Test
         [Test(TestOf = typeof(StringExtensions))]
         public void ToUserFriendlyString()
         {
-            AreEqual("String Transformation For NET 45 Works", "stringTransformation_forNET45Works".ToUserFriendlyString());
+            AreEqual("String Transformation For NET Framework 45 Works", "stringTransformation_forNETFramework45Works".ToUserFriendlyString());
         }
     }
 }
