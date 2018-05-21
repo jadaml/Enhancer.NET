@@ -39,6 +39,11 @@ namespace Enhancer.Extensions
         /// </returns>
         public static Type GetGenericType<T>(this T type, Type genericType)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             return GetGenericType(typeof(T), genericType);
         }
 
@@ -53,24 +58,28 @@ namespace Enhancer.Extensions
         /// </returns>
         public static Type GetGenericType(this Type type, Type genericType)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             if (genericType == null)
             {
                 throw new ArgumentNullException(nameof(genericType));
             }
 
-            if (!genericType.IsInterface)
-            {
-                throw new ArgumentException(IsntInterface, nameof(genericType));
-            }
-
-            if (!genericType.IsGenericTypeDefinition)
-            {
-                throw new ArgumentException(IsntGenericTypeDef, nameof(genericType));
-            }
-
             if (genericType.IsInterface)
             {
                 return type.GetInterface(genericType.Name);
+            }
+
+            if (!genericType.IsGenericTypeDefinition && (type == genericType || type.IsSubclassOf(genericType)))
+            {
+                return genericType;
+            }
+            else if (!genericType.IsGenericTypeDefinition)
+            {
+                return null;
             }
 
             for (; type != typeof(object); type = type.BaseType)
