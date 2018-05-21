@@ -32,143 +32,143 @@ namespace Enhancer.Test.SemanticVersion
         private const string _comparison = "Ordering and Equality";
         private const string _formatting = "Formatting";
 
-        private static (string, SemVer)[] _versionParsing = new(string, SemVer)[]
+        private static object[][] _versionParsing = new object[][]
         {
-            ("1.2.3", new SemVer(1, 2, 3)),
-            ("1.2.3-alpha", new SemVer(1, 2, 3, "alpha")),
-            ("1.2.3-alpha.1", new SemVer(1, 2, 3, "alpha", 1)),
-            ("1.2.3+20130313144700", new SemVer(1, 2, 3, new object[0], new object[] { 20130313144700 })),
-            ("1.2.3-alpha.1+20130313144700.11", new SemVer(1, 2, 3, new object[] { "alpha", 1 }, new object[] { 20130313144700, 11 })),
+            new object[] { "1.2.3", new SemVer(1, 2, 3) },
+            new object[] { "1.2.3-alpha", new SemVer(1, 2, 3, "alpha") },
+            new object[] { "1.2.3-alpha.1", new SemVer(1, 2, 3, "alpha", 1) },
+            new object[] { "1.2.3+20130313144700", new SemVer(1, 2, 3, new object[0], new object[] { 20130313144700 }) },
+            new object[] { "1.2.3-alpha.1+20130313144700.11", new SemVer(1, 2, 3, new object[] { "alpha", 1 }, new object[] { 20130313144700, 11 }) },
         };
 
-        private static (string, string)[] _versionFormat = new(string, string)[]
+        private static object[][] _versionFormat = new object[][]
         {
-            ("1.2.3-alpha.28+this.is.ignored", null),
-            ("1.2.3", "0"),
-            ("1.2.3-alpha.28", "1"),
-            ("1.2.3+this.is.ignored", "2"),
-            ("1.2.3-alpha.28+this.is.ignored", "3"),
+            new object[] { "1.2.3-alpha.28+this.is.ignored", null },
+            new object[] { "1.2.3", "0" },
+            new object[] { "1.2.3-alpha.28", "1" },
+            new object[] { "1.2.3+this.is.ignored", "2" },
+            new object[] { "1.2.3-alpha.28+this.is.ignored", "3" },
         };
 
-        private static (bool, SemVer, SemVer, OperatorExecution<SemVer>)[] _comparisons = new(bool, SemVer, SemVer, OperatorExecution<SemVer>)[]
+        private static object[][] _comparisons = new object[][]
         {
-            (true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a != b)),
-            (false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b <= a)),
-            (false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a == b)),
+            new object[] { true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { true, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a != b) },
+            new object[] { false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => b <= a) },
+            new object[] { false, new SemVer(1,2,0), new SemVer(2,0,0), new OperatorExecution<SemVer>((a, b) => a == b) },
 
-            (true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a != b)),
-            (false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b <= a)),
-            (false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a == b)),
+            new object[] { true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { true, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a != b) },
+            new object[] { false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => b <= a) },
+            new object[] { false, new SemVer(1,0,2), new SemVer(1,1,0), new OperatorExecution<SemVer>((a, b) => a == b) },
 
-            (true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a != b)),
-            (false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b <= a)),
-            (false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a == b)),
+            new object[] { true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { true, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a != b) },
+            new object[] { false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => b <= a) },
+            new object[] { false, new SemVer(1,0,0), new SemVer(1,0,2), new OperatorExecution<SemVer>((a, b) => a == b) },
 
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b <= a)),
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0), new OperatorExecution<SemVer>((a, b) => b <= a) },
 
-            (true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b <= a)),
+            new object[] { true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,0,"alpha",1), new SemVer(1,0,0,"alpha","beta"), new OperatorExecution<SemVer>((a, b) => b <= a) },
 
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b <= a)),
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"beta"), new OperatorExecution<SemVer>((a, b) => b <= a) },
 
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a < b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b > a)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a <= b)),
-            (true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b >= a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a > b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b < a)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a >= b)),
-            (false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b <= a)),
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a < b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b > a) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a <= b) },
+            new object[] { true, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b >= a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a > b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b < a) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a >= b) },
+            new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b <= a) },
 
-            (true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a == b)),
-            (true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0)),
-            (true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a == b)),
-            (true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0)),
-            (true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0,"alpha"), new OperatorExecution<SemVer>((a, b) => a == b)),
-            (true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0, new object[] { "alpha" }, new object[] { "ignored" }), new OperatorExecution<SemVer>((a, b) => a == b)),
+            new object[] { true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a == b) },
+            new object[] { true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0) },
+            new object[] { true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a == b) },
+            new object[] { true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0) },
+            new object[] { true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0,"alpha"), new OperatorExecution<SemVer>((a, b) => a == b) },
+            new object[] { true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0, new object[] { "alpha" }, new object[] { "ignored" }), new OperatorExecution<SemVer>((a, b) => a == b) },
         };
 
-        private static (int, SemVer, SemVer)[] _methodComparison = new(int, SemVer, SemVer)[]
+        private static object[][] _methodComparison = new object[][]
         {
-            (00, new SemVer(1,2,0), new SemVer(1,2,0)),
-            (01, new SemVer(2,0,0), new SemVer(1,2,0)),
-            (-1, new SemVer(1,2,0), new SemVer(2,0,0)),
+            new object[] { 00, new SemVer(1,2,0), new SemVer(1,2,0) },
+            new object[] { 01, new SemVer(2,0,0), new SemVer(1,2,0) },
+            new object[] { -1, new SemVer(1,2,0), new SemVer(2,0,0) },
 
-            (00, new SemVer(1,2,3), new SemVer(1,2,3)),
-            (01, new SemVer(1,3,0), new SemVer(1,2,3)),
-            (-1, new SemVer(1,2,3), new SemVer(1,3,0)),
+            new object[] { 00, new SemVer(1,2,3), new SemVer(1,2,3) },
+            new object[] { 01, new SemVer(1,3,0), new SemVer(1,2,3) },
+            new object[] { -1, new SemVer(1,2,3), new SemVer(1,3,0) },
 
-            (00, new SemVer(1,2,3), new SemVer(1,2,3)),
-            (01, new SemVer(1,2,4), new SemVer(1,2,3)),
-            (-1, new SemVer(1,2,3), new SemVer(1,2,4)),
+            new object[] { 00, new SemVer(1,2,3), new SemVer(1,2,3) },
+            new object[] { 01, new SemVer(1,2,4), new SemVer(1,2,3) },
+            new object[] { -1, new SemVer(1,2,3), new SemVer(1,2,4) },
 
-            (00, new SemVer(1,2,3),     new SemVer(1,2,3)),
-            (01, new SemVer(1,2,3),     new SemVer(1,2,3,1,2)),
-            (-1, new SemVer(1,2,3,1,2), new SemVer(1,2,3)),
+            new object[] { 00, new SemVer(1,2,3),     new SemVer(1,2,3) },
+            new object[] { 01, new SemVer(1,2,3),     new SemVer(1,2,3,1,2) },
+            new object[] { -1, new SemVer(1,2,3,1,2), new SemVer(1,2,3) },
 
-            (00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha")),
-            (01, new SemVer(1,2,3,"beta-"), new SemVer(1,2,3,"alpha")),
-            (-1, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"beta-")),
+            new object[] { 00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha") },
+            new object[] { 01, new SemVer(1,2,3,"beta-"), new SemVer(1,2,3,"alpha") },
+            new object[] { -1, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"beta-") },
 
-            (00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha")),
-            (01, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,1)),
-            (-1, new SemVer(1,2,3,1),       new SemVer(1,2,3,"alpha")),
+            new object[] { 00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha") },
+            new object[] { 01, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,1) },
+            new object[] { -1, new SemVer(1,2,3,1),       new SemVer(1,2,3,"alpha") },
 
-            (00, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha")),
-            (01, new SemVer(1,2,3,"alpha",1), new SemVer(1,2,3,"alpha")),
-            (-1, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha",1)),
+            new object[] { 00, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha") },
+            new object[] { 01, new SemVer(1,2,3,"alpha",1), new SemVer(1,2,3,"alpha") },
+            new object[] { -1, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha",1) },
 
-            (00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
-                 new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { })),
-            (00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { }),
-                 new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" })),
-            (00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
-                 new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" })),
-            (00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
-                 new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "skipped" })),
-            (00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "skipped" }),
-                 new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" })),
+            new object[] { 00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
+                new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { }) },
+            new object[] { 00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { }),
+                new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }) },
+            new object[] { 00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
+                new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }) },
+            new object[] { 00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }),
+                new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "skipped" }) },
+            new object[] { 00, new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "skipped" }),
+                new SemVer(1,2,3, new object[] { "alpha", 8 }, new object[] { "ignored" }) },
         };
 
         private static SemVer _equatalon = new SemVer(1,2,3,new object[] { "alpha", 28 }, new object[] { "this", "is", "ignored" });
@@ -261,30 +261,30 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void FromString((string, SemVer) input)
+        public void FromString(string ver, SemVer expected)
         {
-            AreEqual(input.Item2, SemVer.Parse(input.Item1));
+            AreEqual(expected, SemVer.Parse(ver));
         }
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void TryParse((string, SemVer) input)
+        public void TryParse(string ver, SemVer ignored)
         {
-            IsTrue(SemVer.TryParse(input.Item1, out _));
+            IsTrue(SemVer.TryParse(ver, out _));
         }
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void AsString((string, SemVer) input)
+        public void AsString(string expected, SemVer ver)
         {
-            AreEqual(input.Item1, input.Item2.ToString());
+            AreEqual(expected, ver.ToString());
         }
 
         [TestCaseSource(nameof(_versionFormat), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void FormatString((string, string) input)
+        public void FormatString(string expected, string format)
         {
-            AreEqual(input.Item1, _equatalon.ToString(input.Item2));
+            AreEqual(expected, _equatalon.ToString(format));
         }
 
         [TestCaseSource(nameof(_faultyVersions), Category = _parsing)]
@@ -303,15 +303,15 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(nameof(_comparisons), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void Comparisons((bool, SemVer, SemVer, OperatorExecution<SemVer>) input)
+        public void Comparisons(bool expected, SemVer a, SemVer b, OperatorExecution<SemVer> op)
         {
-            if (input.Item1)
+            if (expected)
             {
-                IsTrue(input.Item4.Invoke(input.Item2, input.Item3));
+                IsTrue(op.Invoke(a, b));
             }
             else
             {
-                IsFalse(input.Item4.Invoke(input.Item2, input.Item3));
+                IsFalse(op.Invoke(a, b));
             }
         }
 
@@ -427,16 +427,16 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(typeof(SemVerTest), nameof(_methodComparison), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void TypedCompareToTest(ValueTuple<int, SemVer, SemVer> input)
+        public void TypedCompareToTest(int expected, SemVer a, SemVer b)
         {
-            AreEqual(input.Item1, input.Item2.CompareTo(input.Item3));
+            AreEqual(expected, a.CompareTo(b));
         }
 
         [TestCaseSource(typeof(SemVerTest), nameof(_methodComparison), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void ObjectCompareToTest(ValueTuple<int, SemVer, SemVer> input)
+        public void ObjectCompareToTest(int expected, IComparable a, IComparable b)
         {
-            AreEqual(input.Item1, ((IComparable)input.Item2).CompareTo(input.Item3));
+            AreEqual(expected, a.CompareTo(b));
         }
 
         [Test(TestOf = typeof(SemVer))]
