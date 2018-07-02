@@ -43,10 +43,7 @@ namespace Enhancer.Extensions
         /// otherwise <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAnyOf<T>(this T value, params T[] args)
-        {
-            return IsAnyOf(value, args.AsEnumerable());
-        }
+        public static bool IsAnyOf<T>(this T value, params T[] args) => IsAnyOf(value, args.AsEnumerable());
 
         /// <summary>
         /// Check if a given value is contained in a collection
@@ -59,10 +56,7 @@ namespace Enhancer.Extensions
         /// otherwise <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAnyOf<T>(this T value, IEnumerable<T> collection)
-        {
-            return collection.Contains(value);
-        }
+        public static bool IsAnyOf<T>(this T value, IEnumerable<T> collection) => collection.Contains(value);
 
         /// <summary>
         /// Checks if a value is not part of the specified collection.
@@ -75,10 +69,7 @@ namespace Enhancer.Extensions
         /// otherwise <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNeitherOf<T>(this T value, params T[] args)
-        {
-            return IsNeitherOf(value, args.AsEnumerable());
-        }
+        public static bool IsNeitherOf<T>(this T value, params T[] args) => IsNeitherOf(value, args.AsEnumerable());
 
         /// <summary>
         /// Checks if a value is not part of the specified collection.
@@ -91,10 +82,7 @@ namespace Enhancer.Extensions
         /// otherwise <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNeitherOf<T>(this T value, IEnumerable<T> collection)
-        {
-            return !collection.Contains(value);
-        }
+        public static bool IsNeitherOf<T>(this T value, IEnumerable<T> collection) => !collection.Contains(value);
 
         /// <summary>
         /// Checks if the collection have at least <paramref name="count"/> number of elements.
@@ -107,9 +95,10 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveAtLeast(this IEnumerable collection, int count)
         {
-            Type        type;
-            int         i;
-            IEnumerator enumerator;
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
 
             if (collection is Array)
             {
@@ -121,10 +110,15 @@ namespace Enhancer.Extensions
                 return ((ICollection)collection).Count >= count;
             }
 
+            Type type;
+
             if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
             {
                 return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) >= count;
             }
+
+            int i;
+            IEnumerator enumerator;
 
             for (i = 0, enumerator = collection.GetEnumerator(); i < count && enumerator.MoveNext(); ++i) ;
 
@@ -142,9 +136,10 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveAtMost(this IEnumerable collection, int count)
         {
-            Type        type;
-            int         i;
-            IEnumerator enumerator;
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
 
             if (collection is Array)
             {
@@ -156,10 +151,15 @@ namespace Enhancer.Extensions
                 return ((ICollection)collection).Count <= count;
             }
 
+            Type type;
+
             if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
             {
                 return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) <= count;
             }
+
+            int i;
+            IEnumerator enumerator;
 
             for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i) ;
 
@@ -177,9 +177,10 @@ namespace Enhancer.Extensions
         /// </returns>
         public static bool HaveExactly(this IEnumerable collection, int count)
         {
-            Type        type;
-            int         i;
-            IEnumerator enumerator;
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
 
             if (collection is Array)
             {
@@ -191,10 +192,15 @@ namespace Enhancer.Extensions
                 return ((ICollection)collection).Count == count;
             }
 
+            Type type;
+
             if ((type = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
             {
                 return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) == count;
             }
+
+            int i;
+            IEnumerator enumerator;
 
             for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i)
             { }
@@ -211,10 +217,7 @@ namespace Enhancer.Extensions
         /// <param name="offset">The lower bound to start the element selection from.</param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T RandomElement<T>(this IList<T> list, Random random, int offset = 0)
-        {
-            return Select(random, list, offset, list.Count - offset);
-        }
+        public static T RandomElement<T>(this IList<T> list, Random random, int offset = 0) => Select(random, list, offset, (list?.Count ?? 0) - offset);
 
         /// <summary>
         /// Select a random element from a list.
@@ -228,10 +231,7 @@ namespace Enhancer.Extensions
         /// </param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T RandomElement<T>(this IList<T> list, Random random, int offset, int count)
-        {
-            return Select(random, list, offset, count);
-        }
+        public static T RandomElement<T>(this IList<T> list, Random random, int offset, int count) => Select(random, list, offset, count);
 
         /// <summary>
         /// Select a random element from a list.
@@ -242,10 +242,7 @@ namespace Enhancer.Extensions
         /// <param name="offset">The lower bound to start the element selection from.</param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Select<T>(this Random random, IList<T> list, int offset = 0)
-        {
-            return Select(random, list, offset, list.Count - offset);
-        }
+        public static T Select<T>(this Random random, IList<T> list, int offset = 0) => Select(random, list, offset, (list?.Count ?? 0) - offset);
 
         /// <summary>
         /// Select a random element from a list.
@@ -275,7 +272,7 @@ namespace Enhancer.Extensions
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            if (offset + count >= list.Count)
+            if (offset + count > list.Count)
             {
                 throw new ArgumentException("The specified arguments exceeds the list.");
             }
@@ -291,6 +288,11 @@ namespace Enhancer.Extensions
         /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add(this IList list, object value, int amount)
         {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
             if (list.IsReadOnly)
             {
                 throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
@@ -310,10 +312,7 @@ namespace Enhancer.Extensions
         /// <param name="type">The type of the instance to create.</param>
         /// <param name="amount">The number of times an object should be added to the collection.</param>
         /// <param name="args">The arguments for the constructor.</param>
-        public static void AddMany(this IList list, Type type, int amount, params object[] args)
-        {
-            AddMany(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
-        }
+        public static void AddMany(this IList list, Type type, int amount, params object[] args) => AddMany(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
 
         /// <summary>
         /// Adds many object instance to the collection by the specified amount, invoking the same constructor
@@ -431,13 +430,11 @@ namespace Enhancer.Extensions
                 return (int)genericType.GetProperty("Count").GetValue(collection);
             }
 
-            for (count = 0, enumerator = collection.GetEnumerator();
-                 count >= 0 && enumerator.MoveNext();
-                 ++count) ;
-
-            if (count < 0)
+            checked
             {
-                throw new OverflowException(CollectionOverflowInt32MaxValue);
+                for (count = 0, enumerator = collection.GetEnumerator();
+                     count >= 0 && enumerator.MoveNext();
+                     ++count) ;
             }
 
             return count;
@@ -469,13 +466,11 @@ namespace Enhancer.Extensions
                 return (int)genericType.GetProperty("Count").GetValue(collection);
             }
 
-            for (count = 0, enumerator = collection.GetEnumerator();
-                 count >= 0 && enumerator.MoveNext();
-                 count += predicate(enumerator.Current) ? 1 : 0) ;
-
-            if (count < 0)
+            checked
             {
-                throw new OverflowException(CollectionOverflowInt32MaxValue);
+                for (count = 0, enumerator = collection.GetEnumerator();
+                     count >= 0 && enumerator.MoveNext();
+                     count += predicate(enumerator.Current) ? 1 : 0) ;
             }
 
             return count;
@@ -491,18 +486,11 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            if (collection is Array)
+            checked
             {
-                return ((Array)collection).LongLength;
-            }
-
-            for (count = 0, enumerator = collection.GetEnumerator();
-                 count >= 0 && enumerator.MoveNext();
-                 ++count) ;
-
-            if (count < 0)
-            {
-                throw new OverflowException(CollectionOverflowInt64MaxValue);
+                for (count = 0, enumerator = collection.GetEnumerator();
+                     count >= 0 && enumerator.MoveNext();
+                     ++count) ;
             }
 
             return count;
@@ -518,18 +506,11 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            if (collection is Array)
+            checked
             {
-                return ((Array)collection).LongLength;
-            }
-
-            for (count = 0, enumerator = collection.GetEnumerator();
-                 count >= 0 && enumerator.MoveNext();
-                 count += predicate(enumerator.Current) ? 1 : 0) ;
-
-            if (count < 0)
-            {
-                throw new OverflowException(CollectionOverflowInt64MaxValue);
+                for (count = 0, enumerator = collection.GetEnumerator();
+                     count >= 0 && enumerator.MoveNext();
+                     count += predicate(enumerator.Current) ? 1 : 0) ;
             }
 
             return count;
