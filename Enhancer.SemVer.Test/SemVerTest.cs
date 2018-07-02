@@ -36,8 +36,8 @@ namespace Enhancer.Test.SemanticVersion
         {
             new object[] { "1.2.3", new SemVer(1, 2, 3) },
             new object[] { "1.2.3-alpha", new SemVer(1, 2, 3, "alpha") },
-            new object[] { "1.2.3-alpha.1", new SemVer(1, 2, 3, "alpha", 1) },
-            new object[] { "1.2.3+20130313144700", new SemVer(1, 2, 3, new object[0], new object[] { 20130313144700 }) },
+            new object[] { "1.2.3-alpha.1.-00", new SemVer(1, 2, 3, "alpha", 1, "-00") },
+            new object[] { "1.2.3+20130313144700.Gorillas.-00", new SemVer(1, 2, 3, new object[0], new object[] { 20130313144700, "Gorillas", "-00" }) },
             new object[] { "1.2.3-alpha.1+20130313144700.11", new SemVer(1, 2, 3, new object[] { "alpha", 1 }, new object[] { 20130313144700, 11 }) },
         };
 
@@ -121,9 +121,7 @@ namespace Enhancer.Test.SemanticVersion
             new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => a >= b) },
             new object[] { false, new SemVer(1,0,0,"alpha"), new SemVer(1,0,0,"alpha","1"), new OperatorExecution<SemVer>((a, b) => b <= a) },
 
-            new object[] { true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a == b) },
             new object[] { true, new SemVer(1,2,0), new SemVer(1,2,0), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0) },
-            new object[] { true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a == b) },
             new object[] { true, new SemVer(1,2,0,"10"), new SemVer(1,2,0,"10"), new OperatorExecution<SemVer>((a, b) => a.CompareTo(b) == 0) },
             new object[] { true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0,"alpha"), new OperatorExecution<SemVer>((a, b) => a == b) },
             new object[] { true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0, new object[] { "alpha" }, new object[] { "ignored" }), new OperatorExecution<SemVer>((a, b) => a == b) },
@@ -139,11 +137,11 @@ namespace Enhancer.Test.SemanticVersion
             new object[] { 01, new SemVer(1,3,0), new SemVer(1,2,3) },
             new object[] { -1, new SemVer(1,2,3), new SemVer(1,3,0) },
 
-            new object[] { 00, new SemVer(1,2,3), new SemVer(1,2,3) },
+            //new object[] { 00, new SemVer(1,2,3), new SemVer(1,2,3) },
             new object[] { 01, new SemVer(1,2,4), new SemVer(1,2,3) },
             new object[] { -1, new SemVer(1,2,3), new SemVer(1,2,4) },
 
-            new object[] { 00, new SemVer(1,2,3),     new SemVer(1,2,3) },
+            //new object[] { 00, new SemVer(1,2,3),     new SemVer(1,2,3) },
             new object[] { 01, new SemVer(1,2,3),     new SemVer(1,2,3,1,2) },
             new object[] { -1, new SemVer(1,2,3,1,2), new SemVer(1,2,3) },
 
@@ -151,11 +149,11 @@ namespace Enhancer.Test.SemanticVersion
             new object[] { 01, new SemVer(1,2,3,"beta-"), new SemVer(1,2,3,"alpha") },
             new object[] { -1, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"beta-") },
 
-            new object[] { 00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha") },
+            //new object[] { 00, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,"alpha") },
             new object[] { 01, new SemVer(1,2,3,"alpha"), new SemVer(1,2,3,1) },
             new object[] { -1, new SemVer(1,2,3,1),       new SemVer(1,2,3,"alpha") },
 
-            new object[] { 00, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha") },
+            //new object[] { 00, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha") },
             new object[] { 01, new SemVer(1,2,3,"alpha",1), new SemVer(1,2,3,"alpha") },
             new object[] { -1, new SemVer(1,2,3,"alpha"),   new SemVer(1,2,3,"alpha",1) },
 
@@ -475,6 +473,15 @@ namespace Enhancer.Test.SemanticVersion
         public void ObjectEqualsFail()
         {
             IsFalse(SemVer.Empty.Equals(new object()));
+        }
+
+        [TestCase("0.0.0")]
+        [TestCase("1.0.0")]
+        [TestCase("1.4.35-Alpha.28")]
+        [TestOf(typeof(SemVer))]
+        public void GetHashCodeConsistency(string strver)
+        {
+            IsTrue(new SemVer(strver).GetHashCode() == new SemVer(strver).GetHashCode(), "The hash-code does not yields the same result for same versions.");
         }
     }
 }

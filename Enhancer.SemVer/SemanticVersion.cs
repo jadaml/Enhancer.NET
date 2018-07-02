@@ -280,7 +280,8 @@ namespace Enhancer.Assemblies
                         return true;
                     case char alnum when alnum >= '0' && alnum <= '9'
                                       || alnum >= 'a' && alnum <= 'z'
-                                      || alnum >= 'A' && alnum <= 'Z':
+                                      || alnum >= 'A' && alnum <= 'Z'
+                                      || alnum == '-':
                         acc += alnum;
                         break;
                     case char terminate when terminate == '.':
@@ -488,7 +489,6 @@ namespace Enhancer.Assemblies
         /// Calculates a hash code for this semantic version instance.
         /// </summary>
         /// <returns>A hash code for this version.</returns>
-        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             return (int)(Major
