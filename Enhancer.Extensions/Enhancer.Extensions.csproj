@@ -48,6 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="FancyFormatProvider.cs" />
+    <Compile Include="NumberExtensions.cs" />
+    <Compile Include="NumberExtensions.templated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NumberExtensions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -60,6 +67,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="StringLoader.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +80,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NumberExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NumberExtensions.templated.cs</LastGenOutput>
+    </Content>
     <Content Include="Properties\FileVersion.tt" />
     <Content Include="Properties\VersionInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -92,6 +104,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings.hu-HU.resx" />
+    <EmbeddedResource Include="Strings.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
