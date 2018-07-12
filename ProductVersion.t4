@@ -2,7 +2,7 @@
 //// VERSION CONFIGURATION /////////////////////////////////////////////////////
 
 uint major = 0;
-uint minor = 0;
+uint minor = 1;
 uint patch = 0;
 
 string preReleaseStage = "0";
