@@ -113,3 +113,5 @@ UpgradeLog*.XML
 *.generated.*
 *.res
 /!*
+/Enhancer.Interop
+/Enhancer.Interop.Test
