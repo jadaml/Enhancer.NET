@@ -202,8 +202,7 @@ namespace Enhancer.Extensions
             int i;
             IEnumerator enumerator;
 
-            for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i)
-            { }
+            for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i) ;
 
             return i == count;
         }
@@ -404,43 +403,7 @@ namespace Enhancer.Extensions
             }
         }
 
-        public static int Count(this IEnumerable collection)
-        {
-            Type        genericType;
-            int         count;
-            IEnumerator enumerator;
-
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            if (collection is Array)
-            {
-                return ((Array)collection).Length;
-            }
-
-            if (collection is ICollection)
-            {
-                return ((ICollection)collection).Count;
-            }
-
-            if ((genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
-            {
-                return (int)genericType.GetProperty("Count").GetValue(collection);
-            }
-
-            checked
-            {
-                for (count = 0, enumerator = collection.GetEnumerator();
-                     count >= 0 && enumerator.MoveNext();
-                     ++count) ;
-            }
-
-            return count;
-        }
-
-        public static int Count(this IEnumerable collection, Predicate<object> predicate)
+        public static int Count(this IEnumerable collection, Predicate<object> predicate = null)
         {
             Type genericType;
             int count;
@@ -468,35 +431,15 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = collection.GetEnumerator();
-                     count >= 0 && enumerator.MoveNext();
-                     count += predicate(enumerator.Current) ? 1 : 0) ;
-            }
-
-            return count;
-        }
-
-        public static long LongCount(this IEnumerable collection)
-        {
-            long count;
-            IEnumerator enumerator;
-
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            checked
-            {
-                for (count = 0, enumerator = collection.GetEnumerator();
-                     count >= 0 && enumerator.MoveNext();
+                for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
+                     enumerator.MoveNext();
                      ++count) ;
             }
 
             return count;
         }
 
-        public static long LongCount(this IEnumerable collection, Predicate<object> predicate)
+        public static long LongCount(this IEnumerable collection, Predicate<object> predicate = null)
         {
             long        count;
             IEnumerator enumerator;
@@ -508,32 +451,15 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = collection.GetEnumerator();
-                     count >= 0 && enumerator.MoveNext();
-                     count += predicate(enumerator.Current) ? 1 : 0) ;
+                for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
+                     enumerator.MoveNext();
+                     ++count) ;
             }
 
             return count;
         }
 
-        public static BigInteger BigCount(this IEnumerable collection)
-        {
-            BigInteger  count;
-            IEnumerator enumerator;
-
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            for (count = 0, enumerator = collection.GetEnumerator();
-                 enumerator.MoveNext();
-                 ++count) ;
-
-            return count;
-        }
-
-        public static BigInteger BigCount(this IEnumerable collection, Predicate<object> predicate)
+        public static BigInteger BigCount(this IEnumerable collection, Predicate<object> predicate = null)
         {
             BigInteger count;
             IEnumerator enumerator;
@@ -543,11 +469,23 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            for (count = 0, enumerator = collection.GetEnumerator();
+            for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
                  enumerator.MoveNext();
-                 count += predicate(enumerator.Current) ? 1 : 0) ;
+                 ++count) ;
 
             return count;
+        }
+
+        private static IEnumerable Filter(IEnumerable collection, Predicate<object> predicate)
+        {
+            if (predicate is null)
+            {
+                return collection;
+            }
+
+            return from object obj in collection
+                   where predicate(obj)
+                   select obj;
         }
     }
 }
