@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
@@ -26,6 +27,7 @@ using System.Threading.Tasks;
 
 namespace Enhancer.Extensions
 {
+    [ExcludeFromCodeCoverage]
     internal static class StringLoader
     {
         private static ResourceManager _resourceManager = new ResourceManager("Enhancer.Extensions.Strings", typeof(StringLoader).Assembly);
