@@ -1,0 +1,42 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".generated.cs" #>
+<#
+string[] integralTypes = { "sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
+bool remainder = false;
+#>
+using Enhancer.Extensions;
+using NUnit.Framework;
+using static NUnit.Framework.Assert;
+
+namespace Enhancer.Extensions.Test
+{
+    partial class NumberExtensionsTest
+    {
+<#
+            foreach (string typeName in integralTypes)
+            {
+                if (remainder)
+                {
+                    WriteLine("");
+                }
+#>
+        [Test]
+        [TestOf(typeof(NumberExtensions))]
+        public void ClampTest_<#= typeName #>()
+        {
+            AreEqual(((<#= typeName #>)1), ((<#= typeName #>)0).Clamp(1, 3));
+            AreEqual(((<#= typeName #>)1), ((<#= typeName #>)1).Clamp(1, 3));
+            AreEqual(((<#= typeName #>)2), ((<#= typeName #>)2).Clamp(1, 3));
+            AreEqual(((<#= typeName #>)3), ((<#= typeName #>)3).Clamp(1, 3));
+            AreEqual(((<#= typeName #>)3), ((<#= typeName #>)4).Clamp(1, 3));
+        }
+<#
+                remainder = true;
+            }
+#>
+    }
+}

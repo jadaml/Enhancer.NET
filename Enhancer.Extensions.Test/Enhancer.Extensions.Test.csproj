@@ -55,6 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableExtensionsTest.cs" />
+    <Compile Include="FancyFormatterProviderTest.cs" />
+    <Compile Include="NumberExtensionsTest.cs" />
+    <Compile Include="NumberExtensionsTest.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NumberExtensionsTest.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\VersionInfo.generated.cs">
       <DependentUpon>VersionInfo.tt</DependentUpon>
@@ -82,6 +89,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NumberExtensionsTest.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NumberExtensionsTest.generated.cs</LastGenOutput>
+    </Content>
     <Content Include="Properties\FileVersion.tt" />
     <Content Include="Properties\VersionInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
