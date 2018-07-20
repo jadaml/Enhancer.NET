@@ -311,7 +311,8 @@ namespace Enhancer.Extensions
         /// <param name="type">The type of the instance to create.</param>
         /// <param name="amount">The number of times an object should be added to the collection.</param>
         /// <param name="args">The arguments for the constructor.</param>
-        public static void AddMany(this IList list, Type type, int amount, params object[] args) => AddMany(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
+        public static void Add(this IList list, Type type, int amount, params object[] args)
+            => Add(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
 
         /// <summary>
         /// Adds many object instance to the collection by the specified amount, invoking the same constructor
@@ -322,7 +323,7 @@ namespace Enhancer.Extensions
         /// <param name="signature">The signature of the constructor to invoke.</param>
         /// <param name="amount">The number of times an object should be added to the collection.</param>
         /// <param name="args">The arguments for the constructor.</param>
-        public static void AddMany(this IList list, Type type, Type[] signature, int amount, params object[] args)
+        public static void Add(this IList list, Type type, Type[] signature, int amount, params object[] args)
         {
             ConstructorInfo ctor;
 
@@ -431,7 +432,7 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
+                for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -451,7 +452,7 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
+                for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -469,23 +470,41 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            for (count = 0, enumerator = Filter(collection, predicate).GetEnumerator();
+            for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
                  enumerator.MoveNext();
                  ++count) ;
 
             return count;
         }
 
-        private static IEnumerable Filter(IEnumerable collection, Predicate<object> predicate)
+        public static IEnumerable Where(IEnumerable collection, Func<object, bool> predicate)
         {
-            if (predicate is null)
+            if (collection == null)
             {
-                return collection;
+                throw new ArgumentNullException(nameof(collection));
             }
 
-            return from object obj in collection
-                   where predicate(obj)
-                   select obj;
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            return collection.Cast<object>().Where(predicate);
+        }
+
+        public static IEnumerable Where(IEnumerable collection, Func<object, int, bool> predicate)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            return collection.Cast<object>().Where(predicate);
         }
     }
 }
