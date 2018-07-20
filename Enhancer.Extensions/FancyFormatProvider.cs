@@ -71,7 +71,7 @@ namespace Enhancer.Extensions
         /// <returns>
         /// The string resource for the specified culture.
         /// </returns>
-        public static string On(CultureInfo culture) => StringLoader.GetString("On", culture);
+        public static string On(CultureInfo culture = null) => StringLoader.GetString("On", culture);
 
         /// <summary>
         /// Retrieves the string resource for "Off" used when formatting boolean values.
@@ -83,7 +83,7 @@ namespace Enhancer.Extensions
         /// <returns>
         /// The string resource for the specified culture.
         /// </returns>
-        public static string Off(CultureInfo culture) => StringLoader.GetString("Off", culture);
+        public static string Off(CultureInfo culture = null) => StringLoader.GetString("Off", culture);
 
         /// <summary>
         /// Retrieves the string resource for "Yes" used when formatting boolean values.
@@ -95,7 +95,7 @@ namespace Enhancer.Extensions
         /// <returns>
         /// The string resource for the specified culture.
         /// </returns>
-        public static string Yes(CultureInfo culture) => StringLoader.GetString("Yes", culture);
+        public static string Yes(CultureInfo culture = null) => StringLoader.GetString("Yes", culture);
 
         /// <summary>
         /// Retrieves the string resource for "No" used when formatting boolean values.
@@ -107,7 +107,7 @@ namespace Enhancer.Extensions
         /// <returns>
         /// The string resource for the specified culture.
         /// </returns>
-        public static string No(CultureInfo culture) => StringLoader.GetString("No", culture);
+        public static string No(CultureInfo culture = null) => StringLoader.GetString("No", culture);
 
         /// <summary>
         /// Retrieves the string resource for "True" used when formatting boolean values.
@@ -122,7 +122,7 @@ namespace Enhancer.Extensions
         /// <remarks>
         /// The returned value is not dependent on <see cref="bool.TrueString"/>.
         /// </remarks>
-        public static string True(CultureInfo culture) => StringLoader.GetString("True", culture);
+        public static string True(CultureInfo culture = null) => StringLoader.GetString("True", culture);
 
         /// <summary>
         /// Retrieves the string resource for "False" used when formatting boolean values.
@@ -137,7 +137,7 @@ namespace Enhancer.Extensions
         /// <remarks>
         /// The returned value is not dependent on <see cref="bool.FalseString"/>.
         /// </remarks>
-        public static string False(CultureInfo culture) => StringLoader.GetString("False", culture);
+        public static string False(CultureInfo culture = null) => StringLoader.GetString("False", culture);
 
         /// <summary>
         /// Returns itself as a format providing service.
@@ -152,7 +152,7 @@ namespace Enhancer.Extensions
         public object GetFormat(Type formatType) => formatType == typeof(ICustomFormatter) ? this : null;
 
         /// <inheritdoc/>
-        public string Format(string format, object arg, IFormatProvider provider)
+        public string Format(string format, object arg, IFormatProvider provider = null)
         {
             switch (arg)
             {
@@ -355,12 +355,12 @@ namespace Enhancer.Extensions
                 }
             }
 
-            string formatCode = format?.Substring(0, 1) ?? "G";
+            string formatCode = format.Substring(0, 1);
             int    digits;
 
             try
             {
-                digits = int.Parse(format?.Substring(1) ?? "0");
+                digits = int.Parse(format.Substring(1));
             }
             catch (FormatException fex)
             {
@@ -371,7 +371,7 @@ namespace Enhancer.Extensions
 
             if (digits == 0
              && !_typeBaseDigitsMapping.TryGetValue(Tuple.Create(baseType, formatCode.ToUpper()), out digits))
-            {
+            { // Failsafe: We didn't cover all base types an enumeration can have.
                 digits = formatCode.ToUpper() == "X" ? 8 : 10;
             }
 
@@ -407,7 +407,7 @@ namespace Enhancer.Extensions
 
                 if (splitIndex == -1)
                 {
-                    trueString  = format.Substring(1);
+                    trueString  = format;
                     falseString = "";
                 }
                 else
@@ -417,6 +417,43 @@ namespace Enhancer.Extensions
                 }
 
                 return FilterBoolCaseFormat(value ? trueString : falseString);
+
+                string FilterBoolCaseFormat(string subfmt)
+                {
+                    if (subfmt.Length == 0)
+                    {
+                        return subfmt;
+                    }
+
+                    StringBuilder result = new StringBuilder(subfmt.Length, subfmt.Length);
+                    bool openBracket = false;
+                    bool closeBracket = false;
+
+                    foreach (char ch in subfmt.Substring(1))
+                    {
+                        if (!openBracket && ch == '[' || !closeBracket && ch == ']')
+                        {
+                            openBracket  = ch == '[';
+                            closeBracket = ch == ']';
+                        }
+                        else if (openBracket && ch == '[')
+                        {
+                            result.Append(ch);
+                            openBracket = false;
+                        }
+                        else if (closeBracket && ch == ']')
+                        {
+                            result.Append(ch);
+                            closeBracket = false;
+                        }
+                        else
+                        {
+                            result.Append(ch);
+                        }
+                    }
+
+                    return result.ToString();
+                }
             }
 
             switch (format)
@@ -429,7 +466,7 @@ namespace Enhancer.Extensions
                 case "of":
                     return (value ? On(provider as CultureInfo) : Off(provider as CultureInfo)).ToLower();
                 case "OF":
-                    return (value ? On(provider as CultureInfo) : Off(provider as CultureInfo));
+                    return value ? On(provider as CultureInfo) : Off(provider as CultureInfo);
                 case "yn":
                     return (value ? Yes(provider as CultureInfo) : No(provider as CultureInfo)).ToLower();
                 case "YN":
@@ -465,53 +502,6 @@ namespace Enhancer.Extensions
                 "{0:N2}\x00A0{1}",
                 //$"{{0:N2}}\x00A0{{1,-{workingUnits.Max(s => s.Length)}}}",
                 result, workingUnits[power]);
-        }
-
-        private static string FilterBoolCaseFormat(string format)
-        {
-            if (format.Length == 0)
-            {
-                return format;
-            }
-
-            StringBuilder result = new StringBuilder(format.Length, format.Length);
-            bool openBracket = false;
-            bool closeBracket = false;
-
-            foreach (char ch in format.Substring(format.StartsWith("[") ? 1 : 0))
-            {
-                if (openBracket && ch == '[')
-                {
-                    result.Append(ch);
-                    openBracket = false;
-                }
-                else if (openBracket)
-                {
-                    result.Append(ch);
-                    openBracket = false;
-                }
-                else if (closeBracket && ch == ']')
-                {
-                    result.Append(ch);
-                    closeBracket = false;
-                }
-                else if (closeBracket)
-                {
-                    result.Append(ch);
-                    closeBracket = false;
-                }
-                else if (ch == '[' || ch == ']')
-                {
-                    openBracket  = ch == '[';
-                    closeBracket = ch == ']';
-                }
-                else
-                {
-                    result.Append(ch);
-                }
-            }
-
-            return result.ToString();
         }
     }
 }
