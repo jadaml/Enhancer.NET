@@ -117,7 +117,7 @@ namespace Enhancer.Extensions
                 return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) >= count;
             }
 
-            int i;
+            int         i;
             IEnumerator enumerator;
 
             for (i = 0, enumerator = collection.GetEnumerator(); i < count && enumerator.MoveNext(); ++i) ;
@@ -158,7 +158,7 @@ namespace Enhancer.Extensions
                 return (int)type.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection) <= count;
             }
 
-            int i;
+            int         i;
             IEnumerator enumerator;
 
             for (i = 0, enumerator = collection.GetEnumerator(); i <= count && enumerator.MoveNext(); ++i) ;
@@ -273,7 +273,7 @@ namespace Enhancer.Extensions
 
             if (offset + count > list.Count)
             {
-                throw new ArgumentException("The specified arguments exceeds the list.");
+                throw new ArgumentException(ArgsOutOfListRange);
             }
 
             return list[random.Next(offset, count + offset)];
@@ -294,7 +294,7 @@ namespace Enhancer.Extensions
 
             if (list.IsReadOnly)
             {
-                throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
+                throw new InvalidOperationException(ReadOnlyCollection);
             }
 
             for (int c = 0; c < amount; ++c)
@@ -329,12 +329,12 @@ namespace Enhancer.Extensions
 
             if (list.IsReadOnly)
             {
-                throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
+                throw new InvalidOperationException(ReadOnlyCollection);
             }
 
             if ((ctor = type.GetConstructor(signature)) is null)
             {
-                throw new ArgumentException($"The specified {type} type does not have a public constructor with {signature.Length} number of arguments.");
+                throw new ArgumentException(string.Format(CtorWithoutSignature, type, signature.Length));
             }
 
             for (int c = 0; c < amount; c++)
@@ -354,7 +354,7 @@ namespace Enhancer.Extensions
         {
             if (list.IsReadOnly)
             {
-                throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
+                throw new InvalidOperationException(ReadOnlyCollection);
             }
 
             for (int c = 0; c < amount; c++)
@@ -374,7 +374,7 @@ namespace Enhancer.Extensions
         {
             if (collection.IsReadOnly)
             {
-                throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
+                throw new InvalidOperationException(ReadOnlyCollection);
             }
 
             for (int c = 0; c < amount; c++)
@@ -395,7 +395,7 @@ namespace Enhancer.Extensions
         {
             if (collection.IsReadOnly)
             {
-                throw new InvalidOperationException("Cannot add values to the collection, because it is read-only.");
+                throw new InvalidOperationException(ReadOnlyCollection);
             }
 
             for (int c = 0; c < amount; c++)

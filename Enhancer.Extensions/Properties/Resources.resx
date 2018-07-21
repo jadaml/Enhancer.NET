@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgsOutOfListRange" xml:space="preserve">
+    <value>The specified arguments exceeds the range of the list.</value>
+    <comment>Exception message for Select&lt;T&gt;(Random,IList&lt;T&gt;,Int,Int)</comment>
+  </data>
   <data name="CollectionOverflowInt32MaxValue" xml:space="preserve">
     <value>The number of elements are greater than Int32.MaxValue</value>
     <comment>Exception message fol counting elements of a collection</comment>
@@ -125,6 +129,10 @@
     <value>The number of elements are greater than Int64.MaxValue</value>
     <comment>Exception message fol counting elements of a collection</comment>
   </data>
+  <data name="CtorWithoutSignature" xml:space="preserve">
+    <value>The specified {0} type does not have a public constructor with {1} number of arguments.</value>
+    <comment>Exception message for missing constructor with number of arguments.</comment>
+  </data>
   <data name="IsntGenericTypeDef" xml:space="preserve">
     <value>The type must be a generic type definition.</value>
     <comment>Exception message when the type isn't a generic type definition</comment>
@@ -132,5 +140,9 @@
   <data name="IsntInterface" xml:space="preserve">
     <value>The type must be an interface.</value>
     <comment>Exception message when the type isn't an interface.</comment>
+  </data>
+  <data name="ReadOnlyCollection" xml:space="preserve">
+    <value>Cannot add values to the collection, because it is read-only.</value>
+    <comment>Exception message for read-only collections</comment>
   </data>
 </root>

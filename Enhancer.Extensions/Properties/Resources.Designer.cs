@@ -61,6 +61,15 @@ namespace Enhancer.Extensions.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified arguments exceeds the range of the list..
+        /// </summary>
+        internal static string ArgsOutOfListRange {
+            get {
+                return ResourceManager.GetString("ArgsOutOfListRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The number of elements are greater than Int32.MaxValue.
         /// </summary>
         internal static string CollectionOverflowInt32MaxValue {
@@ -79,6 +88,15 @@ namespace Enhancer.Extensions.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified {0} type does not have a public constructor with {1} number of arguments..
+        /// </summary>
+        internal static string CtorWithoutSignature {
+            get {
+                return ResourceManager.GetString("CtorWithoutSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type must be a generic type definition..
         /// </summary>
         internal static string IsntGenericTypeDef {
@@ -93,6 +111,15 @@ namespace Enhancer.Extensions.Properties {
         internal static string IsntInterface {
             get {
                 return ResourceManager.GetString("IsntInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add values to the collection, because it is read-only..
+        /// </summary>
+        internal static string ReadOnlyCollection {
+            get {
+                return ResourceManager.GetString("ReadOnlyCollection", resourceCulture);
             }
         }
     }
