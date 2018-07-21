@@ -415,24 +415,24 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            if (collection is Array)
+            if (predicate is null && collection is Array)
             {
                 return ((Array)collection).Length;
             }
 
-            if (collection is ICollection)
+            if (predicate is null && collection is ICollection)
             {
                 return ((ICollection)collection).Count;
             }
 
-            if ((genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
+            if (predicate is null && (genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
             {
                 return (int)genericType.GetProperty("Count").GetValue(collection);
             }
 
             checked
             {
-                for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
+                for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -452,7 +452,7 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
+                for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -470,7 +470,7 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            for (count = 0, enumerator = Where(collection, obj => predicate(obj)).GetEnumerator();
+            for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
                  enumerator.MoveNext();
                  ++count) ;
 
