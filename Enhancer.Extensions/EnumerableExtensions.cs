@@ -292,7 +292,7 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(list));
             }
 
-            if (list.IsReadOnly)
+            if (list.IsFixedSize)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
@@ -327,7 +327,7 @@ namespace Enhancer.Extensions
         {
             ConstructorInfo ctor;
 
-            if (list.IsReadOnly)
+            if (list.IsFixedSize)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
@@ -352,7 +352,7 @@ namespace Enhancer.Extensions
         /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add(this IList list, Func<object> function, int amount)
         {
-            if (list.IsReadOnly)
+            if (list.IsFixedSize)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
