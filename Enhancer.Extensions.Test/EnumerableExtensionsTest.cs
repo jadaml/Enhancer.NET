@@ -32,6 +32,43 @@ namespace Enhancer.Extensions.Test
     [TestFixture]
     public class EnumerableExtensionsTest
     {
+        private class DummyList : IList
+        {
+            public object this[int index]
+            {
+                get => throw new NotImplementedException();
+                set => throw new NotImplementedException();
+            }
+
+            public bool IsReadOnly => true;
+
+            public bool IsFixedSize => false;
+
+            public int Count => 0;
+
+            public object SyncRoot => null;
+
+            public bool IsSynchronized => false;
+
+            public int Add(object value) => 0;
+
+            public void Clear() { }
+
+            public bool Contains(object value) => false;
+
+            public void CopyTo(Array array, int index) { }
+
+            public IEnumerator GetEnumerator() => new object[0].GetEnumerator();
+
+            public int IndexOf(object value) => -1;
+
+            public void Insert(int index, object value) => throw new NotSupportedException();
+
+            public void Remove(object value) => throw new NotSupportedException();
+
+            public void RemoveAt(int index) => throw new NotSupportedException();
+        }
+
         [ExcludeFromCodeCoverage]
         private class TestCollection<T> : ICollection<T>
         {
@@ -235,6 +272,186 @@ namespace Enhancer.Extensions.Test
 
             AreEqual(2, EnumerableExtensions.Select(rnd, Range(0, 4).ToArray(), 1));
             AreEqual(2, EnumerableExtensions.Select(rnd, Range(0, 5).ToArray(), 1, 3));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALOErrorNull()
+        {
+            IList list = null;
+            Throws<ArgumentNullException>(() => list.Add(42, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALOErrorFixedSize()
+        {
+            Throws<InvalidOperationException>(() => new int[0].Add(42, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALOErrorReadOnly()
+        {
+            Throws<InvalidOperationException>(() => new DummyList().Add(42, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALO()
+        {
+            IList list = new List<int>() { 2, 3, 4, };
+            list.Add(42, 8);
+            CollectionAssert.AreEqual(new int[] { 2, 3, 4, 42, 42, 42, 42, 42, 42, 42, 42 }, list);
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALTErrorNull()
+        {
+            Throws<ArgumentNullException>(() => (null as List<object>).Add(typeof(DateTime), 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALTErrorNull2()
+        {
+            Throws<ArgumentNullException>(() => new List<object>().Add(null as Type, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALTErrorFixedSize()
+        {
+            Throws<InvalidOperationException>(() => new object[0].Add(typeof(int), 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALTErrorReadOnly()
+        {
+            Throws<InvalidOperationException>(() => new DummyList().Add(typeof(int), 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALTErrorCtor()
+        {
+            Throws<ArgumentException>(() => new List<object>().Add(typeof(int), 8, null, null, null));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALT()
+        {
+            List<object> list = new List<object>() { 42 };
+
+            list.Add(typeof(DateTime), 8, 1900, 12, 30, 12, 34, 56, 789);
+
+            CollectionAssert.AreEqual(new object[]
+            {
+                42,
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+            }, list);
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorNull()
+        {
+            Throws<ArgumentNullException>(() => (null as List<object>).Add(typeof(DateTime), new Type[0], 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorNull2()
+        {
+            Throws<ArgumentNullException>(() => new List<object>().Add(null as Type, new Type[0], 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorNull3()
+        {
+            Throws<ArgumentNullException>(() => new List<object>().Add(typeof(DateTime), null as Type[], 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorFixedSize()
+        {
+            Throws<InvalidOperationException>(() => new object[0].Add(typeof(int), new Type[0], 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorReadOnly()
+        {
+            Throws<InvalidOperationException>(() => new DummyList().Add(typeof(int), new Type[0], 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALTErrorCtor()
+        {
+            Throws<ArgumentException>(() => new List<object>().Add(typeof(int), new Type[] { typeof(int), typeof(int), typeof(int) }, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add4ALT()
+        {
+            List<object> list = new List<object>() { 42 };
+
+            list.Add(typeof(DateTime), 8, 1900, 12, 30, 12, 34, 56, 789);
+
+            CollectionAssert.AreEqual(new object[]
+            {
+                42,
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+            }, list);
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALFErrorNull()
+        {
+            Throws<ArgumentNullException>(() => (null as IList).Add(() => null, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALFErrorNull2()
+        {
+            Throws<ArgumentNullException>(() => (new List<int>()).Add(null as Func<object>, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALFFixedSize()
+        {
+            Throws<InvalidOperationException>(() => new object[0].Add(() => null, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALFReadOnly()
+        {
+            Throws<InvalidOperationException>(() => new DummyList().Add(() => null, 8));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Add3ALF()
+        {
+            List<object> list = new List<object>() { 42 };
+
+            ((IList)list).Add(() => new DateTime(1900, 12, 30, 12, 34, 56, 789), 8);
+
+            CollectionAssert.AreEqual(new object[]
+            {
+                42,
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+                new DateTime(1900, 12, 30, 12, 34, 56, 789),
+            }, list);
         }
     }
 }
