@@ -312,7 +312,7 @@ namespace Enhancer.Extensions
         /// <param name="amount">The number of times an object should be added to the collection.</param>
         /// <param name="args">The arguments for the constructor.</param>
         public static void Add(this IList list, Type type, int amount, params object[] args)
-            => Add(list, type, args.Select(arg => arg.GetType()).ToArray(), amount, args);
+            => Add(list, type, args.Select(arg => arg?.GetType() ?? typeof(object)).ToArray(), amount, args);
 
         /// <summary>
         /// Adds many object instance to the collection by the specified amount, invoking the same constructor
@@ -325,12 +325,27 @@ namespace Enhancer.Extensions
         /// <param name="args">The arguments for the constructor.</param>
         public static void Add(this IList list, Type type, Type[] signature, int amount, params object[] args)
         {
-            ConstructorInfo ctor;
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (signature == null)
+            {
+                throw new ArgumentNullException(nameof(signature));
+            }
 
             if (list.IsFixedSize)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
+
+            ConstructorInfo ctor;
 
             if ((ctor = type.GetConstructor(signature)) is null)
             {
@@ -352,6 +367,16 @@ namespace Enhancer.Extensions
         /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add(this IList list, Func<object> function, int amount)
         {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (function == null)
+            {
+                throw new ArgumentNullException(nameof(function));
+            }
+
             if (list.IsFixedSize)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
@@ -372,6 +397,11 @@ namespace Enhancer.Extensions
         /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add<TSource>(this ICollection<TSource> collection, TSource value, int amount)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
             if (collection.IsReadOnly)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
@@ -393,6 +423,16 @@ namespace Enhancer.Extensions
         /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
         public static void Add<TSource>(this ICollection<TSource> collection, Func<TSource> function, int amount)
         {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (function == null)
+            {
+                throw new ArgumentNullException(nameof(function));
+            }
+
             if (collection.IsReadOnly)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
