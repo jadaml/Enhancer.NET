@@ -294,6 +294,11 @@ namespace Enhancer.Extensions
 
             if (list.IsFixedSize)
             {
+                throw new InvalidOperationException(FixedSizeList);
+            }
+
+            if (list.IsReadOnly)
+            {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
 
@@ -342,6 +347,11 @@ namespace Enhancer.Extensions
 
             if (list.IsFixedSize)
             {
+                throw new InvalidOperationException(FixedSizeList);
+            }
+
+            if (list.IsReadOnly)
+            {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }
 
@@ -378,6 +388,11 @@ namespace Enhancer.Extensions
             }
 
             if (list.IsFixedSize)
+            {
+                throw new InvalidOperationException(FixedSizeList);
+            }
+
+            if (list.IsReadOnly)
             {
                 throw new InvalidOperationException(ReadOnlyCollection);
             }

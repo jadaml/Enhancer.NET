@@ -133,6 +133,10 @@
     <value>The specified {0} type does not have a public constructor with {1} number of arguments.</value>
     <comment>Exception message for missing constructor with number of arguments.</comment>
   </data>
+  <data name="FixedSizeList" xml:space="preserve">
+    <value>Cannot add values to the collection, because it's size is fixed.</value>
+    <comment>Exception message for fixed-size lists.</comment>
+  </data>
   <data name="IsntGenericTypeDef" xml:space="preserve">
     <value>The type must be a generic type definition.</value>
     <comment>Exception message when the type isn't a generic type definition</comment>

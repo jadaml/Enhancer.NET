@@ -97,6 +97,15 @@ namespace Enhancer.Extensions.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot add values to the collection, because it&apos;s size is fixed..
+        /// </summary>
+        internal static string FixedSizeList {
+            get {
+                return ResourceManager.GetString("FixedSizeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type must be a generic type definition..
         /// </summary>
         internal static string IsntGenericTypeDef {
