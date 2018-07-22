@@ -387,63 +387,7 @@ namespace Enhancer.Extensions
                 list.Add(function.Invoke());
             }
         }
-
-        /// <summary>
-        /// Adds a value by the specified amount to the collection.
-        /// </summary>
-        /// <typeparam name="TSource">The base type of the collection</typeparam>
-        /// <param name="collection">The collection to add to.</param>
-        /// <param name="value">The value to add to the collection many times.</param>
-        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
-        public static void Add<TSource>(this ICollection<TSource> collection, TSource value, int amount)
-        {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            if (collection.IsReadOnly)
-            {
-                throw new InvalidOperationException(ReadOnlyCollection);
-            }
-
-            for (int c = 0; c < amount; c++)
-            {
-                collection.Add(value);
-            }
-        }
-
-        /// <summary>
-        /// Adds the objects returned by the specified <paramref name="function"/> by the specified amount
-        /// to the collection.
-        /// </summary>
-        /// <typeparam name="TSource">The base type of the collection</typeparam>
-        /// <param name="collection">The collection to add to.</param>
-        /// <param name="function">The function that generates the objects to add to the collection.</param>
-        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
-        public static void Add<TSource>(this ICollection<TSource> collection, Func<TSource> function, int amount)
-        {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            if (function == null)
-            {
-                throw new ArgumentNullException(nameof(function));
-            }
-
-            if (collection.IsReadOnly)
-            {
-                throw new InvalidOperationException(ReadOnlyCollection);
-            }
-
-            for (int c = 0; c < amount; c++)
-            {
-                collection.Add(function.Invoke());
-            }
-        }
-
+        
         public static int Count(this IEnumerable collection, Predicate<object> predicate = null)
         {
             Type genericType;
