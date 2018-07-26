@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using static NUnit.Framework.Assert;
 using static System.Linq.Enumerable;
 using static System.Math;
@@ -452,6 +453,205 @@ namespace Enhancer.Extensions.Test
                 new DateTime(1900, 12, 30, 12, 34, 56, 789),
                 new DateTime(1900, 12, 30, 12, 34, 56, 789),
             }, list);
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountErrorNull()
+        {
+            Throws<ArgumentNullException>(() => (null as IEnumerable).Count());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountArray()
+        {
+            AreEqual(8, (new int[8] as IEnumerable).Count());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountCollection()
+        {
+            ICollection collection = Substitute.For<ICollection>();
+
+            collection.Count.Returns(8);
+
+            AreEqual(8, (collection as IEnumerable).Count());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountTypedCollection()
+        {
+            ICollection<int> collection = Substitute.For<ICollection<int>>();
+
+            collection.Count.Returns(8);
+
+            AreEqual(8, (collection as IEnumerable).Count());
+        }
+
+        private struct DummyEnumerator : IEnumerator
+        {
+            public object Current => null;
+
+            public bool MoveNext() => true;
+
+            public void Reset() { }
+        }
+
+        //[Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountEnumerableOverflow()
+        {
+            IEnumerable enumerable = Substitute.For<IEnumerable>();
+
+            enumerable.GetEnumerator().Returns(new DummyEnumerator());
+
+            Throws<OverflowException>(() => enumerable.Count());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountEnumerable()
+        {
+            IEnumerable enumerable = Substitute.For<IEnumerable>();
+            IEnumerator enumerator = Substitute.For<IEnumerator>();
+
+            enumerable.GetEnumerator().Returns(enumerator);
+            enumerator.MoveNext().Returns(true, true, true, true, true, true, true, true, false);
+            enumerator.Current.Returns(
+                ci => 1,
+                ci => 2,
+                ci => 3,
+                ci => 4,
+                ci => 5,
+                ci => 6,
+                ci => 7,
+                ci => 8,
+                ci => throw new InvalidOperationException());
+
+            AreEqual(8, enumerable.Count());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void CountEnumerablePredicate()
+        {
+            IEnumerable enumerable = Substitute.For<IEnumerable>();
+            IEnumerator enumerator = Substitute.For<IEnumerator>();
+
+            enumerable.GetEnumerator().Returns(enumerator);
+            enumerator.MoveNext().Returns(true, true, true, true, true, true, true, true, false);
+            enumerator.Current.Returns(
+                ci => 1,
+                ci => 2,
+                ci => 3,
+                ci => 4,
+                ci => 5,
+                ci => 6,
+                ci => 7,
+                ci => 8,
+                ci => throw new InvalidOperationException());
+
+            AreEqual(4, enumerable.Count(obj => obj as int? < 5));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void LongCountNullError()
+        {
+            Throws<ArgumentNullException>(() => (null as IEnumerable).LongCount());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void LongCount()
+        {
+            AreEqual(8, Range(1, 8).LongCount());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void LongCountPredicate()
+        {
+            AreEqual(4, Range(1, 8).LongCount(obj => obj as int? < 5));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void BigCountNullError()
+        {
+            Throws<ArgumentNullException>(() => (null as IEnumerable).BigCount());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void BigCount()
+        {
+            AreEqual((BigInteger)8, Range(1, 8).BigCount());
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void BigCountPredicate()
+        {
+            AreEqual((BigInteger)4, Range(1, 8).BigCount(obj => obj as int? < 5));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void WhereNullError1()
+        {
+            Throws<ArgumentNullException>(() => (null as IEnumerable).Where(obj => true));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void WhereNullError2()
+        {
+            Throws<ArgumentNullException>(() => (new int[0] as IEnumerable).Where(null as Func<object, bool>));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void Where()
+        {
+            IEnumerable enumerable = Substitute.For<IEnumerable>();
+            IEnumerator enumerator = Substitute.For<IEnumerator>();
+
+            enumerable.GetEnumerator().Returns(enumerator);
+            enumerator.MoveNext().Returns(true, true, true, true, true, true, true, true, false);
+            enumerator.Current.Returns(
+                ci => 1,
+                ci => 2,
+                ci => 3,
+                ci => 4,
+                ci => 5,
+                ci => 6,
+                ci => 7,
+                ci => 8,
+                ci => throw new InvalidOperationException());
+
+            CollectionAssert.AreEqual(new[] { 3, 4, 5 }, enumerable.Where(obj => obj as int? < 6 && obj as int? > 2));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void WhereIndexNullError1()
+        {
+            Throws<ArgumentNullException>(() => (null as IEnumerable).Where((obj, i) => true));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void WhereIndexNullError2()
+        {
+            Throws<ArgumentNullException>(() => (new int[0] as IEnumerable).Where(null as Func<object, int, bool>));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void WhereIndex()
+        {
+            IEnumerable enumerable = Substitute.For<IEnumerable>();
+            IEnumerator enumerator = Substitute.For<IEnumerator>();
+
+            enumerable.GetEnumerator().Returns(enumerator);
+            enumerator.MoveNext().Returns(true, true, true, true, true, true, true, true, false);
+            enumerator.Current.Returns(
+                ci => 1,
+                ci => 2,
+                ci => 3,
+                ci => 4,
+                ci => 5,
+                ci => 6,
+                ci => 7,
+                ci => 8,
+                ci => throw new InvalidOperationException());
+
+            CollectionAssert.AreEqual(new[] { 3, 4, 5 }, enumerable.Where((obj, i) => i < 5 && obj as int? > 2));
         }
     }
 }
