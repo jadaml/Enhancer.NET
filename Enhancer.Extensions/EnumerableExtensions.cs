@@ -426,12 +426,12 @@ namespace Enhancer.Extensions
 
             if (predicate is null && (genericType = collection.GetType().GetInterface(typeof(ICollection<>).Name)) != null)
             {
-                return (int)genericType.GetProperty("Count").GetValue(collection);
+                return (int)genericType.GetProperty(nameof(ICollection<object>.Count)).GetValue(collection);
             }
 
             checked
             {
-                for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
+                for (count = 0, enumerator = GetEnumeratorByPredicate(collection, predicate);
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -451,7 +451,7 @@ namespace Enhancer.Extensions
 
             checked
             {
-                for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
+                for (count = 0, enumerator = GetEnumeratorByPredicate(collection, predicate);
                      enumerator.MoveNext();
                      ++count) ;
             }
@@ -469,11 +469,21 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(collection));
             }
 
-            for (count = 0, enumerator = Where(collection, obj => predicate?.DynamicInvoke(obj) as bool? ?? true).GetEnumerator();
+            for (count = 0, enumerator = GetEnumeratorByPredicate(collection, predicate);
                  enumerator.MoveNext();
                  ++count) ;
 
             return count;
+        }
+
+        private static IEnumerator GetEnumeratorByPredicate(IEnumerable enumerable, Predicate<object> predicate)
+        {
+            if (predicate is null)
+            {
+                return enumerable.GetEnumerator();
+            }
+
+            return Where(enumerable, obj => predicate(obj)).GetEnumerator();
         }
 
         public static IEnumerable Where(IEnumerable collection, Func<object, bool> predicate)
