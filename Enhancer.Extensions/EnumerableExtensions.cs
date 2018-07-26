@@ -498,7 +498,7 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return collection.Cast<object>().Where(predicate);
+            return collection.Cast<object>().Where<object>(predicate);
         }
 
         public static IEnumerable Where(this IEnumerable collection, Func<object, int, bool> predicate)
@@ -513,7 +513,7 @@ namespace Enhancer.Extensions
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return collection.Cast<object>().Where(predicate);
+            return collection.Cast<object>().Where<object>(predicate);
         }
     }
 }
