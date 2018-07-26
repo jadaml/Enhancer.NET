@@ -486,7 +486,7 @@ namespace Enhancer.Extensions
             return Where(enumerable, obj => predicate(obj)).GetEnumerator();
         }
 
-        public static IEnumerable Where(IEnumerable collection, Func<object, bool> predicate)
+        public static IEnumerable Where(this IEnumerable collection, Func<object, bool> predicate)
         {
             if (collection == null)
             {
@@ -501,7 +501,7 @@ namespace Enhancer.Extensions
             return collection.Cast<object>().Where(predicate);
         }
 
-        public static IEnumerable Where(IEnumerable collection, Func<object, int, bool> predicate)
+        public static IEnumerable Where(this IEnumerable collection, Func<object, int, bool> predicate)
         {
             if (collection == null)
             {
