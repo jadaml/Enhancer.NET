@@ -60,6 +60,10 @@
       <Project>{7e8efbeb-a62d-4add-a4d8-70e34923cfbb}</Project>
       <Name>Enhancer.Collections</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Enhancer.Extensions\Enhancer.Extensions.csproj">
+      <Project>{1e51746c-4cc9-4a16-8c84-0c53488e6a4f}</Project>
+      <Name>Enhancer.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enhancer.SemVer\Enhancer.SemVer.csproj">
       <Project>{a375d80d-5d09-4292-98ef-efe27bc3b56a}</Project>
       <Name>Enhancer.SemVer</Name>
