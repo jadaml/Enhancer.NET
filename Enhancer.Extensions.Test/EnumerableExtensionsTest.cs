@@ -496,7 +496,8 @@ namespace Enhancer.Extensions.Test
             public void Reset() { }
         }
 
-        //[Test(TestOf = typeof(EnumerableExtensions))]
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        [Ignore("Takes ridiculously long time to execute. Needs to be reworked.")]
         public void CountEnumerableOverflow()
         {
             IEnumerable enumerable = Substitute.For<IEnumerable>();
