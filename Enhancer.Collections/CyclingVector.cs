@@ -156,7 +156,17 @@ namespace Enhancer.Collections
         object IList.this[int index]
         {
             get => this[index];
-            set => this[index] = (T)value;
+            set
+            {
+                try
+                {
+                    this[index] = (T)value;
+                }
+                catch (InvalidCastException icex)
+                {
+                    throw InvalidValue(value, nameof(value), icex);
+                }
+            }
         }
 
         public int Count => _length;
@@ -166,15 +176,15 @@ namespace Enhancer.Collections
         /// </summary>
         public bool IsReadOnly => false;
 
-        public object SyncRoot => _syncRoot;
+        object ICollection.SyncRoot => _syncRoot;
 
         public bool IsSynchronized => true;
 
-        public bool IsFixedSize => throw new NotImplementedException();
+        public bool IsFixedSize => false;
 
-        public CyclingVector()
-            : this(128)
-        { }
+        public int Capacity => _size;
+
+        public CyclingVector() : this(128) { }
 
         /// <summary>
         /// Creates a new <see cref="CyclingVector{T}"/> instance.
@@ -193,15 +203,9 @@ namespace Enhancer.Collections
             _vector = new T[initialSize];
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return new CyclingVectorEnumerator(this);
-        }
+        public IEnumerator<T> GetEnumerator() => new CyclingVectorEnumerator(this);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private void IncreaseStore()
         {
@@ -261,7 +265,7 @@ namespace Enhancer.Collections
         /// Push a new element in the vector, if that is possible.
         /// </summary>
         /// <param name="value">The value to add to the Vector.</param>
-        /// <returns><c>true</c> if the push was successfull, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if the push was successful, <c>false</c> otherwise.</returns>
         public void Push(T value)
         {
             lock (_syncRoot)
@@ -283,7 +287,8 @@ namespace Enhancer.Collections
         {
             lock (_syncRoot)
             {
-                _vector = new T[_size];
+                Array.Clear(_vector, 0, _size);
+
                 _length = 0;
 
                 InvalidateEnumerators();
@@ -394,6 +399,54 @@ namespace Enhancer.Collections
             }
         }
 
+        public int IndexOf(T item)
+        {
+            for (int i = 0; i < _length; ++i)
+            {
+                if (this[i].Equals(item))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public void Insert(int index, T item)
+        {
+            if (index < 0 || index > _length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            if (_length == _size)
+            {
+                IncreaseStore();
+            }
+
+            for (int c = _length++; c > index; --c)
+            {
+                _vector[(_first + c) % _size] = _vector[(_first + c - 1) % _size];
+            }
+
+            _vector[(_first + index) % _size] = item;
+        }
+
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index >= _length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            for (int c = index; c <= _length; ++c)
+            {
+                _vector[(_first + c) % _size] = _vector[(_first + c + 1) % _size];
+            }
+
+            _vector[(_first + --_length) % _size] = default(T);
+        }
+
         private void InvalidateEnumerators()
         {
             lock (((ICollection)_enumerators).SyncRoot)
@@ -414,37 +467,21 @@ namespace Enhancer.Collections
             }
         }
 
-        public int IndexOf(T item)
+        private Exception InvalidValue(object value, string argName, Exception innerEx = null)
         {
-            for (int i = 0; i < _length; ++i)
-            {
-                if (this[i].Equals(item))
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public void Insert(int index, T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAt(int index)
-        {
-            throw new NotImplementedException();
+            return new ArgumentException($"Cannot add the specified value, because it isn't of type {typeof(T)}.", argName, innerEx);
         }
 
         int IList.Add(object value)
         {
-            if (!(value is T))
+            try
             {
-                throw new InvalidOperationException($"Cannot add the specified value, because it isn't of type {typeof(T)}.");
+                Add((T)value);
             }
-
-            Add((T)value);
+            catch (InvalidCastException icex)
+            {
+                throw InvalidValue(value, nameof(value), icex);
+            }
 
             return _length - 1;
         }
@@ -455,14 +492,24 @@ namespace Enhancer.Collections
 
         void IList.Insert(int index, object value)
         {
-            if (!(value is T))
+            try
             {
-                throw new InvalidOperationException($"Cannot add the specified value, because it isn't of type {typeof(T)}.");
+                Insert(index, (T)value);
             }
-
-            Insert(index, (T)value);
+            catch (InvalidCastException icex)
+            {
+                throw InvalidValue(value, nameof(value), icex);
+            }
         }
 
-        void IList.Remove(object value) => Remove((T)value);
+        void IList.Remove(object value)
+        {
+            if (!typeof(T).IsAssignableFrom(value.GetType()))
+            {
+                return;
+            }
+
+            Remove((T)value);
+        }
     }
 }
