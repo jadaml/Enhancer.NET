@@ -497,7 +497,11 @@ namespace Enhancer.Extensions.Test
         }
 
         [Test(TestOf = typeof(EnumerableExtensions))]
+#if DEBUG
         [Ignore("Takes ridiculously long time to execute. Needs to be reworked.")]
+#endif
+        [Category("DoNotCover")]
+        [Timeout(15_000)]
         public void CountEnumerableOverflow()
         {
             IEnumerable enumerable = Substitute.For<IEnumerable>();
