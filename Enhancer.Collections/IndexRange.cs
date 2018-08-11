@@ -27,17 +27,22 @@ namespace Enhancer.Collections
     /// </summary>
     public class IndexRange : IList<int>, IList
     {
-        private sealed class IndexEnumerator : IEnumerator<int>
+        private struct IndexEnumerator : IEnumerator<int>
         {
-            private int _index;
-            private IndexRange _owner;
+            private int _value;
+            private readonly int _start, _end, _increments;
 
             public IndexEnumerator(IndexRange indexRange)
             {
-                _owner = indexRange;
+                _value      = 0;
+                _start      = indexRange._start;
+                _end        = indexRange._end;
+                _increments = indexRange._increments;
+
+                Reset();
             }
 
-            public int Current => _index;
+            public int Current => _value < _start || _value > _end ? throw new InvalidOperationException() : _value;
 
             object IEnumerator.Current => Current;
 
@@ -45,13 +50,13 @@ namespace Enhancer.Collections
 
             public bool MoveNext()
             {
-                return _index > _owner._end
-                    || (_index += _owner._increments) > _owner._end;
+                return _value <= _end
+                    && (_value += _increments) <= _end;
             }
 
             public void Reset()
             {
-                _index = _owner._start - _owner._increments;
+                _value = _start - _increments;
             }
         }
 
