@@ -168,7 +168,7 @@ namespace Enhancer.Collections
 
         int IList.IndexOf(object value) => value is int ? IndexOf((int)value) : -1;
 
-        bool IList.Contains(object value) => !(value is int) || Contains((int)value);
+        bool IList.Contains(object value) => value is int && Contains((int)value);
 
         void ICollection.CopyTo(Array array, int index)
         {
