@@ -64,7 +64,7 @@ namespace Enhancer.Collections
         /// <summary>
         /// Gets the number of indexes this collection contains.
         /// </summary>
-        public int Count => (_start - _end) / _increments + 1;
+        public int Count => (_end - _start) / _increments + 1;
 
         bool ICollection<int>.IsReadOnly => true;
 
@@ -107,6 +107,11 @@ namespace Enhancer.Collections
         /// <param name="increments">The increments in which to produce the indexes.</param>
         public IndexRange(int start, int end, int increments)
         {
+            if (increments == 0)
+            {
+                throw new ArgumentException("The increments cannot be zero.", nameof(increments));
+            }
+
             _start      = start;
             _end        = end;
             _increments = increments;
@@ -157,7 +162,7 @@ namespace Enhancer.Collections
 
             for (int i = 0; _start + i * _increments < _end; ++i)
             {
-                array[i] = _start + i * _increments;
+                array[i + arrayIndex] = _start + i * _increments;
             }
         }
 
@@ -184,7 +189,7 @@ namespace Enhancer.Collections
 
             for (int i = 0; _start + i * _increments < _end; ++i)
             {
-                array.SetValue(_start + i * _increments, i);
+                array.SetValue(_start + i * _increments, i + index);
             }
         }
 
