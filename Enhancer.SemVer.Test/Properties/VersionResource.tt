@@ -20,8 +20,6 @@
 
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="System.DirectoryServices.AccountManagement" #>
-<#@ import namespace="System.DirectoryServices.AccountManagement" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -76,7 +74,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Ádám L. Juhász"
             VALUE "FileDescription",  "Semantic Version test cases"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.SemVer.Test"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.SemVer.Test.dll"
@@ -104,7 +102,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "Semantic Version teszt esetek"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.SemVer.Test"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.SemVer.Test.dll"

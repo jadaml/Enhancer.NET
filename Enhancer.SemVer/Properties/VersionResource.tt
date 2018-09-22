@@ -74,7 +74,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Ádám L. Juhász"
             VALUE "FileDescription",  "Provides Semantic Version support for .NET"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.SemVer"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.SemVer.dll"
@@ -102,7 +102,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "Semantic Version támogatást nyújt .NET környezethez"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.SemVer"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.SemVer.dll"

@@ -74,7 +74,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Ádám L. Juhász"
             VALUE "FileDescription",  "Test cases for Enhancer.Collections"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Collections.Test"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Collections.Test.dll"
@@ -102,7 +102,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "Teszt gyűjtemények az Enhancer.Collections osztályokhoz"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Collections.Test"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Collections.Test.dll"

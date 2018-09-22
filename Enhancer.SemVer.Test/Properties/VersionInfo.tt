@@ -27,8 +27,8 @@
 <#@ include file="../../ProductVersion.t4" #>
 <#@ include file="FileVersion.tt" #>
 <#
-Version assemblyVersion = new Version((int)major, 0);
-Version fileVersion = new Version((int)fileMajor, (int)fileMinor, int.Parse(build), int.Parse(revision));
+Version assemblyVersion = new Version((int)fileMajor, 0);
+Version asmFileVersion = new Version((int)fileMajor, (int)fileMinor, int.Parse(build), int.Parse(revision));
 #>
 using Enhancer.Assemblies;
 using System;
@@ -47,17 +47,16 @@ using System.Reflection;
 partial class VersionInfo
 {
     internal const string _assemblyVersionString = "<#= assemblyVersion #>";
-    internal const string _fileVersionString     = "<#= fileVersion #>";
+    internal const string _fileVersionString     = "<#= asmFileVersion #>";
     internal const string _productVersionString  = "<#= productVersion #>";
 
     private static readonly Version         _assemblyVersion = new Version(<#= assemblyVersion.Major #>, <#= assemblyVersion.Minor #>);
-    private static readonly Version         _fileVersion     = new Version(<#= fileMajor #>, <#= fileMinor #>, <#= build #>, <#= revision #>);
-    private static readonly SemanticVersion _productVersion  = new SemanticVersion(<#= major #>, <#= minor #>, <#= patch #>,
+    private static readonly SemanticVersion _fileVersion     = new SemanticVersion(<#= fileMajor #>, <#= fileMinor #>, <#= filePatch #>,
 <#
             if (preRelease.Any())
             {
 #>
-        new object[] { <#= string.Join(", ", preRelease) #> },
+        new object[] { <#= string.Join(", ", codePreRelease) #> },
 <#
             }
             else
@@ -67,7 +66,23 @@ partial class VersionInfo
 <#
             }
 #>
-        new object[] { <#= string.Join(", ", buildMetaData) #> });
+        new object[] { <#= string.Join(", ", codeBuildMetaData) #> });
+    private static readonly SemanticVersion _productVersion  = new SemanticVersion(<#= major #>, <#= minor #>, <#= patch #>,
+<#
+            if (preRelease.Any())
+            {
+#>
+        new object[] { <#= string.Join(", ", codePreRelease) #> },
+<#
+            }
+            else
+            {
+#>
+        new object[0],
+<#
+            }
+#>
+        new object[] { <#= string.Join(", ", codeBuildMetaData) #> });
 
     /// <summary>Gets the version of the assembly.</summary>
     [DebuggerNonUserCode]
@@ -75,7 +90,7 @@ partial class VersionInfo
 
     /// <summary>Gets the version of the file.</summary>
     [DebuggerNonUserCode]
-    public static Version FileVersion => _fileVersion;
+    public static SemanticVersion FileVersion => _fileVersion;
 
     /// <summary>Gets the version of the product.</summary>
     [DebuggerNonUserCode]

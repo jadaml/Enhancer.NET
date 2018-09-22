@@ -74,7 +74,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Ádám L. Juhász"
             VALUE "FileDescription",  "Provides additional collections for .NET"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Collection"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Collection.dll"
@@ -102,7 +102,7 @@ FILESUBTYPE    VFT2_UNKNOWN
         {
             VALUE "CompanyName",      "Juhász Ádám L."
             VALUE "FileDescription",  "További gyűjteményeket nyújt .NET környezethez"
-            VALUE "FileVersion",      "<#= fileMajor #>.<#= fileMinor #>.<#= build #>.<#= revision #>"
+            VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Collection"
             VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Collection.dll"

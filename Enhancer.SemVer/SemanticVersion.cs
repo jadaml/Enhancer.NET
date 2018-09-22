@@ -27,7 +27,8 @@ using static System.String;
 namespace Enhancer.Assemblies
 {
     /// <summary>
-    /// Represents a semantic version compatible with the standard proposed at https://semver.org/.
+    /// Represents a semantic version compatible with the standard proposed at
+    /// <see href="https://semver.org/" target="_blank"/>.
     /// </summary>
     public class SemanticVersion : ICloneable, IEquatable<SemanticVersion>, IComparable, IComparable<SemanticVersion>, IFormattable
     {

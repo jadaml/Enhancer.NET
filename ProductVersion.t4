@@ -2,7 +2,7 @@
 //// VERSION CONFIGURATION /////////////////////////////////////////////////////
 
 uint major = 0;
-uint minor = 1;
+uint minor = 2;
 uint patch = 0;
 
 string preReleaseStage = "0";
@@ -32,6 +32,8 @@ IEnumerable<object> preRelease = from identifier in new object[] { preReleaseSta
                                  select identifier;
 
 IEnumerable<object> buildMetaData;
+IEnumerable<object> codePreRelease;
+IEnumerable<object> codeBuildMetaData;
 
 if (build == "0" || revision == "0")
 {
@@ -51,8 +53,8 @@ string productVersion = $"{major}.{minor}.{patch}"
                       + (preRelease.Any() ? $"-{string.Join(".", preRelease)}" : "")
                       + $"+{string.Join(".", buildMetaData)}";
 
-preRelease = from identifier in preRelease
-             select identifier is string ? $@"""{identifier}""" : (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
-buildMetaData = from identifier in buildMetaData
-                select identifier is string ? $@"""{identifier}""": (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
+codePreRelease = from identifier in preRelease
+                 select identifier is string ? $@"""{identifier}""" : (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
+codeBuildMetaData = from identifier in buildMetaData
+                    select identifier is string ? $@"""{identifier}""": (identifier.GetType().IsEnum ? $"{identifier.GetType().FullName}.{identifier}" : identifier);
 #>
