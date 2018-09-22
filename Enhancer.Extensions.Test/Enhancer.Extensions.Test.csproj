@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Win32Resource>Properties\VersionResource.generated.res</Win32Resource>
@@ -56,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableExtensionsTest.cs" />
+    <Compile Include="EnumExtensionsTest.cs" />
     <Compile Include="FancyFormatterProviderTest.cs" />
     <Compile Include="NumberExtensionsTest.cs" />
     <Compile Include="NumberExtensionsTest.generated.cs">
