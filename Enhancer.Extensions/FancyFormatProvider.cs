@@ -177,7 +177,7 @@ namespace Enhancer.Extensions
                 case bool l:
                     return FormatBool(format, l, provider);
                 default:
-                    return (arg as IFormattable)?.ToString(format, provider) ?? arg.ToString();
+                    return (arg as IFormattable)?.ToString(format, provider) ?? arg?.ToString() ?? string.Empty;
             }
         }
 

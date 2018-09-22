@@ -179,6 +179,13 @@ namespace Enhancer.Extensions.Test
             IsNull(FancyFormatProvider.Provider.GetFormat(null));
         }
 
+        [Test(TestOf = typeof(FancyFormatProvider))]
+        [Category(_genericCat)]
+        public void NullFormat()
+        {
+            AreEqual(string.Empty, FancyFormatProvider.Provider.Format("{0}", null));
+        }
+
         [TestCaseSource(nameof(_boolParams), Category = _boolCat)]
         [TestOf(typeof(FancyFormatProvider))]
         public void BoolFormat(StringConstFunc reference, string format, bool value)
