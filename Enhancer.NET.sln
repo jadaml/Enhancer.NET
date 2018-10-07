@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.NativeBridge", "En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.Extensions.Test", "Enhancer.Extensions.Test\Enhancer.Extensions.Test.csproj", "{ACF6921E-3F3A-400E-8138-2FF41C4E576E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.Configuration", "Enhancer.Configuration\Enhancer.Configuration.csproj", "{2412C602-778D-436A-8465-AB333A855D3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.Configuration.Test", "Enhancer.Configuration.Test\Enhancer.Configuration.Test.csproj", "{116F29B3-61AF-4741-BC47-5279ED3DAC0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{ACF6921E-3F3A-400E-8138-2FF41C4E576E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACF6921E-3F3A-400E-8138-2FF41C4E576E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACF6921E-3F3A-400E-8138-2FF41C4E576E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2412C602-778D-436A-8465-AB333A855D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2412C602-778D-436A-8465-AB333A855D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2412C602-778D-436A-8465-AB333A855D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2412C602-778D-436A-8465-AB333A855D3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
