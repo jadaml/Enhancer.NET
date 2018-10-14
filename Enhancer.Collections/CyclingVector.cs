@@ -24,20 +24,20 @@ using System.Linq;
 
 namespace Enhancer.Collections
 {
+    /// <summary>
+    /// Represents a first-in-last-out collection, who's elements can be
+    /// accessed individually.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of the elements.
+    /// </typeparam>
     [DebuggerDisplay("Count: {Count}")]
     public class CyclingVector<T> : IList<T>, IList
     {
-        /// <summary>The size of the internal array.</summary>
-        private int _size;
         /// <summary>The starting index of the first element.</summary>
         private int _first;
-        /// <summary>The number of element the vector is currently holding.</summary>
-        private int _length;
         /// <summary>The internal array.</summary>
         private T[] _vector;
-
-        private object _syncRoot = new object();
-
         private List<WeakReference<CyclingVectorEnumerator>> _enumerators = new List<WeakReference<CyclingVectorEnumerator>>();
 
         private class CyclingVectorEnumerator : IEnumerator<T>
@@ -106,12 +106,12 @@ namespace Enhancer.Collections
                     throw new InvalidOperationException("The collection is changed.");
                 }
 
-                if (_index >= _cvector._length)
+                if (_index >= _cvector.Count)
                 {
                     return false;
                 }
 
-                return ++_index < _cvector._length;
+                return ++_index < _cvector.Count;
             }
 
             public void Reset()
@@ -125,30 +125,41 @@ namespace Enhancer.Collections
             }
         }
 
+        /// <summary>
+        /// Gets or sets the element at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the element to access.</param>
+        /// <returns>
+        /// The element at the specified <paramref name="index"/>.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// When <paramref name="index"/> is less than zero, or greater than or
+        /// equal to <see cref="Count"/>.
+        /// </exception>
         public T this[int index]
         {
             get
             {
-                if (index < 0 || index >= _length)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
                 }
 
-                lock (_syncRoot)
+                lock (SyncRoot)
                 {
-                    return _vector[(index + _first) % _size];
+                    return _vector[(index + _first) % Capacity];
                 }
             }
             set
             {
-                if (index < 0 || index >= _length)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, "The index is out of range.");
                 }
 
-                lock (_syncRoot)
+                lock (SyncRoot)
                 {
-                    _vector[(index + _first) % _size] = value;
+                    _vector[(index + _first) % Capacity] = value;
                 }
             }
         }
@@ -169,27 +180,60 @@ namespace Enhancer.Collections
             }
         }
 
-        public int Count => _length;
+        /// <summary>
+        /// Gets the number of elements in the collection.
+        /// </summary>
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets a value indicating if the vector can be modified.
         /// </summary>
+        /// <value>
+        /// Always returns <see langword="false"/>.
+        /// </value>
         public bool IsReadOnly => false;
 
-        object ICollection.SyncRoot => _syncRoot;
+        /// <summary>
+        /// Gets an object that can be used to synchronize assess to the
+        /// <see cref="CyclingVector{T}"/>.
+        /// </summary>
+        public object SyncRoot { get; } = new object();
 
+        /// <summary>
+        /// Gets a value indicating whether access to the
+        /// <see cref="CyclingVector{T}"/> is synchronized.
+        /// </summary>
+        /// <value>
+        /// This property returns <see langword="true"/>.
+        /// </value>
         public bool IsSynchronized => true;
 
+        /// <summary>
+        /// Gets a value indicating if the <see cref="CyclingVector{T}"/> size
+        /// is fixed.
+        /// </summary>
+        /// <value>
+        /// This property returns <see langword="false"/>.
+        /// </value>
         public bool IsFixedSize => false;
 
-        public int Capacity => _size;
-
-        public CyclingVector() : this(128) { }
+        /// <summary>
+        /// Gets the current capacity of this <see cref="CyclingVector{T}"/>.
+        /// </summary>
+        public int Capacity { get; private set; }
 
         /// <summary>
         /// Creates a new <see cref="CyclingVector{T}"/> instance.
         /// </summary>
-        /// <param name="initialSize">The initial size of the vector.</param>
+        public CyclingVector() : this(128) { }
+
+        /// <summary>
+        /// Creates a new <see cref="CyclingVector{T}"/> instance, with a
+        /// specified initial capacity.
+        /// </summary>
+        /// <param name="initialSize">
+        /// The initial capacity of the vector.
+        /// </param>
         public CyclingVector(int initialSize)
         {
             if (initialSize <= 0)
@@ -197,12 +241,20 @@ namespace Enhancer.Collections
                 throw new ArgumentOutOfRangeException(nameof(initialSize), "Parameter must be a positive number.");
             }
 
-            _size   = initialSize;
+            Capacity   = initialSize;
             _first  = 0;
-            _length = 0;
+            Count = 0;
             _vector = new T[initialSize];
         }
 
+        /// <summary>
+        /// Creates an iterator object which can be used to iterate through the
+        /// elements of this <see cref="CyclingVector{T}"/> instance.
+        /// </summary>
+        /// <returns>
+        /// The iterator object that can be used to iterate through the
+        /// elements.
+        /// </returns>
         public IEnumerator<T> GetEnumerator() => new CyclingVectorEnumerator(this);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -212,48 +264,53 @@ namespace Enhancer.Collections
             T[] newVector;
             int newSize;
 
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
-                newSize = _size * _size;
+                newSize = Capacity * Capacity;
                 newVector = new T[newSize];
                 CopyTo(newVector, 0);
                 _vector = newVector;
-                _size = newSize;
+                Capacity = newSize;
                 _first = 0;
             }
         }
 
         /// <summary>
-        /// Previews the first element without removing it.
+        /// Previews the next element without removing it.
         /// </summary>
-        /// <returns>The first element of the vector, or the default value
-        /// of T if there is no element in the vector.</returns>
+        /// <returns>
+        /// The next element of the vector, or the default value of
+        /// <typeparamref name="T"/> if there is no element in the vector.
+        /// </returns>
         public T Peek()
         {
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
                 return _vector[_first];
             }
         }
 
         /// <summary>
-        /// Removes the first element of the vector.
+        /// Removes the next element of the vector.
         /// </summary>
-        /// <returns>The removed first element, or the default value if no item could be removed.</returns>
+        /// <returns>
+        /// The removed next element, or the default value of
+        /// <typeparamref name="T"/> if no item could be removed.
+        /// </returns>
         public T Pop()
         {
-            if (_length == 0) return default(T);
+            if (Count == 0) return default(T);
 
             T output;
 
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
                 output = _vector[_first];
                 // To allow GC to collect unused objects.
                 _vector[_first] = default(T);
-                _first = ++_first % _size;
+                _first = ++_first % Capacity;
 
-                --_length;
+                --Count;
 
                 InvalidateEnumerators();
             }
@@ -265,39 +322,58 @@ namespace Enhancer.Collections
         /// Push a new element in the vector, if that is possible.
         /// </summary>
         /// <param name="value">The value to add to the Vector.</param>
-        /// <returns><c>true</c> if the push was successful, <c>false</c> otherwise.</returns>
+        /// <returns>
+        /// <see langword="true"/> if the push was successful,
+        /// <see langword="false"/> otherwise.
+        /// </returns>
         public void Push(T value)
         {
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
-                if (_length == _size)
+                if (Count == Capacity)
                 {
                     IncreaseStore();
                 }
 
-                _vector[(_first + _length++) % _size] = value;
+                _vector[(_first + Count++) % Capacity] = value;
 
                 InvalidateEnumerators();
             }
         }
 
+        /// <summary>
+        /// Adds a new element at the end of the <see cref="CyclingVector{T}"/>.
+        /// </summary>
+        /// <param name="item">The element to add to the collection.</param>
         public void Add(T item) => Push(item);
 
+        /// <summary>
+        /// Removes all the elements from this <see cref="CyclingVector{T}"/>.
+        /// </summary>
         public void Clear()
         {
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
-                Array.Clear(_vector, 0, _size);
+                Array.Clear(_vector, 0, Capacity);
 
-                _length = 0;
+                Count = 0;
 
                 InvalidateEnumerators();
             }
         }
 
+        /// <summary>
+        /// Checks if this <see cref="CyclingVector{T}"/> contains the specified
+        /// <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item">The item to search for.</param>
+        /// <returns>
+        /// <see langword="true"/> if the <paramref name="item"/> could be found
+        /// in this collection, otherwise <see langword="false"/>.
+        /// </returns>
         public bool Contains(T item)
         {
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
                 foreach (T element in this)
                 {
@@ -311,6 +387,16 @@ namespace Enhancer.Collections
             }
         }
 
+        /// <summary>
+        /// Copies the elements of this <see cref="CyclingVector{T}"/> to the
+        /// specified <paramref name="array"/> starting at the specified
+        /// <paramref name="arrayIndex"/>.
+        /// </summary>
+        /// <param name="array">The array to copy the elements to.</param>
+        /// <param name="arrayIndex">
+        /// The zero-based index to start copying in to the
+        /// <paramref name="array"/>.
+        /// </param>
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
@@ -323,14 +409,14 @@ namespace Enhancer.Collections
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             }
 
-            if (array.Length - arrayIndex < _length)
+            if (array.Length - arrayIndex < Count)
             {
                 throw new ArgumentException("The array is too small", nameof(array));
             }
 
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
-                for (int i = 0; i < _length; ++i)
+                for (int i = 0; i < Count; ++i)
                 {
                     array[i + arrayIndex] = this[i];
                 }
@@ -344,28 +430,31 @@ namespace Enhancer.Collections
         /// This operation is not fully supported yet.
         /// </note>
         /// <param name="item">The object to remove from the vector.</param>
-        /// <returns><c>true</c> if <c>item</c> is found and successfully removed, <c>false</c> otherwise.</returns>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="item"/> is found and
+        /// successfully removed, <see langword="false"/> otherwise.
+        /// </returns>
         public bool Remove(T item)
         {
             int i;
 
-            lock (_syncRoot)
+            lock (SyncRoot)
             {
-                for (i = 0; i < _length; ++i)
+                for (i = 0; i < Count; ++i)
                 {
                     if (this[i].Equals(item)) break;
                 }
 
-                if (i >= _length) return false;
+                if (i >= Count) return false;
 
-                for (; i < _length - 1; ++i)
+                for (; i < Count - 1; ++i)
                 {
                     this[i] = this[i + 1];
                 }
 
                 // To allow GC to collect unused objects.
                 this[i] = default(T);
-                --_length;
+                --Count;
 
                 InvalidateEnumerators();
             }
@@ -385,7 +474,7 @@ namespace Enhancer.Collections
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            if (array.Length - index < _length)
+            if (array.Length - index < Count)
             {
                 throw new ArgumentException("The array is too small", nameof(array));
             }
@@ -399,9 +488,19 @@ namespace Enhancer.Collections
             }
         }
 
+        /// <summary>
+        /// Determines the index of the specified <paramref name="item"/> in
+        /// this <see cref="CyclingVector{T}"/>.
+        /// </summary>
+        /// <param name="item">The element to look for.</param>
+        /// <returns>
+        /// The index of the specified <paramref name="item"/> in this
+        /// <see cref="CyclingVector{T}"/>, or -1 if the element cannot be
+        /// found.
+        /// </returns>
         public int IndexOf(T item)
         {
-            for (int i = 0; i < _length; ++i)
+            for (int i = 0; i < Count; ++i)
             {
                 if (this[i].Equals(item))
                 {
@@ -412,39 +511,58 @@ namespace Enhancer.Collections
             return -1;
         }
 
+        /// <summary>
+        /// Adds the specified <paramref name="item"/> at the specified
+        /// <paramref name="index"/> shifting all the elements starting from
+        /// <paramref name="index"/> to the next index.
+        /// </summary>
+        /// <param name="index">
+        /// The zero-based index to insert the specified <paramref name="item"/>
+        /// to.
+        /// </param>
+        /// <param name="item">
+        /// The mew element to add to this <see cref="CyclingVector{T}"/>.
+        /// </param>
         public void Insert(int index, T item)
         {
-            if (index < 0 || index > _length)
+            if (index < 0 || index > Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            if (_length == _size)
+            if (Count == Capacity)
             {
                 IncreaseStore();
             }
 
-            for (int c = _length++; c > index; --c)
+            for (int c = Count++; c > index; --c)
             {
-                _vector[(_first + c) % _size] = _vector[(_first + c - 1) % _size];
+                _vector[(_first + c) % Capacity] = _vector[(_first + c - 1) % Capacity];
             }
 
-            _vector[(_first + index) % _size] = item;
+            _vector[(_first + index) % Capacity] = item;
         }
 
+        /// <summary>
+        /// Removes the element from the specified <paramref name="index"/>
+        /// shifting all succeeding element to fill its place.
+        /// </summary>
+        /// <param name="index">
+        /// The zero-based index of the element to remove.
+        /// </param>
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= _length)
+            if (index < 0 || index >= Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            for (int c = index; c <= _length; ++c)
+            for (int c = index; c <= Count; ++c)
             {
-                _vector[(_first + c) % _size] = _vector[(_first + c + 1) % _size];
+                _vector[(_first + c) % Capacity] = _vector[(_first + c + 1) % Capacity];
             }
 
-            _vector[(_first + --_length) % _size] = default(T);
+            _vector[(_first + --Count) % Capacity] = default(T);
         }
 
         private void InvalidateEnumerators()
@@ -483,7 +601,7 @@ namespace Enhancer.Collections
                 throw InvalidValue(value, nameof(value), icex);
             }
 
-            return _length - 1;
+            return Count - 1;
         }
 
         bool IList.Contains(object value) => value is T && _vector.Contains((T)value);

@@ -6,6 +6,7 @@
 <#@ output extension=".templated.cs" #>
 <#
 string[] integralTypes = { "sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
+string[] vowelTypes = { "sbyte", "short", "ushort", "int", "uint", "long", "ulong" };
 bool remainder = false;
 #>
 namespace Enhancer.Extensions
@@ -20,6 +21,26 @@ namespace Enhancer.Extensions
                     WriteLine("");
                 }
 #>
+        /// <summary>
+        /// Restricts a<#= vowelTypes.Any(tn => tn.Equals((typeName), StringComparison.Ordinal)) ? "n" : "" #> <see cref="<#= typeName #>"/> value in between the
+        /// specified values.
+        /// </summary>
+        /// <param name="value">The value to work with.</param>
+        /// <param name="min">
+        /// The lower-bound below which <paramref name="value"/> isn't allowed
+        /// to go.
+        /// </param>
+        /// <param name="max">
+        /// The upper-bound above which <paramref name="value"/> isn't allowed
+        /// to go.
+        /// </param>
+        /// <returns>
+        /// If the <paramref name="value"/> goes below <paramref name="min"/>
+        /// it will return <paramref name="min"/>;
+        /// if the <paramref name="value"/> goes above <paramref name="max"/>
+        /// it will return <paramref name="max"/>;
+        /// otherwise it returns <paramref name="value"/>.
+        /// </returns>
         public static <#= typeName #> Clamp(this <#= typeName #> value, <#= typeName #> min, <#= typeName #> max)
         {
             if (value < min)

@@ -26,9 +26,9 @@ namespace Enhancer.Extensions
     public static class StringExtensions
     {
         /// <summary>
-        /// Separates an identifier string to separate words.
+        /// Transform an identifier name to separate words.
         /// </summary>
-        /// <param name="value">The input string to separate.</param>
+        /// <param name="value">The input string to transform.</param>
         /// <returns>The separated words transformed from the specified string value.</returns>
         public static string ToUserFriendlyString(this string value)
         {

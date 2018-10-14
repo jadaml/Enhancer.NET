@@ -37,6 +37,10 @@ namespace Enhancer.Extensions
         /// The type who's generic type definition matches with the specified one, otherwise <see langword="null"/>
         /// if the generic type definition was not found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="type"/> or <paramref name="genericType"/>
+        /// is <see langword="null"/>.
+        /// </exception>
         public static Type GetGenericType<T>(this T type, Type genericType)
         {
             if (type == null)
@@ -56,6 +60,10 @@ namespace Enhancer.Extensions
         /// The type who's generic type definition matches with the specified one, otherwise <see langword="null"/>
         /// if the generic type definition was not found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="type"/> or <paramref name="genericType"/>
+        /// is <see langword="null"/>.
+        /// </exception>
         public static Type GetGenericType(this Type type, Type genericType)
         {
             if (type == null)

@@ -81,7 +81,7 @@ namespace Enhancer.Collections
 
         object ICollection.SyncRoot => _syncRoot;
 
-        bool ICollection.IsSynchronized => true;
+        bool ICollection.IsSynchronized => false;
 
         object IList.this[int index]
         {
@@ -92,7 +92,9 @@ namespace Enhancer.Collections
         /// <summary>
         /// Gets the value at the specified index.
         /// </summary>
-        /// <param name="index">The index of the value to get.</param>
+        /// <param name="index">
+        /// The zero-based index of the value to get.
+        /// </param>
         /// <returns>The index value at the specified index.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If the index exceeds the boundaries of the collection.
@@ -123,15 +125,9 @@ namespace Enhancer.Collections
         }
 
         /// <inheritdoc/>
-        public IEnumerator<int> GetEnumerator()
-        {
-            return new IndexEnumerator(this);
-        }
+        public IEnumerator<int> GetEnumerator() => new IndexEnumerator(this);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <inheritdoc/>
         public int IndexOf(int item)

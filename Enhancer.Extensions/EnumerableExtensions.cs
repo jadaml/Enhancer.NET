@@ -93,6 +93,9 @@ namespace Enhancer.Extensions
         /// <see langword="true"/> if the collection have at least <paramref name="count"/> number of elements,
         /// otherwise <see langword="false"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static bool HaveAtLeast(this IEnumerable collection, int count)
         {
             if (collection == null)
@@ -134,6 +137,9 @@ namespace Enhancer.Extensions
         /// <see langword="true"/> if the collection have at most <paramref name="count"/> number of elements,
         /// otherwise <see langword="false"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static bool HaveAtMost(this IEnumerable collection, int count)
         {
             if (collection == null)
@@ -175,6 +181,9 @@ namespace Enhancer.Extensions
         /// <see langword="true"/> if the collection have exactly <paramref name="count"/> number of elements,
         /// otherwise <see langword="false"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static bool HaveExactly(this IEnumerable collection, int count)
         {
             if (collection == null)
@@ -215,6 +224,17 @@ namespace Enhancer.Extensions
         /// <param name="random">The random object to select with.</param>
         /// <param name="offset">The lower bound to start the element selection from.</param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="random"/> or <paramref name="list"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="offset"/> is less than zero.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="offset"/> plus <paramref name="count"/> overflows
+        /// the number of elements in the <paramref name="list"/>.
+        /// </exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T RandomElement<T>(this IList<T> list, Random random, int offset = 0) => Select(random, list, offset, (list?.Count ?? 0) - offset);
 
@@ -229,6 +249,14 @@ namespace Enhancer.Extensions
         /// The number of consecutive element that can be selected starting from <paramref name="offset"/>.
         /// </param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="random"/> or <paramref name="list"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="offset"/> is less than zero or greater than
+        /// the number of elements in the <paramref name="list"/>.
+        /// </exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T RandomElement<T>(this IList<T> list, Random random, int offset, int count) => Select(random, list, offset, count);
 
@@ -240,6 +268,14 @@ namespace Enhancer.Extensions
         /// <param name="random">The random object to select with.</param>
         /// <param name="offset">The lower bound to start the element selection from.</param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="random"/> or <paramref name="list"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="offset"/> is less than zero or greater than the
+        /// number of elements in the <paramref name="list"/>.
+        /// </exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Select<T>(this Random random, IList<T> list, int offset = 0) => Select(random, list, offset, (list?.Count ?? 0) - offset);
 
@@ -254,6 +290,17 @@ namespace Enhancer.Extensions
         /// The number of consecutive element that can be selected starting from <paramref name="offset"/>.
         /// </param>
         /// <returns>The element selected by the <paramref name="random"/> object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="random"/> or <paramref name="list"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="offset"/> is less than zero.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="offset"/> plus <paramref name="count"/> overflows
+        /// the number of elements in the <paramref name="list"/>.
+        /// </exception>
         public static T Select<T>(this Random random, IList<T> list, int offset, int count)
         {
             if (random == null)
@@ -280,11 +327,21 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Adds a value by the specified amount to the collection.
+        /// Adds the <paramref name="value"/> by the specified
+        /// <paramref name="amount"/> of times to the collection.
         /// </summary>
         /// <param name="list">The collection to add to.</param>
-        /// <param name="value">The value to add to the collection many times.</param>
-        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
+        /// <param name="value">The value to add to the collection.</param>
+        /// <param name="amount">
+        /// The amount of times to add the <paramref name="value"/> to the
+        /// collection.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="list"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="list"/> is read-only or is fixed in size.
+        /// </exception>
         public static void Add(this IList list, object value, int amount)
         {
             if (list == null)
@@ -309,25 +366,54 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Adds many object instance to the collection by the specified amount, invoking the same constructor
-        /// for a given type.
+        /// Adds many object instance of the specified <paramref name="type"/>
+        /// to the collection by the specified <paramref name="amount"/>,
+        /// invoking the constructor matching the types of the
+        /// <paramref name="args"/> list.
         /// </summary>
         /// <param name="list">The collection to add the instances to.</param>
         /// <param name="type">The type of the instance to create.</param>
-        /// <param name="amount">The number of times an object should be added to the collection.</param>
+        /// <param name="amount">
+        /// The number of times an object should be added to the collection.
+        /// </param>
         /// <param name="args">The arguments for the constructor.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="list"/> or <paramref name="type"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If the specified <paramref name="type"/> does not have a constructor
+        /// matching the argument types of the <paramref name="args"/> list.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="list"/> is read-only or is fixed in size.
+        /// </exception>
         public static void Add(this IList list, Type type, int amount, params object[] args)
             => Add(list, type, args.Select(arg => arg?.GetType() ?? typeof(object)).ToArray(), amount, args);
 
         /// <summary>
-        /// Adds many object instance to the collection by the specified amount, invoking the same constructor
-        /// for a given type.
+        /// Adds many object instance of the specified <paramref name="type"/>
+        /// to the collection by the specified <paramref name="amount"/>,
+        /// invoking the constructor matching the
+        /// <paramref name="signature"/> type list and passing
+        /// <paramref name="args"/> list as the arguments.
         /// </summary>
         /// <param name="list">The collection to add the instances to.</param>
         /// <param name="type">The type of the instance to create.</param>
         /// <param name="signature">The signature of the constructor to invoke.</param>
         /// <param name="amount">The number of times an object should be added to the collection.</param>
         /// <param name="args">The arguments for the constructor.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="list"/>, <paramref name="type"/> or
+        /// <paramref name="signature"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If the specified <paramref name="type"/> does not have a constructor
+        /// with the specified <paramref name="signature"/> list.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="list"/> is read-only or is fixed in size.
+        /// </exception>
         public static void Add(this IList list, Type type, Type[] signature, int amount, params object[] args)
         {
             if (list == null)
@@ -369,12 +455,24 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Adds the objects returned by the specified <paramref name="function"/> by the specified amount
-        /// to the collection.
+        /// Adds the objects returned by the specified
+        /// <paramref name="function"/> by the specified
+        /// <paramref name="amount"/> to the collection.
         /// </summary>
         /// <param name="list">The collection to add to.</param>
-        /// <param name="function">The function that generates the objects to add to the collection.</param>
-        /// <param name="amount">The amount of times to call the function and add the result to the collection</param>
+        /// <param name="function">
+        /// The function that generates the objects to add to the collection.
+        /// </param>
+        /// <param name="amount">
+        /// The amount of times to call the function and add the result to the collection
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="list"/> or <paramref name="function"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="list"/> is read-only or is fixed in size.
+        /// </exception>
         public static void Add(this IList list, Func<object> function, int amount)
         {
             if (list == null)
@@ -402,7 +500,32 @@ namespace Enhancer.Extensions
                 list.Add(function.Invoke());
             }
         }
-        
+
+        /// <summary>
+        /// Counts the number of elements where <paramref name="predicate"/> is
+        /// <see langword="true"/> in an <see cref="IEnumerable"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection who's elements should be counted.
+        /// </param>
+        /// <param name="predicate">
+        /// <para>
+        /// The condition for when to count an element.
+        /// If the predicate returns <see langword="true"/> the element will be
+        /// counted, and skipped if it returns <see langword="false"/>.
+        /// </para>
+        /// <para>
+        /// A <see langword="null"/> value is equivalent to a predicate that
+        /// always returns <see langword="true"/>.
+        /// </para>
+        /// </param>
+        /// <returns>
+        /// The number of elements in the <paramref name="collection"/> to which
+        /// <paramref name="predicate"/> returns <see langword="true"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If the <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static int Count(this IEnumerable collection, Predicate<object> predicate = null)
         {
             Type genericType;
@@ -439,6 +562,30 @@ namespace Enhancer.Extensions
             return count;
         }
 
+        /// <summary>
+        /// Counts the number of elements where <paramref name="predicate"/> is
+        /// <see langword="true"/> in an <see cref="IEnumerable"/> and returns
+        /// it as <see cref="long"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection who's elements should be counted.
+        /// </param>
+        /// <param name="predicate">
+        /// <para>
+        /// The condition for when to count an element.
+        /// If the predicate returns <see langword="true"/> the element will be
+        /// counted, and skipped if it returns <see langword="false"/>.
+        /// </para>
+        /// A <see langword="null"/> value is equivalent to a predicate that
+        /// always returns <see langword="true"/>.
+        /// </param>
+        /// <returns>
+        /// The number of elements in the <paramref name="collection"/> to which
+        /// <paramref name="predicate"/> returns <see langword="true"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If the <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static long LongCount(this IEnumerable collection, Predicate<object> predicate = null)
         {
             long        count;
@@ -459,6 +606,32 @@ namespace Enhancer.Extensions
             return count;
         }
 
+        /// <summary>
+        /// Counts the number of elements where <paramref name="predicate"/> is
+        /// <see langword="true"/> in an <see cref="IEnumerable"/> and returns
+        /// it as a <see cref="BigInteger"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection who's elements should be counted.
+        /// </param>
+        /// <param name="predicate">
+        /// <para>
+        /// The condition for when to count an element.
+        /// If the predicate returns <see langword="true"/> the element will be
+        /// counted, and skipped if it returns <see langword="false"/>.
+        /// </para>
+        /// <para>
+        /// A <see langword="null"/> value is equivalent to a predicate that
+        /// always returns <see langword="true"/>.
+        /// </para>
+        /// </param>
+        /// <returns>
+        /// The number of elements in the <paramref name="collection"/> to which
+        /// <paramref name="predicate"/> returns <see langword="true"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If the <paramref name="collection"/> is <see langword="null"/>.
+        /// </exception>
         public static BigInteger BigCount(this IEnumerable collection, Predicate<object> predicate = null)
         {
             BigInteger count;
@@ -486,6 +659,23 @@ namespace Enhancer.Extensions
             return Where(enumerable, obj => predicate(obj)).GetEnumerator();
         }
 
+        /// <summary>
+        /// Filters a sequence of values based on a <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// An <see cref="IEnumerable"/> to filter.
+        /// </param>
+        /// <param name="predicate">
+        /// A function to test each elements for a condition.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable"/> that contains elements from the input
+        /// sequence that satisfy the condition.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="collection"/> or
+        /// <paramref name="predicate"/> is <see langword="null"/>.
+        /// </exception>
         public static IEnumerable Where(this IEnumerable collection, Func<object, bool> predicate)
         {
             if (collection == null)
@@ -501,6 +691,26 @@ namespace Enhancer.Extensions
             return collection.Cast<object>().Where<object>(predicate);
         }
 
+        /// <summary>
+        /// Filters a sequence of values based on a predicate. Each element's
+        /// index is used in the logic of the predicate function.
+        /// </summary>
+        /// <param name="collection">
+        /// An <see cref="IEnumerable"/> to filter.
+        /// </param>
+        /// <param name="predicate">
+        /// A function to test each source element for a condition. The second
+        /// parameter of the function represents the index of the source
+        /// element.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable"/> that contains elements from the input
+        /// sequence that satisfy the condition.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="collection"/> or
+        /// <paramref name="predicate"/> is <see langword="null"/>.
+        /// </exception>
         public static IEnumerable Where(this IEnumerable collection, Func<object, int, bool> predicate)
         {
             if (collection == null)

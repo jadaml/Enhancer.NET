@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="269009de-b506-4d7e-8b0e-e9d35e7c8f52" visible="True" isExpanded="true" title="Enhancer.NET reference">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+    <Topic id="7d7041d7-12dd-40d5-abd7-daa1610f944d" visible="True" isExpanded="true" apiParentMode="InsertBefore" title="Version History">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, history" />
+      </HelpKeywords>
+      <Topic id="939073c0-13f5-4417-8420-ac518628bdde" visible="True" isSelected="true" title="Version 0.0.0">
+        <HelpKeywords>
+          <HelpKeyword index="K" term="version, 0.0.0, 1.0.0, 1.0.0-alpha" />
+        </HelpKeywords>
+      </Topic>
+      <Topic id="eab61bad-597a-4cd7-b68b-6b3d2b8bf946" visible="True" title="Version 0.1.0">
+        <HelpKeywords>
+          <HelpKeyword index="K" term="version, 0.1.0" />
+        </HelpKeywords>
+      </Topic>
+      <Topic id="645f1141-a39b-4fec-82b0-ad4605aee829" visible="True" title="Version 0.2.0">
+        <HelpKeywords>
+          <HelpKeyword index="K" term="version, 0.2.0" />
+        </HelpKeywords>
+      </Topic>
+    </Topic>
+  </Topic>
+</Topics>

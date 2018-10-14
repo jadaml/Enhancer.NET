@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="939073c0-13f5-4417-8420-ac518628bdde" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+
+    <introduction>
+      <para>Version 0.0.0 was released on 2018-04-02 as version 1.0.0-alpha+10.7.</para>
+      <alert class="caution">
+        <para>
+          This version was released under the version number of 1.0.0-alpha+10.7.
+          After thorough consideration, it was reconsidered to be 0.0.0-0.1, and
+          a correctional
+          <link xlink:href="eab61bad-597a-4cd7-b68b-6b3d2b8bf946"/> released.
+        </para>
+      </alert>
+    </introduction>
+
+    <section>
+      <title>Changes in This Release</title>
+      <content>
+        <para>
+          This version is restructured version of any prior implementation
+          of the <application>Enhancer.NET</application> utility package
+          library.
+        </para>
+      </content>
+    </section>
+
+    <relatedTopics>
+      <link xlink:href="7d7041d7-12dd-40d5-abd7-daa1610f944d" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

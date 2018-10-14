@@ -47,36 +47,43 @@ namespace Enhancer.Assemblies
         public static readonly SemanticVersion Empty = new SemanticVersion();
 
         /// <summary>
-        /// Gets the major version node.
+        /// Gets the major version number.
         /// </summary>
         public uint Major { get; }
 
         /// <summary>
-        /// Gets the minor version node.
+        /// Gets the minor version number.
         /// </summary>
         public uint Minor { get; }
 
         /// <summary>
-        /// Gets the patch version node.
+        /// Gets the patch version number.
         /// </summary>
         public uint Patch { get; }
 
         /// <summary>
         /// Gets the pre-release version node.
         /// </summary>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public IReadOnlyList<string> PreRelease { get; }
 
         /// <summary>
         /// Gets the build meta-data node.
         /// </summary>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public IReadOnlyList<string> MetaData { get; }
 
         /// <summary>
-        /// Gets a value indicating, if the current version identifies an initial release.
+        /// Gets a value indicating, if the current version identifies an
+        /// initial development release.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if the current version identifies an initial release, otherwise <see langword="false"/>.
+        /// <see langword="true"/> if the current version identifies an initial
+        /// development release, otherwise <see langword="false"/>.
         /// </value>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public bool IsDevelopmentVersion => Major == 0;
 
         /// <summary>
@@ -85,6 +92,7 @@ namespace Enhancer.Assemblies
         /// <value>
         /// <see langword="true"/> if the current version is a pre-release, otherwise <see langword="false"/>.
         /// </value>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public bool IsPreRelease => PreRelease.Count > 0;
 
         /// <summary>
@@ -111,6 +119,7 @@ namespace Enhancer.Assemblies
         /// <param name="version">The version string to parse.</param>
         /// <returns>The parsed instance of <see cref="SemanticVersion"/>.</returns>
         /// <exception cref="FormatException">If failed to parse the provided string.</exception>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public static SemanticVersion Parse(string version)
         {
             try
@@ -133,6 +142,7 @@ namespace Enhancer.Assemblies
         /// holds an instance representing the parsed string, or <see langword="false"/> if failed to parse the version
         /// string, in which case the resulting <paramref name="version"/> has nothing to do with the version string.
         /// </returns>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public static bool TryParse(string input, out SemanticVersion version)
         {
             try
@@ -158,9 +168,20 @@ namespace Enhancer.Assemblies
         }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance by parsing the
+        /// provided string as a semantic version.
         /// </summary>
         /// <param name="version">The version string to parse</param>
+        /// <exception cref="NullReferenceException">
+        /// If <paramref name="version"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="version"/> is an empty string.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// If failed to parse the provided string.
+        /// </exception>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public SemanticVersion(string version) : this()
         {
             if (version is null)
@@ -314,54 +335,111 @@ namespace Enhancer.Assemblies
         }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance representing
+        /// a 0.0.0 initial release with no pre-release and meta data nodes.
         /// </summary>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         [ExcludeFromCodeCoverage]
         public SemanticVersion() : this(0, 0, 0, new object[0], new object[0]) { }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance representing a
+        /// <paramref name="major"/>.<paramref name="minor"/>.<paramref name="patch"/>
+        /// semantic version with no pre-release or meta-data nodes.
         /// </summary>
-        /// <param name="major">Specifies the major node for the version.</param>
-        /// <param name="minor">Specifies the minor node for the version.</param>
-        /// <param name="patch">Specifies the patch node for the version.</param>
+        /// <param name="major">Specifies the major version number for the version.</param>
+        /// <param name="minor">Specifies the minor version number for the version.</param>
+        /// <param name="patch">Specifies the patch version number for the version.</param>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         [ExcludeFromCodeCoverage]
         public SemanticVersion(uint major, uint minor, uint patch)
             : this(major, minor, patch, new object[0], new object[0])
         { }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance specifying a
+        /// <paramref name="major"/>.<paramref name="minor"/>.<paramref name="patch"/>
+        /// semantic version where the pre-release node is constructed by the
+        /// string representation of the <paramref name="preRelease"/> list
+        /// of identifiers and have no meta-data node.
         /// </summary>
-        /// <param name="major">Specifies the major node for the version.</param>
-        /// <param name="minor">Specifies the minor node for the version.</param>
-        /// <param name="patch">Specifies the patch node for the version.</param>
+        /// <param name="major">Specifies the major version number for the version.</param>
+        /// <param name="minor">Specifies the minor version number for the version.</param>
+        /// <param name="patch">Specifies the patch version number for the version.</param>
         /// <param name="preRelease">Defines the identifiers of the pre-release node for the version.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="preRelease"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="preRelease"/>
+        /// contains an object, who's <see cref="object.ToString()"/> method
+        /// returns a string that is not a valid identified.
+        /// Valid identifiers can be checked with the
+        /// <see cref="ValidIdentifier(string)"/> method.
+        /// </exception>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         [ExcludeFromCodeCoverage]
         public SemanticVersion(uint major, uint minor, uint patch, params object[] preRelease)
             : this(major, minor, patch, preRelease, new object[0])
         { }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance specifying a
+        /// <paramref name="major"/>.<paramref name="minor"/>.<paramref name="patch"/>
+        /// semantic version where the pre-release node is constructed by the
+        /// string representation of the <paramref name="preRelease"/> list
+        /// of identifiers and have no meta-data node.
         /// </summary>
-        /// <param name="major">Specifies the major node for the version.</param>
-        /// <param name="minor">Specifies the minor node for the version.</param>
-        /// <param name="patch">Specifies the patch node for the version.</param>
+        /// <param name="major">Specifies the major version number for the version.</param>
+        /// <param name="minor">Specifies the minor version number for the version.</param>
+        /// <param name="patch">Specifies the patch version number for the version.</param>
         /// <param name="preRelease">Defines the identifiers of the pre-release node for the version.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="preRelease"/> is
+        /// <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="preRelease"/>
+        /// contains an object, who's <see cref="object.ToString()"/> method
+        /// returns a string that is not a valid identified.
+        /// Valid identifiers can be checked with the
+        /// <see cref="ValidIdentifier(string)"/> method.
+        /// </exception>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         [ExcludeFromCodeCoverage]
         public SemanticVersion(uint major, uint minor, uint patch, IEnumerable<object> preRelease)
             : this(major, minor, patch, preRelease, new object[0])
         { }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> instance.
+        /// Creates a new <see cref="SemanticVersion"/> instance specifying a
+        /// <paramref name="major"/>.<paramref name="minor"/>.<paramref name="patch"/>
+        /// semantic version where the pre-release and meta-data nodes are
+        /// constructed by the string representation of the
+        /// <paramref name="preRelease"/> and <paramref name="metadata"/> lists
+        /// of identifiers respectively.
         /// </summary>
         /// <param name="major">Specifies the major node for the version.</param>
         /// <param name="minor">Specifies the minor node for the version.</param>
         /// <param name="patch">Specifies the patch node for the version.</param>
         /// <param name="preRelease">Defines the identifiers of the pre-release node for the version.</param>
         /// <param name="metadata">Defines the identifiers of the build meta-data node for the version.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="preRelease"/> or
+        /// <paramref name="metadata"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If either <paramref name="preRelease"/> or <paramref name="metadata"/>
+        /// contains an object, who's <see cref="object.ToString()"/> method
+        /// returns a string that is not a valid identified.
+        /// Valid identifiers can be checked with the
+        /// <see cref="ValidIdentifier(string)"/> method.
+        /// </exception>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public SemanticVersion(uint major, uint minor, uint patch, IEnumerable<object> preRelease, IEnumerable<object> metadata)
             : this(major, minor, patch,
                   (preRelease ?? throw new ArgumentNullException(nameof(preRelease))).Select(ObjectAsString),
@@ -376,6 +454,13 @@ namespace Enhancer.Assemblies
         /// <param name="patch">Specifies the patch node for the version.</param>
         /// <param name="preRelease">Defines the identifiers of the pre-release node for the version.</param>
         /// <param name="metadata">Defines the identifiers of the build meta-data node for the version.</param>
+        /// <exception cref="ArgumentException">
+        /// If either <paramref name="preRelease"/> or <paramref name="metadata"/>
+        /// contains an object, who's <see cref="object.ToString()"/> method
+        /// returns a string that is not a valid identified.
+        /// </exception>
+        /// <seealso cref="ValidIdentifier(string)"/>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         private SemanticVersion(uint major, uint minor, uint patch, IEnumerable<string> preRelease, IEnumerable<string> metadata)
         {
             if (!preRelease.All(ValidIdentifier))
@@ -436,6 +521,7 @@ namespace Enhancer.Assemblies
         /// </list>
         /// </param>
         /// <returns>The string representing the semantic version instance.</returns>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         [ExcludeFromCodeCoverage]
         public string ToString(string format) => ToString(format, CultureInfo.InvariantCulture);
 
@@ -472,6 +558,7 @@ namespace Enhancer.Assemblies
         /// </param>
         /// <param name="formatProvider">This parameter does not affects the outcome of the string result.</param>
         /// <returns>The string representing the semantic version instance.</returns>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             if (format != null && format != "0" && format != "1" && format != "2" && format != "3")
@@ -513,9 +600,15 @@ namespace Enhancer.Assemblies
         /// </summary>
         /// <param name="other">The version to compare to.</param>
         /// <returns>
-        /// <see langword="true"/> if <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> are equals,
-        /// the <see cref="PreRelease"/> have the same amount of identifiers, and all of them are equal one another,
-        /// and they appear in the same order, otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="other"/> is not
+        /// <see langword="null"/>, and
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal, and the <see cref="PreRelease"/> node have the same
+        /// amount of identifiers, and all of the identifiers are the same,
+        /// and they appear in the same order,
+        /// otherwise <see langword="false"/>.
         /// </returns>
         public bool Equals(SemanticVersion other)
         {
@@ -531,10 +624,15 @@ namespace Enhancer.Assemblies
         /// </summary>
         /// <param name="obj">The version to compare to.</param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> is a <see cref="SemanticVersion"/> instance, and
-        /// <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> are equals, the <see cref="PreRelease"/>
-        /// have the same amount of identifiers, and all of them are equal one another, and they appear in the same
-        /// order, otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="obj"/> is a
+        /// <see cref="SemanticVersion"/> instance, and
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal, and the <see cref="PreRelease"/> node have the same
+        /// amount of identifiers, and all of the identifiers are the same,
+        /// and they appear in the same order,
+        /// otherwise <see langword="false"/>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -554,72 +652,150 @@ namespace Enhancer.Assemblies
         /// <item>
         /// <term>-1</term>
         /// <term>
-        /// <para>If the current <see cref="Major"/> is less then <paramref name="other"/>'s <see cref="Major"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> is the same,
-        /// but the current <see cref="Minor"/> is less then <paramref name="other"/>'s <see cref="Minor"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> and <see cref="Minor"/> is the same,
-        /// but the current <see cref="Patch"/> is less then <paramref name="other"/>'s <see cref="Patch"/>,</para>
-        /// <para><em>- OR -</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have any identifiers specified in pre-release node, while the other have not.
+        /// If the current <see cref="Major"/> version number is less than
+        /// <paramref name="other"/>'s <see cref="Major"/> version number,
         /// </para>
-        /// <para><em>- OR -</em></para>
+        /// <para><em>‒ OR ‒</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have more identifiers specified in pre-release node, than the other.
+        /// If the <see cref="Major"/> version numbers
+        /// are equal,
+        /// but the current <see cref="Minor"/> version number is less than
+        /// <paramref name="other"/>'s <see cref="Minor"/> version number,
         /// </para>
-        /// <para><em>- OR -</em></para>
+        /// <para><em>‒ OR ‒</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but one of the
-        /// pre-release identifier is considered to be preceding than the other, either by numerically or lexically,
-        /// or the current version specifies a number whereas the other specifies a string.
+        /// If the
+        /// <see cref="Major"/> and
+        /// <see cref="Minor"/> version numbers
+        /// are equal,
+        /// but the current <see cref="Patch"/> version number is less than
+        /// <paramref name="other"/>'s <see cref="Patch"/> version number,
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// but the current instance have identifiers specified in it's
+        /// <see cref="PreRelease"/> node, while the <paramref name="other"/>
+        /// have not.
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// but the current instance have less identifiers specified in
+        /// <see cref="PreRelease"/> node, than the <paramref name="other"/>.
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// and the number of identifiers in <see cref="PreRelease"/> nodes
+        /// are equal,
+        /// but one of the <see cref="PreRelease"/> identifier
+        /// at the smallest common index
+        /// at which they are not equal
+        /// precedes <paramref name="other"/>'s,
+        /// either by numerically or lexically,
+        /// or the current version identifier specifies a number
+        /// whereas the <paramref name="other"/>'s specifies a string.
         /// </para>
         /// </term>
         /// </item>
         /// <item>
         /// <term>0</term>
         /// <term>
-        /// If <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> are equal, and the pre-release nodes
-        /// have exactly the same amount of identifiers and are all of them are the same and are in the same order.
+        /// If
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// and the <see cref="PreRelease"/> nodes have the same amount of
+        /// identifiers
+        /// and all of them are the same and are in the same order.
         /// </term>
         /// </item>
         /// <item>
         /// <term>1</term>
         /// <term>
-        /// <para>If the current <see cref="Major"/> is greater then <paramref name="other"/>'s <see cref="Major"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> is the same,
-        /// but the current <see cref="Minor"/> is greater then <paramref name="other"/>'s <see cref="Minor"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> and <see cref="Minor"/> is the same,
-        /// but the current <see cref="Patch"/> is greater then <paramref name="other"/>'s <see cref="Patch"/>,</para>
-        /// <para><em>- OR -</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have no identifiers specified in pre-release node, while the other have.
+        /// If the current <see cref="Major"/> version number is greater than
+        /// <paramref name="other"/>'s <see cref="Major"/> version number,
         /// </para>
-        /// <para><em>- OR -</em></para>
+        /// <para><em>‒ OR ‒</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have less identifiers specified in pre-release node, than the other.
+        /// If the
+        /// <see cref="Major"/> version numbers
+        /// are equal,
+        /// but the current <see cref="Minor"/> version number is greater than
+        /// <paramref name="other"/>'s <see cref="Minor"/> version number,
         /// </para>
-        /// <para><em>- OR -</em></para>
+        /// <para><em>‒ OR ‒</em></para>
         /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but one of the
-        /// pre-release identifier is considered to be preceding than the other, either by numerically or lexically,
-        /// or the current version specifies a string whereas the other specifies a number.
+        /// If the
+        /// <see cref="Major"/> and
+        /// <see cref="Minor"/> version numbers
+        /// are equal,
+        /// but the current <see cref="Patch"/> version number is greater than
+        /// <paramref name="other"/>'s <see cref="Patch"/> version number,
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// but the current instance have no identifiers specified in its
+        /// <see cref="PreRelease"/> node, while the <paramref name="other"/>
+        /// have.
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// but the current instance have more identifiers specified in its
+        /// <see cref="PreRelease"/> node, than the <paramref name="other"/>.
+        /// </para>
+        /// <para><em>‒ OR ‒</em></para>
+        /// <para>
+        /// If the
+        /// <see cref="Major"/>,
+        /// <see cref="Minor"/> and
+        /// <see cref="Patch"/> version numbers
+        /// are equal,
+        /// but one of the <see cref="PreRelease"/> identifier
+        /// at the smallest common index
+        /// at which they are not equal
+        /// follows <paramref name="other"/>'s,
+        /// either by numerically or lexically,
+        /// or the current version identifier specifies a string
+        /// whereas the <paramref name="other"/>'s specifies a number.
         /// </para>
         /// </term>
         /// </item>
         /// </list>
         /// </returns>
         /// <remarks>
-        /// This comparing function strictly follows the rules of what is specified in the https://semver.org
-        /// specification's 11th point.
+        /// This comparing function strictly follows the rules of what is
+        /// specified in the
+        /// <see href="https://semver.org/spec/v2.0.0.html#spec-item-11">
+        /// Semantic Version 2.0.0 specification's 11th point.
+        /// </see>
         /// </remarks>
+        /// <seealso href="https://semver.org/spec/v2.0.0.html">Semantic Version 2.0.0</seealso>
         public int CompareTo(SemanticVersion other)
         {
             int cmpRes;
@@ -648,88 +824,6 @@ namespace Enhancer.Assemblies
             return 0;
         }
 
-        /// <summary>
-        /// Compares the current version with another version.
-        /// </summary>
-        /// <param name="obj">The other version to compare the current version with.</param>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="obj"/> isn't a <see cref="SemanticVersion"/> instance.
-        /// </exception>
-        /// <returns>
-        /// <list type="table">
-        /// <listheader>
-        /// <term>Value</term>
-        /// <term>Condition</term>
-        /// </listheader>
-        /// <item>
-        /// <term>-1</term>
-        /// <term>
-        /// <para>If the current <see cref="Major"/> is less then <paramref name="obj"/>'s <see cref="Major"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> is the same,
-        /// but the current <see cref="Minor"/> is less then <paramref name="obj"/>'s <see cref="Minor"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> and <see cref="Minor"/> is the same,
-        /// but the current <see cref="Patch"/> is less then <paramref name="obj"/>'s <see cref="Patch"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have any identifiers specified in pre-release node, while the other have not.
-        /// </para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have more identifiers specified in pre-release node, than the other.
-        /// </para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but one of the
-        /// pre-release identifier is considered to be preceding than the other, either by numerically or lexically,
-        /// or the current version specifies a number whereas the other specifies a string.
-        /// </para>
-        /// </term>
-        /// </item>
-        /// <item>
-        /// <term>0</term>
-        /// <term>
-        /// If <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> are equal, and the pre-release nodes
-        /// have exactly the same amount of identifiers and are all of them are the same and are in the same order.
-        /// </term>
-        /// </item>
-        /// <item>
-        /// <term>1</term>
-        /// <term>
-        /// <para>If the current <see cref="Major"/> is greater then <paramref name="obj"/>'s <see cref="Major"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> is the same,
-        /// but the current <see cref="Minor"/> is greater then <paramref name="obj"/>'s <see cref="Minor"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>If the <see cref="Major"/> and <see cref="Minor"/> is the same,
-        /// but the current <see cref="Patch"/> is greater then <paramref name="obj"/>'s <see cref="Patch"/>,</para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have no identifiers specified in pre-release node, while the other have.
-        /// </para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but the current
-        /// instance have less identifiers specified in pre-release node, than the other.
-        /// </para>
-        /// <para><em>- OR -</em></para>
-        /// <para>
-        /// If the <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/> is the same, but one of the
-        /// pre-release identifier is considered to be preceding than the other, either by numerically or lexically,
-        /// or the current version specifies a string whereas the other specifies a number.
-        /// </para>
-        /// </term>
-        /// </item>
-        /// </list>
-        /// </returns>
-        /// <remarks>
-        /// This comparing function strictly follows the rules of what is specified in the https://semver.org
-        /// specification's 11th point.
-        /// </remarks>
         int IComparable.CompareTo(object obj)
         {
             return CompareTo(obj as SemanticVersion ?? throw new ArgumentException("The parameter is not the expected type.", nameof(obj)));
@@ -750,8 +844,9 @@ namespace Enhancer.Assemblies
         }
 
         /// <summary>
-        /// Compares the current version with the specified version, and determines if the versions
-        /// are only have backward-compatible.
+        /// Compares the current version with the specified version, and
+        /// determines if the versions are only have backward-compatible
+        /// changes.
         /// </summary>
         /// <param name="version">The later version to compare with.</param>
         /// <returns>
@@ -823,12 +918,12 @@ namespace Enhancer.Assemblies
         }
 
         /// <summary>
-        /// Compares two semantic version whether the first version successes the second.
+        /// Compares two semantic version whether the first version follows the second.
         /// </summary>
         /// <param name="a">The first version to compare.</param>
         /// <param name="b">The second version to compare.</param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="a"/> successes <paramref name="b"/>, otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="a"/> follows <paramref name="b"/>, otherwise <see langword="false"/>.
         /// </returns>
         public static bool operator >(SemanticVersion a, SemanticVersion b)
         {
@@ -870,12 +965,12 @@ namespace Enhancer.Assemblies
         }
 
         /// <summary>
-        /// Compares two semantic version whether the first version successes the second, or are they the same.
+        /// Compares two semantic version whether the first version follows the second, or are they the same.
         /// </summary>
         /// <param name="a">The first version to compare.</param>
         /// <param name="b">The second version to compare.</param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="a"/> successes <paramref name="b"/> or are they the same,
+        /// <see langword="true"/> if <paramref name="a"/> follows <paramref name="b"/> or are they the same,
         /// otherwise <see langword="false"/>.
         /// </returns>
         public static bool operator >=(SemanticVersion a, SemanticVersion b)

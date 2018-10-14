@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="269009de-b506-4d7e-8b0e-e9d35e7c8f52" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        <application>Enhancer.NET</application> is a utility package library for providing
+        additional functions and algorithms for simplifying simple or more complex scenarios,
+        or to eliminate as much boilerplate codes as possible.
+      </para>
+    </introduction>
+    
+    <relatedTopics>
+      <codeEntityReference qualifyHint="true">N:Enhancer.Assemblies</codeEntityReference>
+      <codeEntityReference qualifyHint="true">N:Enhancer.Collections</codeEntityReference>
+      <codeEntityReference qualifyHint="true">N:Enhancer.Configuration</codeEntityReference>
+      <codeEntityReference qualifyHint="true">N:Enhancer.Extensions</codeEntityReference>
+      <link xlink:href="7d7041d7-12dd-40d5-abd7-daa1610f944d" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

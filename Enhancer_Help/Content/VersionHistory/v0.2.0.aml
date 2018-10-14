@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="645f1141-a39b-4fec-82b0-ad4605aee829" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        Version 0.2.0 was released on <placeholder>[TODO: Date]</placeholder>.
+      </para>
+    </introduction>
+
+    <section>
+      <title>Changes in This Release</title>
+      <content>
+
+        <list class="bullet">
+          <listItem>
+            <para>
+              Introduced
+              <codeEntityReference>T:Enhancer.Extensions.EnumExtensions</codeEntityReference>
+              class.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              Introduced
+              <codeEntityReference>N:Enhancer.Configuration</codeEntityReference>
+              classes.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              Fixed a possible NullPointerException in
+              <codeEntityReference>T:Enhancer.Extensions.FancyFormatProvider</codeEntityReference>
+              class.
+            </para>
+          </listItem>
+        </list>
+
+      </content>
+    </section>
+
+    <relatedTopics>
+      <link xlink:href="7d7041d7-12dd-40d5-abd7-daa1610f944d" />
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

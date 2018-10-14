@@ -57,8 +57,8 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Toggles the state of a specified flag of a flag enumeration in the
-        /// given value.
+        /// Toggles the state of a specified <paramref name="flag"/> of a flag
+        /// enumeration in the given <paramref name="value"/>.
         /// </summary>
         /// <typeparam name="T">The type of the flag enumeration.</typeparam>
         /// <param name="value">The value to work with.</param>
@@ -78,8 +78,9 @@ namespace Enhancer.Extensions
         }
 
         /// <summary>
-        /// Switches the state of a specified flag of a flag enumeration in the
-        /// given value to the specified state.
+        /// Switches the state of a specified <paramref name="flag"/> of a flag
+        /// enumeration in the given <paramref name="value"/> to the specified
+        /// <paramref name="state"/>.
         /// </summary>
         /// <typeparam name="T">The type of the flag enumeration.</typeparam>
         /// <param name="value">The value to work with.</param>

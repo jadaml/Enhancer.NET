@@ -62,10 +62,10 @@ namespace Enhancer.Extensions
         public static FancyFormatProvider Provider => _instance ?? (_instance = new FancyFormatProvider());
 
         /// <summary>
-        /// Retrieves the string resource for "On" used when formatting boolean values.
+        /// Retrieves the string resource for “On” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -74,10 +74,10 @@ namespace Enhancer.Extensions
         public static string On(CultureInfo culture = null) => StringLoader.GetString("On", culture);
 
         /// <summary>
-        /// Retrieves the string resource for "Off" used when formatting boolean values.
+        /// Retrieves the string resource for “Off” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -86,10 +86,10 @@ namespace Enhancer.Extensions
         public static string Off(CultureInfo culture = null) => StringLoader.GetString("Off", culture);
 
         /// <summary>
-        /// Retrieves the string resource for "Yes" used when formatting boolean values.
+        /// Retrieves the string resource for “Yes” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -98,10 +98,10 @@ namespace Enhancer.Extensions
         public static string Yes(CultureInfo culture = null) => StringLoader.GetString("Yes", culture);
 
         /// <summary>
-        /// Retrieves the string resource for "No" used when formatting boolean values.
+        /// Retrieves the string resource for “No” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -110,10 +110,10 @@ namespace Enhancer.Extensions
         public static string No(CultureInfo culture = null) => StringLoader.GetString("No", culture);
 
         /// <summary>
-        /// Retrieves the string resource for "True" used when formatting boolean values.
+        /// Retrieves the string resource for “True” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -125,10 +125,10 @@ namespace Enhancer.Extensions
         public static string True(CultureInfo culture = null) => StringLoader.GetString("True", culture);
 
         /// <summary>
-        /// Retrieves the string resource for "False" used when formatting boolean values.
+        /// Retrieves the string resource for “False” used when formatting boolean values.
         /// </summary>
         /// <param name="culture">
-        /// The culture for the string resource should be searched for, or
+        /// The culture to be searched for the string resource, or
         /// <see langword="null"/> to search the current culture.
         /// </param>
         /// <returns>
@@ -152,6 +152,13 @@ namespace Enhancer.Extensions
         public object GetFormat(Type formatType) => formatType == typeof(ICustomFormatter) ? this : null;
 
         /// <inheritdoc/>
+        /// <param name="format">
+        /// A format string containing formatting specifications.
+        /// </param>
+        /// <param name="arg">An object to format.</param>
+        /// <param name="provider">
+        /// An optional format provider to use when formatting the object.
+        /// </param>
         public string Format(string format, object arg, IFormatProvider provider = null)
         {
             switch (arg)

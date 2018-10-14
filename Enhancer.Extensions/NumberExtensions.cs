@@ -24,6 +24,9 @@ using System.Threading.Tasks;
 
 namespace Enhancer.Extensions
 {
+    /// <summary>
+    /// This class provides extension methods for number types.
+    /// </summary>
     public static partial class NumberExtensions
     {
     }

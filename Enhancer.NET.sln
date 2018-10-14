@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.Configuration", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer.Configuration.Test", "Enhancer.Configuration.Test\Enhancer.Configuration.Test.csproj", "{116F29B3-61AF-4741-BC47-5279ED3DAC0B}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "EnhancerHelp", "Enhancer_Help\EnhancerHelp.shfbproj", "{081F2714-386E-4A6C-A115-1B686C47E904}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116F29B3-61AF-4741-BC47-5279ED3DAC0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081F2714-386E-4A6C-A115-1B686C47E904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081F2714-386E-4A6C-A115-1B686C47E904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081F2714-386E-4A6C-A115-1B686C47E904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081F2714-386E-4A6C-A115-1B686C47E904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
