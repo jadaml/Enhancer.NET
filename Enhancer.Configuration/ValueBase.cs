@@ -261,17 +261,17 @@ namespace Enhancer.Configuration
             // untestable in our case (see related decompiled unittest),
             // so ***STICK WITH THIS CODE!***
 
-            if (_value == null)
+            if (Value == null)
             {
                 return string.Empty;
             }
 
-            if (_value is IFormattable formattable)
+            if (Value is IFormattable formattable)
             {
                 return formattable.ToString(format, formatProvider);
             }
 
-            return _value.ToString();
+            return Value.ToString();
         }
 
         /// <summary>
