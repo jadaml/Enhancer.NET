@@ -811,15 +811,32 @@ namespace Enhancer.Assemblies
             if (PreRelease.Count == 0) return 1;
 
             int i;
+            int prmin = Min(PreRelease.Count, other.PreRelease.Count);
 
-            for (i = 0; i < Min(PreRelease.Count, other.PreRelease.Count); ++i)
+            for (i = 0; i < prmin; ++i)
             {
-                if ((cmpRes = StringComparer.InvariantCulture.Compare(PreRelease[i], other.PreRelease[i])) != 0)
+                string ida = PreRelease[i];
+                string idb = other.PreRelease[i];
+
+                bool aisnum = ida.All(char.IsDigit) && (ida.Length <= 1 || !ida.StartsWith("0"));
+                bool bisnum = idb.All(char.IsDigit) && (idb.Length <= 1 || !idb.StartsWith("0"));
+
+                if ((cmpRes = Convert.ToInt32(bisnum) - Convert.ToInt32(aisnum)) != 0)
+                {
                     return cmpRes;
+                }
+
+                if (aisnum && (cmpRes = int.Parse(ida) - int.Parse(idb)) != 0
+                 || (cmpRes = StringComparer.InvariantCulture.Compare(ida, idb)) != 0)
+                {
+                    return cmpRes;
+                }
             }
 
-            if (i < other.PreRelease.Count) return -1;
-            if (i < PreRelease.Count) return 1;
+            if ((cmpRes = PreRelease.Count - other.PreRelease.Count) != 0)
+            {
+                return cmpRes;
+            }
 
             return 0;
         }

@@ -33,6 +33,13 @@
               class.
             </para>
           </listItem>
+          <listitem>
+            <para>
+              Fixed ordering of
+              <codeEntityReference>T:Enhancer.Assemblies.SemanticVersion</codeEntityReference>'s
+              Pre-release identifiers.
+            </para>
+          </listitem>
         </list>
 
       </content>
