@@ -33,13 +33,23 @@
               class.
             </para>
           </listItem>
-          <listitem>
+          <listItem>
             <para>
               Fixed ordering of
               <codeEntityReference>T:Enhancer.Assemblies.SemanticVersion</codeEntityReference>'s
-              Pre-release identifiers.
+              Pre-release numeric identifiers.
             </para>
-          </listitem>
+          </listItem>
+          <listItem>
+            <para>
+              Fixed
+              <codeEntityReference>M:Enhancer.Extensions.TypeExtensions.GetGenericType</codeEntityReference>
+              when the <legacyItalic>type</legacyItalic> is an interface type
+              and does not implement the specified <legacyItalic>genericType</legacyItalic>
+              now returns <legacyItalic>null</legacyItalic> instead of throwing
+              <codeEntityReference>T:System.NullReferenceException</codeEntityReference>.
+            </para>
+          </listItem>
         </list>
 
       </content>

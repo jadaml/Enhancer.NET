@@ -90,7 +90,7 @@ namespace Enhancer.Extensions
                 return null;
             }
 
-            for (; type != typeof(object); type = type.BaseType)
+            for (; type != typeof(object) && type != null; type = type.BaseType)
             {
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == genericType)
                 {

@@ -37,19 +37,33 @@ namespace Enhancer.Extensions.Test
             public SpecialList() : base(0) { }
         }
 
-        private static object[][] _types = new object[][]
+        private static IEnumerable<TestCaseData> TypeTestCases
         {
-            new object[] { typeof(Guid),            null                    },
-            new object[] { typeof(Tuple<,>),        null                    },
-            new object[] { typeof(IComparable),     null                    },
-            new object[] { typeof(IComparable<>),   null                    },
-            new object[] { typeof(IList),           typeof(IList)           },
-            new object[] { typeof(IList<>),         typeof(IList<TestType>) },
-            new object[] { typeof(IList<TestType>), typeof(IList<TestType>) },
-            new object[] { typeof(List<>),          typeof(List<TestType>)  },
-            new object[] { typeof(List<TestType>),  typeof(List<TestType>)  },
-            new object[] { typeof(SpecialList),     typeof(SpecialList)     },
-        };
+            get
+            {
+                yield return new TestCaseData(typeof(SpecialList), typeof(Guid))            { ExpectedResult = null,                    TestName = "Type derives unrelated type"                      };
+                yield return new TestCaseData(typeof(SpecialList), typeof(Tuple<,>))        { ExpectedResult = null,                    TestName = "Type derives unrelated generic type"              };
+                yield return new TestCaseData(typeof(SpecialList), typeof(IComparable))     { ExpectedResult = null,                    TestName = "Type implements unrelated interface"              };
+                yield return new TestCaseData(typeof(SpecialList), typeof(IComparable<>))   { ExpectedResult = null,                    TestName = "Type implements unrelated generic interface"      };
+                yield return new TestCaseData(typeof(SpecialList), typeof(IList))           { ExpectedResult = typeof(IList),           TestName = "Type implements interface"                        };
+                yield return new TestCaseData(typeof(SpecialList), typeof(IList<>))         { ExpectedResult = typeof(IList<TestType>), TestName = "Type implements generic interface definition"     };
+                yield return new TestCaseData(typeof(SpecialList), typeof(IList<TestType>)) { ExpectedResult = typeof(IList<TestType>), TestName = "Type implements generic interface"                };
+                yield return new TestCaseData(typeof(SpecialList), typeof(List<>))          { ExpectedResult = typeof(List<TestType>),  TestName = "Type derives from base generic type definition"   };
+                yield return new TestCaseData(typeof(SpecialList), typeof(List<TestType>))  { ExpectedResult = typeof(List<TestType>),  TestName = "Type derives from base type"                      };
+                yield return new TestCaseData(typeof(SpecialList), typeof(SpecialList))     { ExpectedResult = typeof(SpecialList),     TestName = "Type is it self"                                  };
+                yield return new TestCaseData(new SpecialList(),   typeof(Guid))            { ExpectedResult = null,                    TestName = "Object derives from unrelated type"               };
+                yield return new TestCaseData(new SpecialList(),   typeof(Tuple<,>))        { ExpectedResult = null,                    TestName = "Object derives from unrelated generic type"       };
+                yield return new TestCaseData(new SpecialList(),   typeof(IComparable))     { ExpectedResult = null,                    TestName = "Object derives from unrelated interface"          };
+                yield return new TestCaseData(new SpecialList(),   typeof(IComparable<>))   { ExpectedResult = null,                    TestName = "Object derives from unrelated generic interface"  };
+                yield return new TestCaseData(new SpecialList(),   typeof(IList))           { ExpectedResult = typeof(IList),           TestName = "Object derives from interface"                    };
+                yield return new TestCaseData(new SpecialList(),   typeof(IList<>))         { ExpectedResult = typeof(IList<TestType>), TestName = "Object derives from generic interface definition" };
+                yield return new TestCaseData(new SpecialList(),   typeof(IList<TestType>)) { ExpectedResult = typeof(IList<TestType>), TestName = "Object derives from generic interface"            };
+                yield return new TestCaseData(new SpecialList(),   typeof(List<>))          { ExpectedResult = typeof(List<TestType>),  TestName = "Object derives from base generic type definition" };
+                yield return new TestCaseData(new SpecialList(),   typeof(List<TestType>))  { ExpectedResult = typeof(List<TestType>),  TestName = "Object derives from base type"                    };
+                yield return new TestCaseData(new SpecialList(),   typeof(SpecialList))     { ExpectedResult = typeof(SpecialList),     TestName = "Object is an instance of its own type"            };
+                yield return new TestCaseData(typeof(IList<>),     typeof(List<>))          { ExpectedResult = null,                    TestName = "Interface derives from descendant"                };
+            }
+        }
 
         [Test(TestOf = typeof(TypeExtensions))]
         public void GetGenericTypeError()
@@ -60,12 +74,19 @@ namespace Enhancer.Extensions.Test
             Throws<ArgumentNullException>(() => TypeExtensions.GetGenericType(new List(), null));
         }
 
-        [TestCaseSource(nameof(_types))]
+        [TestCaseSource(nameof(TypeTestCases))]
         [TestOf(typeof(TypeExtensions))]
-        public void GetGenericTypeTest(Type value, Type expect)
+        public Type GetGenericTypeTest(object value, Type ancestor)
         {
-            AreEqual(expect, TypeExtensions.GetGenericType(typeof(SpecialList), value));
-            AreEqual(expect, TypeExtensions.GetGenericType(new SpecialList(), value));
+            if (value is Type type)
+            {
+                return TypeExtensions.GetGenericType(type, ancestor);
+            }
+            if (value is SpecialList list)
+            {
+                return TypeExtensions.GetGenericType((SpecialList)value, ancestor);
+            }
+            return TypeExtensions.GetGenericType(value.GetType(), ancestor);
         }
     }
 }
