@@ -1,0 +1,102 @@
+﻿<#
+/* Copyright (c) 2018, Ádám L. Juhász
+ *
+ * This file is part of Enhancer.Configuration.
+ *
+ * Enhancer.Configuration is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Enhancer.Configuration is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Enhancer.Configuration.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#>
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".Generated.cs" #>
+<#
+            string[] implementors =
+            {
+                "ValueBase",
+                "SimpleValue",
+                "MemoryValue",
+            };
+            bool isFollowup = false;
+            int maxLen = implementors.Max(s => s.Length);
+#>
+// This code is generated.
+
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+
+namespace Enhancer.Configuration
+{
+<#
+            foreach (string type in implementors)
+            {
+#>
+    [TypeConverter(typeof(<#= type #>Converter<#= new string(' ', maxLen - type.Length) #>))] partial class <#= type #><T> { }
+<#
+                isFollowup = true;
+            }
+#>
+
+<#
+            isFollowup = false;
+
+            foreach (string type in implementors)
+            {
+                if (isFollowup) WriteLine("");
+#>
+    internal class <#= type #>Converter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) => true;
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            Type valueType  = context?.PropertyDescriptor?.PropertyType ?? context?.Instance?.GetType();
+
+            return valueType != null
+                && typeof(<#= type #><>).IsAssignableFrom(valueType)
+                && destinationType.IsAssignableFrom(valueType.GetGenericArguments().First())
+                || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            Type targetType = value.GetType();
+
+            return typeof(<#= type #><>).MakeGenericType(targetType)
+                .GetMethod("op_Implicit", new[] { targetType })
+                .Invoke(null, new[] { value });
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            Type valueType = value.GetType();
+
+            if (!typeof(<#= type #><>).IsAssignableFrom(valueType)
+             || !destinationType.IsAssignableFrom(valueType.GetGenericArguments().First()))
+            {
+                return base.ConvertTo(context, culture, value, destinationType);
+            }
+
+            return ((IValue)value).Value;
+        }
+    }
+<#
+                isFollowup = true;
+            }
+#>
+}

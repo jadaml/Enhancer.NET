@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachedValueTest.cs" />
+    <Compile Include="ConversionTestCases.cs" />
     <Compile Include="DirectAttachedValueTest.cs" />
     <Compile Include="IndirectAttachedValueTest.cs" />
     <Compile Include="MemoryValueTest.cs" />
@@ -63,7 +64,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SettingsGroupTest.cs" />
+    <Compile Include="SimpleValueConvertibleTest.cs" />
     <Compile Include="SimpleValueTest.cs" />
+    <Compile Include="ValueBaseConvertibleTest.cs" />
     <Compile Include="ValueBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>

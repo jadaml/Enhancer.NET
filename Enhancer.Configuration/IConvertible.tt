@@ -1,0 +1,109 @@
+﻿<#
+/* Copyright (c) 2018, Ádám L. Juhász
+ *
+ * This file is part of Enhancer.Configuration.
+ *
+ * Enhancer.Configuration is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Enhancer.Configuration is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Enhancer.Configuration.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#>
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".Generated.cs" #>
+<#
+            string[] implementors = { "ValueBase", "SimpleValue" };
+            bool isFollowup = false;
+            string[] baseTypes =
+            {
+                nameof(Boolean),
+                nameof(Char),
+                nameof(SByte),
+                nameof(Byte),
+                nameof(Int16),
+                nameof(UInt16),
+                nameof(Int32),
+                nameof(UInt32),
+                nameof(Int64),
+                nameof(UInt64),
+                nameof(Single),
+                nameof(Double),
+                nameof(Decimal),
+                nameof(DateTime),
+                nameof(String),
+            };
+            int maxLen = baseTypes.Max(s => s.Length);
+#>
+// This file is generated.
+
+using System;
+
+namespace Enhancer.Configuration
+{
+    internal static class ConvConst
+    {
+        public static TypeCode GetTypeCode(Type type)
+        {
+            switch (type)
+            {
+<#
+            foreach (string typeName in baseTypes)
+            {
+#>
+                case Type t when t == typeof(<#= typeName.PadRight(maxLen) #>): return TypeCode.<#= typeName #>;
+<#
+            }
+#>
+                default<#= new string(' ', maxLen) #>                       : return TypeCode.Object;
+            }
+        }
+    }
+
+<#
+            foreach (string type in implementors)
+            {
+                if (isFollowup) WriteLine("");
+#>
+    partial class <#= type #><T> : IConvertible
+    {
+        TypeCode IConvertible.GetTypeCode() => ConvConst.GetTypeCode(typeof(T));
+
+<#
+            foreach (string typeName in baseTypes)
+            {
+#>
+        <#= typeName.PadRight(maxLen) #> IConvertible.To<#= typeName.PadRight(maxLen) #>(IFormatProvider provider) => <#
+            if (typeName.Equals(nameof(String)))
+            {
+#>ToString();
+<#
+            }
+            else
+            {
+#>(<#= typeName.PadRight(maxLen) #>)((IValue)this).Value;
+<#
+            }
+#>
+<#
+            }
+#>
+
+        object IConvertible.ToType(Type ctype, IFormatProvider provider) => ctype.IsAssignableFrom(typeof(T)) ? Value : throw new InvalidCastException();
+    }
+<#
+                isFollowup = true;
+            }
+#>
+}

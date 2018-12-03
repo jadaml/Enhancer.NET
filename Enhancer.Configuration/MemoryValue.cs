@@ -29,7 +29,7 @@ namespace Enhancer.Configuration
     /// First introduced.
     /// </revision>
     /// </revisionHistory>
-    public class MemoryValue<T> : ValueBase<T>
+    public partial class MemoryValue<T> : ValueBase<T>
     {
         private T _reference;
 

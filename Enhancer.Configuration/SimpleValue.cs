@@ -34,7 +34,7 @@ namespace Enhancer.Configuration
     /// </revision>
     /// </revisionHistory>
     [DebuggerDisplay("{Value}")]
-    public class SimpleValue<T> : IValue, IValue<T>, IValueChanged, INotifyPropertyChanged, IEquatable<T>, IFormattable
+    public partial class SimpleValue<T> : IValue, IValue<T>, IValueChanged, INotifyPropertyChanged, IEquatable<T>, IFormattable
     {
         private T _value;
 

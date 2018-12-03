@@ -59,7 +59,17 @@
     </Compile>
     <Compile Include="SettingsGroup.cs" />
     <Compile Include="SimpleValue.cs" />
+    <None Include="TypeConverter.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TypeConverter.tt</DependentUpon>
+    </None>
     <Compile Include="ValueBase.cs" />
+    <Compile Include="IConvertible.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IConvertible.tt</DependentUpon>
+    </Compile>
     <Compile Include="ValueBase.TransitiveValue.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +86,14 @@
     <Content Include="Properties\VersionResource.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>VersionResource.generated.rc</LastGenOutput>
+    </Content>
+    <Content Include="IConvertible.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IConvertible.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="TypeConverter.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeConverter.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
