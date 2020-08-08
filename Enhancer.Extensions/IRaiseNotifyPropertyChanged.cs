@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2019, Ádám L. Juhász
+﻿/* Copyright (c) 2019, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.
  *

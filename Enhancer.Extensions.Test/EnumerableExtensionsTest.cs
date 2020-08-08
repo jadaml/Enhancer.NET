@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2018, Ádám L. Juhász
+﻿/* Copyright (c) 2018, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.Test.
  *

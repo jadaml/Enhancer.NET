@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2018, Ádám L. Juhász
+﻿/* Copyright (c) 2018, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.
  *
@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Enhancer.NET")]
-[assembly: AssemblyCopyright("Copyright © 2018, Ádám L. Juhász")]
+[assembly: AssemblyCopyright("Copyright © 2018, 2020, Ádám L. Juhász")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

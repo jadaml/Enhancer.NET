@@ -1,5 +1,5 @@
 <#
-/* Copyright (c) 2018, Ádám L. Juhász
+/* Copyright (c) 2018, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.Test.
  *
@@ -76,7 +76,7 @@ FILESUBTYPE    VFT2_UNKNOWN
             VALUE "FileDescription",  "Test cases for Enhancer.Extensions"
             VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Extensions.Test"
-            VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
+            VALUE "LegalCopyright",   "Copyright © 2018, 2020, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Extensions.Test.dll"
 <#
             if (build == "0" || revision == "0")
@@ -104,7 +104,7 @@ FILESUBTYPE    VFT2_UNKNOWN
             VALUE "FileDescription",  "Teszt eseteket biztosít az Enhancer.Extensions osztályoknak."
             VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Extensions.Test"
-            VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
+            VALUE "LegalCopyright",   "Copyright © 2018, 2020, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Extensions.Test.dll"
 <#
             if (build == "0" || revision == "0")
