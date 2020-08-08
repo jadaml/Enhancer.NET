@@ -71,6 +71,7 @@
       <DependentUpon>IConvertible.tt</DependentUpon>
     </Compile>
     <Compile Include="ValueBase.TransitiveValue.cs" />
+    <None Include="ValueDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\FileVersion.tt" />

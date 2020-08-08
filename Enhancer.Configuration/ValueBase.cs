@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -36,9 +37,22 @@ namespace Enhancer.Configuration
     public abstract partial class ValueBase<T>
         : ITransactionedValue, ITransactionedValue<T>, IValueChanged, INotifyPropertyChanged, IEquatable<T>, IFormattable
     {
-        private T    _value;
-        private bool _isModified = false;
-        private bool _autoCommit;
+        private T                    _value;
+        private bool                 _isModified = false;
+        private bool                 _autoCommit;
+        private IEqualityComparer<T> _comparer;
+
+        /// <summary>
+        /// Gets or sets the <see cref="IEqualityComparer{T}"/> to compare the
+        /// current <see cref="Value"/> with the <see cref="Reference"/> value.
+        /// This comparer will also be used by the <see cref="Equals(T)"/> and
+        /// <see cref="GetHashCode"/> methods.
+        /// </summary>
+        public virtual IEqualityComparer<T> Comparer
+        {
+            get => _comparer ?? (_comparer = EqualityComparer<T>.Default);
+            set => _comparer = value;
+        }
 
         /// <summary>
         /// Gets or sets the value of this setting value object.
@@ -48,14 +62,14 @@ namespace Enhancer.Configuration
             get => IsModified ? _value : Reference;
             set
             {
-                if (IsModified && (_value?.Equals(value) ?? value == null)
-                 || !IsModified && (Reference?.Equals(value) ?? value == null))
+                if (IsModified && Comparer.Equals(_value, value)
+                 || !IsModified && Comparer.Equals(Reference, value))
                 {
                     return;
                 }
 
                 _value     = value;
-                IsModified = !Reference?.Equals(value) ?? value != null;
+                IsModified = !Comparer.Equals(Reference, value);
 
                 OnValueChanged(EventArgs.Empty);
                 OnPropertyChanged();
@@ -301,7 +315,7 @@ namespace Enhancer.Configuration
         /// <see langword="true"/> if the object equals with the provided
         /// object, otherwise <see langword="false"/>.
         /// </returns>
-        public bool Equals(T other) => _value?.Equals(other) ?? other == null;
+        public bool Equals(T other) => Comparer.Equals(_value, other);
 
         /// <summary>
         /// Generates a hash code for the object.
@@ -313,7 +327,7 @@ namespace Enhancer.Configuration
         /// changed.
         /// </note>
         /// </remarks>
-        public override int GetHashCode() => _value?.GetHashCode() ?? 0;
+        public override int GetHashCode() => _value == null ? 0 : Comparer.GetHashCode(_value);
 
         /// <summary>
         /// Casts a <see cref="ValueBase{T}"/> to a
