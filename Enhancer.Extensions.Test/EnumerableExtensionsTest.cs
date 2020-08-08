@@ -138,6 +138,14 @@ namespace Enhancer.Extensions.Test
         };
 
         private static readonly Random rnd = Substitute.For<Random>();
+        private static readonly Dictionary<string, int> _dictTest = new Dictionary<string, int>()
+        {
+            ["Apple"]    = 8,
+            ["Coconut"]  = 16,
+            ["Enhancer"] = 2,
+            ["Banana"]   = 9001,
+            ["Madness"]  = 9001,
+        };
 
         [TestCase(0, 3, 1)]
         [TestCase(0, 3, 4)]
@@ -657,6 +665,99 @@ namespace Enhancer.Extensions.Test
                 ci => throw new InvalidOperationException());
 
             CollectionAssert.AreEqual(new[] { 3, 4, 5 }, enumerable.Where((obj, i) => i < 5 && obj as int? > 2));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipArrayNull1()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip((Func<object[], object>)null));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipArrayNull2()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip(ar => null as object, null as object[]));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipArrayNull3()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip(ar => null as object, new[] { null as IEnumerable }));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipEnumNull1()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip((Func<object[], object>)null, Repeat<IEnumerable>(null, 0)));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipEnumNull2()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip(ar => null as object, null as IEnumerable<IEnumerable>));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipEnumNull3()
+        {
+            Throws(typeof(ArgumentNullException), () => EnumerableExtensions.Zip(ar => null as object, Repeat<IEnumerable>(null, 1)));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipArrayNothing()
+        {
+            CollectionAssert.AreEqual(new bool[0], EnumerableExtensions.Zip(o => true));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipArray()
+        {
+            CollectionAssert.AreEqual(
+                Repeat(18, 5),
+                EnumerableExtensions.Zip(objs => objs.Cast<int>().Sum(),
+                new[] {  1, 2, 3, 4,  5 },
+                new[] {  5, 4, 3, 2,  1, 5 },
+                new[] {  2, 4, 6, 8, 10, 5, 4 },
+                new[] { 10, 8, 6, 4,  2 }));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipEnumNothing()
+        {
+            CollectionAssert.AreEqual(new bool[0], EnumerableExtensions.Zip(o => true, new object[0].Cast<IEnumerable>()));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void ZipEnum()
+        {
+            CollectionAssert.AreEqual(
+                Repeat(18, 5),
+                EnumerableExtensions.Zip(objs => objs.Cast<int>().Sum(),
+                new[]
+                {
+                    new[] {  1, 2, 3, 4,  5 },
+                    new[] {  5, 4, 3, 2,  1, 5 },
+                    new[] {  2, 4, 6, 8, 10, 5, 4 },
+                    new[] { 10, 8, 6, 4,  2 },
+                }.AsEnumerable()));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void FindKeyForValueArEx()
+        {
+            Throws<ArgumentException>(() => EnumerableExtensions.FindKeyForValue(_dictTest, 9000));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void FindKeyForValueInvalid()
+        {
+            Throws<InvalidOperationException>(() => EnumerableExtensions.FindKeyForValue(_dictTest, 9001));
+        }
+
+        [Test(TestOf = typeof(EnumerableExtensions))]
+        public void FindKeyForValue()
+        {
+            AreEqual("Enhancer", EnumerableExtensions.FindKeyForValue(_dictTest, 2));
         }
     }
 }

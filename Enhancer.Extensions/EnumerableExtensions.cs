@@ -725,5 +725,116 @@ namespace Enhancer.Extensions
 
             return collection.Cast<object>().Where<object>(predicate);
         }
+
+        /// <summary>
+        /// Applies a function of the elements of any number of sequence, producing a new sequence from the results.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the results</typeparam>
+        /// <param name="resultSelector">The function applied to the sequences.</param>
+        /// <param name="collections">The collection of sequences to apply the function to.</param>
+        /// <returns>The sequence produced by the function.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="resultSelector"/> or <paramref name="collections"/> is <see langword="null"/>
+        /// or any of <paramref name="collections"/>' element is <see langword="null"/>.
+        /// </exception>
+        /// <revisionHistry>
+        /// <revision date="2019-03-31" version="0.2.0" author="Ádám L. Juhász &lt;jadaml@gmail.com&gt;">
+        /// Introduced.
+        /// </revision>
+        /// </revisionHistry>
+        public static IEnumerable<TResult> Zip<TResult>(Func<object[], TResult> resultSelector, params IEnumerable[] collections)
+        {
+            return Zip(resultSelector, collections.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Applies a function of the elements of any number of sequence, producing a new sequence from the results.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the results</typeparam>
+        /// <param name="resultSelector">The function applied to the sequences.</param>
+        /// <param name="collections">The collection of sequences to apply the function to.</param>
+        /// <returns>The sequence produced by the function.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If either <paramref name="resultSelector"/> or <paramref name="collections"/> is <see langword="null"/>
+        /// or any of <paramref name="collections"/>' element is <see langword="null"/>.
+        /// </exception>
+        /// <revisionHistry>
+        /// <revision date="2019-03-31" version="0.2.0" author="Ádám L. Juhász &lt;jadaml@gmail.com&gt;">
+        /// Introduced.
+        /// </revision>
+        /// </revisionHistry>
+        public static IEnumerable<TResult> Zip<TResult>(Func<object[], TResult> resultSelector, IEnumerable<IEnumerable> collections)
+        {
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            if (collections == null || collections.Any(c => c is null))
+            {
+                throw new ArgumentNullException(nameof(collections));
+            }
+
+            return InternalZip(resultSelector, collections);
+        }
+
+        private static IEnumerable<TResult> InternalZip<TResult>(Func<object[], TResult> resultSelector, IEnumerable<IEnumerable> collections)
+        {
+            IEnumerator[] enumerators = null;
+
+            if (!collections.Any())
+            {
+                yield break;
+            }
+
+            try
+            {
+                for (enumerators = collections.Select(c => c.GetEnumerator()).ToArray();
+                     enumerators.All(etor => etor.MoveNext());)
+                {
+                    yield return resultSelector(enumerators.Select(etor => etor.Current).ToArray());
+                }
+            }
+            finally
+            {
+                foreach (IDisposable etor in enumerators.OfType<IDisposable>())
+                {
+                    etor.Dispose();
+                }
+            }
+
+            yield break;
+        }
+
+        /// <summary>
+        /// Looks for the key which has the specified <paramref name="value" /> associated to it.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dictionary">The dictionary to search.</param>
+        /// <param name="value">The value ti search for.</param>
+        /// <returns>The key associated with <paramref name="value" />.</returns>
+        /// <exception cref="ArgumentException">
+        /// The <paramref name="value"/> cannot be found.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// There are more than one key associated with the given value.
+        /// </exception>
+        /// <revisionHistry>
+        /// <revision date="2019-03-31" version="0.2.0" author="Ádám L. Juhász &lt;jadaml@gmail.com&gt;">
+        /// Introduced.
+        /// </revision>
+        /// </revisionHistry>
+        public static TKey FindKeyForValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TValue value)
+        {
+            if (dictionary.Values.All(v => !Equals(v, value)))
+            {
+                throw new ArgumentException("The value cannot be found", nameof(value));
+            }
+
+            return (from pair in dictionary
+                    where Equals(pair.Value, value)
+                    select pair.Key).Single();
+        }
     }
 }
