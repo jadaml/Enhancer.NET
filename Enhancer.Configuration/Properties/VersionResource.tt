@@ -76,7 +76,7 @@ FILESUBTYPE    VFT2_UNKNOWN
             VALUE "FileDescription",  "Change tracking configuration utilities for .NET"
             VALUE "FileVersion",      "<#= fileVersion #>"
             VALUE "InternalName",     "Enhancer.Configuration"
-            VALUE "LegalCopyright",   "Copyright © 2018, Ádám L. Juhász"
+            VALUE "LegalCopyright",   "Copyright © 2018, 2020, Ádám L. Juhász"
             VALUE "OriginalFilename", "Enhancer.Configuration.dll"
 <#
             if (build == "0" || revision == "0")
