@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2018, Ádám L. Juhász
+﻿/* Copyright (c) 2018, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.Test.
  *
@@ -155,16 +155,33 @@ namespace Enhancer.Extensions.Test
 
         private static object[][] _defNumbPars =
         {
-            // TODO: Provide test cases for testing perseverance of the framework provided format strings.
-            new object[] { null, null }, // Placeholder.
+            new object[] { sbyte     .MinValue,        "N"                       },
+            new object[] { short     .MinValue,        "N"                       },
+            new object[] { int       .MinValue,        "N"                       },
+            new object[] { long      .MinValue,        "N"                       },
+            new object[] { byte      .MaxValue,        "N"                       },
+            new object[] { ushort    .MaxValue,        "N"                       },
+            new object[] { uint      .MaxValue,        "N"                       },
+            new object[] { ulong     .MaxValue,        "N"                       },
+            new object[] { TaskStatus.RanToCompletion, "G"                       },
+            new object[] { TaskStatus.RanToCompletion, "g"                       },
+            new object[] { TaskStatus.RanToCompletion, "X"                       },
+            new object[] { TaskStatus.RanToCompletion, "x"                       },
+            new object[] { TaskStatus.RanToCompletion, "D"                       },
+            new object[] { TaskStatus.RanToCompletion, "d"                       },
+            new object[] { TaskStatus.RanToCompletion, "F"                       },
+            new object[] { TaskStatus.RanToCompletion, "f"                       },
+            new object[] { DateTime  .Now,             "G"                       },
+            new object[] { DateTime  .Now,             "yyyy-MM-dd HH:mm:ss.fff" },
         };
 
         private static object[][] _numbBytePars =
         {
-            new object[] { "1.00\x00A0B",        1ul,            "B"      },
-            new object[] { "1.00\x00A0B",        1ul,            "b"      },
-            new object[] { "1.00\x00A0KiB",      1024ul,         "B"      },
-            new object[] { "1.02\x00A0kB",       1024ul,         "b"      },
+            new object[] { "0.00\x00A0B",        -1,             "B"      },
+            new object[] { "1.00\x00A0B",        1,              "B"      },
+            new object[] { "1.00\x00A0B",        1,              "b"      },
+            new object[] { "1.00\x00A0KiB",      1024,           "B"      },
+            new object[] { "1.02\x00A0kB",       1024,           "b"      },
             new object[] { "16.00\x00A0EiB",     ulong.MaxValue, "B"      },
             new object[] { "18.45\x00A0EB",      ulong.MaxValue, "b"      },
             new object[] { "16,384.00\x00A0PiB", ulong.MaxValue, "B20000" },
@@ -240,17 +257,12 @@ namespace Enhancer.Extensions.Test
         [TestOf(typeof(FancyFormatProvider))]
         public void DefaultNumberFormat(IFormattable value, string format)
         {
-            if (value is null)
-            {
-                Inconclusive();
-            }
-
             AreEqual(value.ToString(format, null), FancyFormatProvider.Provider.Format(format, value));
         }
 
         [TestCaseSource(nameof(_numbBytePars), Category = _numbCat)]
         [TestOf(typeof(FancyFormatProvider))]
-        public void NumberFormat(string expect, ulong value, string format)
+        public void NumberFormat(string expect, object value, string format)
         {
             AreEqual(expect, FancyFormatProvider.Provider.Format(format, value, CultureInfo.GetCultureInfo("en-US")));
         }

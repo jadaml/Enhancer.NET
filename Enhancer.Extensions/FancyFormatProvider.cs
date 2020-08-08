@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2018, Ádám L. Juhász
+﻿/* Copyright (c) 2018, 2020, Ádám L. Juhász
  *
  * This file is part of Enhancer.Extensions.
  *
@@ -164,19 +164,19 @@ namespace Enhancer.Extensions
             switch (arg)
             {
                 case sbyte si08:
-                    return FormatInt(format, (ulong)si08.Clamp(0, sbyte.MaxValue), provider);
+                    return FormatInt(format, si08, provider);
                 case byte ui08:
                     return FormatInt(format, ui08, provider);
                 case short si16:
-                    return FormatInt(format, (ulong)si16.Clamp(0, short.MaxValue), provider);
+                    return FormatInt(format, si16, provider);
                 case ushort ui16:
                     return FormatInt(format, ui16, provider);
                 case int si32:
-                    return FormatInt(format, (ulong)si32.Clamp(0, int.MaxValue), provider);
+                    return FormatInt(format, si32, provider);
                 case uint ui32:
                     return FormatInt(format, ui32, provider);
                 case long si64:
-                    return FormatInt(format, (ulong)si64.Clamp(0, long.MaxValue), provider);
+                    return FormatInt(format, si64, provider);
                 case ulong ui64:
                     return FormatInt(format, ui64, provider);
                 case Enum @enum:
@@ -185,6 +185,29 @@ namespace Enhancer.Extensions
                     return FormatBool(format, l, provider);
                 default:
                     return (arg as IFormattable)?.ToString(format, provider) ?? arg?.ToString() ?? string.Empty;
+            }
+        }
+
+        private static string FormatInt(string format, long value, IFormatProvider provider)
+        {
+            // Note: So far, the following implementation does not inherently throws exceptions.
+            if (format?.ToUpper().StartsWith("B") ?? false)
+            {
+                if (!uint.TryParse(format.Substring(1), out uint rounding))
+                {
+                    rounding = 1000;
+                }
+
+                return FormatBytes(provider, (ulong)value.Clamp(0, long.MaxValue), format[0] == 'B', rounding);
+            }
+
+            try
+            {
+                return value.ToString(format, provider);
+            }
+            catch (FormatException fex)
+            {
+                throw new FormatException(fex.Message, fex);
             }
         }
 
