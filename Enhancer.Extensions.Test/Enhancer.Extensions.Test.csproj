@@ -72,6 +72,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="PropertyNotifierTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />
     <Compile Include="TypeExtensionsTest.cs" />
   </ItemGroup>
