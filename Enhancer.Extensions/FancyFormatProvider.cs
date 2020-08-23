@@ -19,15 +19,17 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Enhancer.Extensions
 {
     /// <summary>
     /// This class provides additional formatting options for various base types.
     /// </summary>
+    /// <remarks>
+    /// The <see cref="FancyFormatProvider"/> provides additional formatting options
+    /// to the base types preserving the formatting options they define.
+    /// </remarks>
     public class FancyFormatProvider : IFormatProvider, ICustomFormatter
     {
         private static readonly IReadOnlyDictionary<Tuple<Type, string>, int> _typeBaseDigitsMapping = new Dictionary<Tuple<Type, string>, int>()
@@ -163,28 +165,17 @@ namespace Enhancer.Extensions
         {
             switch (arg)
             {
-                case sbyte si08:
-                    return FormatInt(format, si08, provider);
-                case byte ui08:
-                    return FormatInt(format, ui08, provider);
-                case short si16:
-                    return FormatInt(format, si16, provider);
-                case ushort ui16:
-                    return FormatInt(format, ui16, provider);
-                case int si32:
-                    return FormatInt(format, si32, provider);
-                case uint ui32:
-                    return FormatInt(format, ui32, provider);
-                case long si64:
-                    return FormatInt(format, si64, provider);
-                case ulong ui64:
-                    return FormatInt(format, ui64, provider);
-                case Enum @enum:
-                    return FormatEnum(format, @enum, provider);
-                case bool l:
-                    return FormatBool(format, l, provider);
-                default:
-                    return (arg as IFormattable)?.ToString(format, provider) ?? arg?.ToString() ?? string.Empty;
+                case sbyte  si08:  return FormatInt(format, si08, provider);
+                case byte   ui08:  return FormatInt(format, ui08, provider);
+                case short  si16:  return FormatInt(format, si16, provider);
+                case ushort ui16:  return FormatInt(format, ui16, provider);
+                case int    si32:  return FormatInt(format, si32, provider);
+                case uint   ui32:  return FormatInt(format, ui32, provider);
+                case long   si64:  return FormatInt(format, si64, provider);
+                case ulong  ui64:  return FormatInt(format, ui64, provider);
+                case Enum   @enum: return FormatEnum(format, @enum, provider);
+                case bool   l:     return FormatBool(format, l, provider);
+                default:           return (arg as IFormattable)?.ToString(format, provider) ?? arg?.ToString() ?? string.Empty;
             }
         }
 
@@ -201,14 +192,7 @@ namespace Enhancer.Extensions
                 return FormatBytes(provider, (ulong)value.Clamp(0, long.MaxValue), format[0] == 'B', rounding);
             }
 
-            try
-            {
-                return value.ToString(format, provider);
-            }
-            catch (FormatException fex)
-            {
-                throw new FormatException(fex.Message, fex);
-            }
+            return value.ToString(format, provider);
         }
 
         /// <summary>
@@ -295,14 +279,7 @@ namespace Enhancer.Extensions
                 return FormatBytes(provider, value, format[0] == 'B', rounding);
             }
 
-            try
-            {
-                return value.ToString(format, provider);
-            }
-            catch (FormatException fex)
-            {
-                throw new FormatException(fex.Message, fex);
-            }
+            return value.ToString(format, provider);
         }
 
         /// <summary>
@@ -375,49 +352,32 @@ namespace Enhancer.Extensions
 
             if (format is null || format.Length <= 1)
             {
-                try
-                {
-                    return arg.ToString(format);
-                }
-                catch (FormatException fex)
-                {
-                    throw new FormatException(fex.Message, fex);
-                }
+                return arg.ToString(format);
             }
 
             string formatCode = format.Substring(0, 1);
-            int    digits;
+            int    digits     = int.Parse(format.Substring(1));
+            Type   baseType   = Enum.GetUnderlyingType(arg.GetType());
 
-            try
+            if (digits == 0)
             {
-                digits = int.Parse(format.Substring(1));
-            }
-            catch (FormatException fex)
-            {
-                throw new FormatException("Invalid format string.", fex);
+                format = formatCode + _typeBaseDigitsMapping[Tuple.Create(baseType, formatCode.ToUpper())];
             }
 
-            Type baseType = Enum.GetUnderlyingType(arg.GetType());
-
-            if (digits == 0
-             && !_typeBaseDigitsMapping.TryGetValue(Tuple.Create(baseType, formatCode.ToUpper()), out digits))
-            { // Failsafe: We didn't cover all base types an enumeration can have.
-                digits = formatCode.ToUpper() == "X" ? 8 : 10;
-            }
-
-            return ((IFormattable)Convert.ChangeType(arg, baseType)).ToString(formatCode + digits, provider);
+            return ((IFormattable)Convert.ChangeType(arg, baseType)).ToString(format, provider);
         }
 
         private static string FormatBool(string format, bool value, IFormatProvider provider)
         {
             if (format?.StartsWith("[") ?? false)
             {
-                int candidate = -1;
-                int splitIndex = -1;
+                int    splitIndex = -1;
                 string trueString;
                 string falseString;
 
-                for (int i = 1; i < format.Length; ++i)
+                for (int i = 1, candidate = -1;
+                     splitIndex == -1 && i < format.Length;
+                     ++i)
                 {
                     switch (format[i])
                     {
@@ -427,11 +387,6 @@ namespace Enhancer.Extensions
                         default:
                             splitIndex = candidate == -1 ? -1 : i;
                             break;
-                    }
-
-                    if (splitIndex != -1)
-                    {
-                        break;
                     }
                 }
 
@@ -455,9 +410,9 @@ namespace Enhancer.Extensions
                         return subfmt;
                     }
 
-                    StringBuilder result = new StringBuilder(subfmt.Length, subfmt.Length);
-                    bool openBracket = false;
-                    bool closeBracket = false;
+                    StringBuilder result       = new StringBuilder(subfmt.Length, subfmt.Length);
+                    bool          openBracket  = false;
+                    bool          closeBracket = false;
 
                     foreach (char ch in subfmt.Substring(1))
                     {
@@ -488,39 +443,28 @@ namespace Enhancer.Extensions
 
             switch (format)
             {
-                case "ud":
-                case "UD":
-                    return value ? "↑" : "↓";
-                case "10":
-                    return value ? "1" : "0";
-                case "of":
-                    return (value ? On(provider as CultureInfo) : Off(provider as CultureInfo)).ToLower();
-                case "OF":
-                    return value ? On(provider as CultureInfo) : Off(provider as CultureInfo);
-                case "yn":
-                    return (value ? Yes(provider as CultureInfo) : No(provider as CultureInfo)).ToLower();
-                case "YN":
-                    return value ? Yes(provider as CultureInfo) : No(provider as CultureInfo);
-                case "tf":
-                    return (value ? True(provider as CultureInfo) : False(provider as CultureInfo)).ToLower();
-                case "TF":
-                    return value ? True(provider as CultureInfo) : False(provider as CultureInfo);
-                case "g":
-                    return value.ToString().ToLower();
-                case "G":
-                case null:
-                    return value.ToString();
-                default:
-                    throw new FormatException("Invalid format string. Only supported g, G, tf, TF, 10, yn, YN and ?<yes>:<no>");
+                case "ud": // ↓
+                case "UD": return  value ? "↑"                           : "↓";
+                case "10": return  value ? "1"                           : "0";
+                case "of": return (value ? On(provider as CultureInfo)   : Off(provider as CultureInfo)).ToLower();
+                case "OF": return  value ? On(provider as CultureInfo)   : Off(provider as CultureInfo);
+                case "yn": return (value ? Yes(provider as CultureInfo)  : No(provider as CultureInfo)).ToLower();
+                case "YN": return  value ? Yes(provider as CultureInfo)  : No(provider as CultureInfo);
+                case "tf": return (value ? True(provider as CultureInfo) : False(provider as CultureInfo)).ToLower();
+                case "TF": return  value ? True(provider as CultureInfo) : False(provider as CultureInfo);
+                case "g":  return value.ToString().ToLower();
+                case "G":  // ↓
+                case null: return value.ToString();
+                default:   throw new FormatException("Invalid format string. Only supported g, G, tf, TF, 10, yn, YN and ?<yes>:<no>");
             }
         }
 
         private static string FormatBytes(IFormatProvider provider, ulong value, bool twoPower, uint rounding)
         {
-            int divisor;
-            int power;
+            int      divisor;
+            int      power;
             string[] workingUnits;
-            double result;
+            double   result;
 
             workingUnits = twoPower ? _iecUnits : _decDataUnits;
 
