@@ -16,6 +16,7 @@
  * along with Enhancer.Extensions.Test.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -68,9 +69,9 @@ namespace Enhancer.Extensions.Test
         private enum SInt64 : long   { }
 
         private const string _genericCat = "Format Provider Boilerplate";
-        private const string _boolCat = "Boolean Format";
-        private const string _enumCat = "Enumeration Format";
-        private const string _numbCat = "Number Format";
+        private const string _boolCat    = "Boolean Format";
+        private const string _enumCat    = "Enumeration Format";
+        private const string _numbCat    = "Number Format";
 
         private static object[][] _boolParams =
         {
@@ -155,24 +156,24 @@ namespace Enhancer.Extensions.Test
 
         private static object[][] _defNumbPars =
         {
-            new object[] { sbyte     .MinValue,        "N"                       },
-            new object[] { short     .MinValue,        "N"                       },
-            new object[] { int       .MinValue,        "N"                       },
-            new object[] { long      .MinValue,        "N"                       },
-            new object[] { byte      .MaxValue,        "N"                       },
-            new object[] { ushort    .MaxValue,        "N"                       },
-            new object[] { uint      .MaxValue,        "N"                       },
-            new object[] { ulong     .MaxValue,        "N"                       },
-            new object[] { TaskStatus.RanToCompletion, "G"                       },
-            new object[] { TaskStatus.RanToCompletion, "g"                       },
-            new object[] { TaskStatus.RanToCompletion, "X"                       },
-            new object[] { TaskStatus.RanToCompletion, "x"                       },
-            new object[] { TaskStatus.RanToCompletion, "D"                       },
-            new object[] { TaskStatus.RanToCompletion, "d"                       },
-            new object[] { TaskStatus.RanToCompletion, "F"                       },
-            new object[] { TaskStatus.RanToCompletion, "f"                       },
-            new object[] { DateTime  .Now,             "G"                       },
-            new object[] { DateTime  .Now,             "yyyy-MM-dd HH:mm:ss.fff" },
+            new object[] { sbyte     .MinValue,        "N"  },
+            new object[] { short     .MinValue,        "N"  },
+            new object[] { int       .MinValue,        "N"  },
+            new object[] { long      .MinValue,        "N"  },
+            new object[] { byte      .MaxValue,        "N"  },
+            new object[] { ushort    .MaxValue,        "N"  },
+            new object[] { uint      .MaxValue,        "N"  },
+            new object[] { ulong     .MaxValue,        "N"  },
+            new object[] { long      .MaxValue,        null },
+            new object[] { ulong     .MaxValue,        null },
+            new object[] { TaskStatus.RanToCompletion, "G"  },
+            new object[] { TaskStatus.RanToCompletion, "g"  },
+            new object[] { TaskStatus.RanToCompletion, "X"  },
+            new object[] { TaskStatus.RanToCompletion, "x"  },
+            new object[] { TaskStatus.RanToCompletion, "D"  },
+            new object[] { TaskStatus.RanToCompletion, "d"  },
+            new object[] { TaskStatus.RanToCompletion, "F"  },
+            new object[] { TaskStatus.RanToCompletion, "f"  },
         };
 
         private static object[][] _numbBytePars =
@@ -182,6 +183,8 @@ namespace Enhancer.Extensions.Test
             new object[] { "1.00\x00A0B",        1,              "b"      },
             new object[] { "1.00\x00A0KiB",      1024,           "B"      },
             new object[] { "1.02\x00A0kB",       1024,           "b"      },
+            new object[] { "1,024.00\x00A0B",    1024,           "b20000" },
+            new object[] { "1,024.00\x00A0B",    1024,           "b20000" },
             new object[] { "16.00\x00A0EiB",     ulong.MaxValue, "B"      },
             new object[] { "18.45\x00A0EB",      ulong.MaxValue, "b"      },
             new object[] { "16,384.00\x00A0PiB", ulong.MaxValue, "B20000" },
@@ -265,6 +268,19 @@ namespace Enhancer.Extensions.Test
         public void NumberFormat(string expect, object value, string format)
         {
             AreEqual(expect, FancyFormatProvider.Provider.Format(format, value, CultureInfo.GetCultureInfo("en-US")));
+        }
+
+        [Test(TestOf = typeof(FancyFormatProvider))]
+        [Category(_genericCat)]
+        public void DefaultFormat()
+        {
+            IFormattable formattable = Substitute.For<IFormattable>();
+            object obj = Substitute.For<object>();
+            FancyFormatProvider.Provider.Format(null, formattable);
+            FancyFormatProvider.Provider.Format(null, obj);
+            formattable.DidNotReceive().ToString();
+            formattable.ReceivedWithAnyArgs(1).ToString(default, default);
+            obj.Received(1).ToString();
         }
     }
 }
