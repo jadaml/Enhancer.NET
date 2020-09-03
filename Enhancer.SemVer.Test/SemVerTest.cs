@@ -168,6 +168,29 @@ namespace Enhancer.Test.SemanticVersion
             new object[] { true, new SemVer(1,2,0,"alpha"), new SemVer(1,2,0, new object[] { "alpha" }, new object[] { "ignored" }), new OperatorExecution<SemVer>((a, b) => a == b) },
         };
 
+        private static object[][] _compareToTestCases =
+        {
+            new object[] { new SemVer(0,0,0), new SemVer(1,0,0), -1 },
+            new object[] { new SemVer(2,0,0), new SemVer(1,0,0), +1 },
+            new object[] { new SemVer(1,0,0), new SemVer(1,1,0), -1 },
+            new object[] { new SemVer(1,2,0), new SemVer(1,1,0), +1 },
+            new object[] { new SemVer(1,1,0), new SemVer(1,1,1), -1 },
+            new object[] { new SemVer(1,1,2), new SemVer(1,1,1), +1 },
+
+            new object[] { new SemVer(1,1,1,"alpha"), new SemVer(1,1,1),         -1 },
+            new object[] { new SemVer(1,1,1),         new SemVer(1,1,1,"alpha"), +1 },
+            new object[] { new SemVer(1,1,1,"a"),     new SemVer(1,1,1,"z"),     -1 },
+            new object[] { new SemVer(1,1,1,"z"),     new SemVer(1,1,1,"a"),     +1 },
+            new object[] { new SemVer(1,1,1,1),       new SemVer(1,1,1,"a"),     -1 },
+            new object[] { new SemVer(1,1,1,"a"),     new SemVer(1,1,1,1),       +1 },
+            new object[] { new SemVer(1,1,1,0),       new SemVer(1,1,1,1),       -1 },
+            new object[] { new SemVer(1,1,1,2),       new SemVer(1,1,1,1),       +1 },
+            new object[] { new SemVer(1,1,1,1),       new SemVer(1,1,1,1,1),     -1 },
+            new object[] { new SemVer(1,1,1,1,1),     new SemVer(1,1,1,1),       +1 },
+
+            new object[] { new SemVer(1,1,1,"alpha",1), new SemVer(1,1,1,"alpha",1), 0 },
+        };
+
         private static object[][] _methodComparison = new object[][]
         {
             new object[] { 00, new SemVer(1,2,0), new SemVer(1,2,0) },
@@ -338,6 +361,13 @@ namespace Enhancer.Test.SemanticVersion
         public void TryParsingFaulty(string input)
         {
             IsFalse(SemVer.TryParse(input, out _));
+        }
+
+        [TestCaseSource(nameof(_compareToTestCases), Category = _comparison)]
+        [TestOf(typeof(SemVer))]
+        public void CompareToTest(SemVer a, SemVer b, int expect)
+        {
+            AreEqual(expect, a.CompareTo(b));
         }
 
         [TestCaseSource(nameof(_comparisons), Category = _comparison)]

@@ -821,19 +821,19 @@ namespace Enhancer.Assemblies
                 bool aisnum = ida.All(char.IsDigit) && (ida.Length <= 1 || !ida.StartsWith("0"));
                 bool bisnum = idb.All(char.IsDigit) && (idb.Length <= 1 || !idb.StartsWith("0"));
 
-                if ((cmpRes = Convert.ToInt32(bisnum) - Convert.ToInt32(aisnum)) != 0)
+                if ((cmpRes = Convert.ToInt32(bisnum).CompareTo(Convert.ToInt32(aisnum))) != 0)
                 {
                     return cmpRes;
                 }
 
-                if (aisnum && (cmpRes = int.Parse(ida) - int.Parse(idb)) != 0
+                if (aisnum && (cmpRes = int.Parse(ida).CompareTo(int.Parse(idb))) != 0
                  || (cmpRes = StringComparer.InvariantCulture.Compare(ida, idb)) != 0)
                 {
                     return cmpRes;
                 }
             }
 
-            if ((cmpRes = PreRelease.Count - other.PreRelease.Count) != 0)
+            if ((cmpRes = PreRelease.Count.CompareTo(other.PreRelease.Count)) != 0)
             {
                 return cmpRes;
             }
