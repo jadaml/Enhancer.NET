@@ -281,17 +281,11 @@ namespace Enhancer.Test.SemanticVersion
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_creation)]
-        public void ConstructorNullExceptionString()
-        {
-            Throws<ArgumentNullException>(() => new SemVer(null));
-        }
+        public void ConstructorNullExceptionString() => Throws<ArgumentNullException>(() => new SemVer(null));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_creation)]
-        public void ConstructorExceptionEmptyString()
-        {
-            Throws<ArgumentException>(() => new SemVer(""));
-        }
+        public void ConstructorExceptionEmptyString() => Throws<ArgumentException>(() => new SemVer(""));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_creation)]
@@ -323,52 +317,31 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void FromString(string ver, SemVer expected)
-        {
-            AreEqual(expected, SemVer.Parse(ver));
-        }
+        public void FromString(string ver, SemVer expected) => AreEqual(expected, SemVer.Parse(ver));
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void TryParse(string ver, SemVer ignored)
-        {
-            IsTrue(SemVer.TryParse(ver, out _));
-        }
+        public void TryParse(string ver, SemVer ignored) => IsTrue(SemVer.TryParse(ver, out _));
 
         [TestCaseSource(nameof(_versionParsing), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void AsString(string expected, SemVer ver)
-        {
-            AreEqual(expected, ver.ToString());
-        }
+        public void AsString(string expected, SemVer ver) => AreEqual(expected, ver.ToString());
 
         [TestCaseSource(nameof(_versionFormat), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void FormatString(string expected, string format)
-        {
-            AreEqual(expected, _equatalon.ToString(format));
-        }
+        public void FormatString(string expected, string format) => AreEqual(expected, _equatalon.ToString(format));
 
         [TestCaseSource(nameof(_faultyVersions), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void ParsingError(string input)
-        {
-            Throws<FormatException>(() => SemVer.Parse(input));
-        }
+        public void ParsingError(string input) => Throws<FormatException>(() => SemVer.Parse(input));
 
         [TestCaseSource(nameof(_faultyVersions), Category = _parsing)]
         [TestOf(typeof(SemVer))]
-        public void TryParsingFaulty(string input)
-        {
-            IsFalse(SemVer.TryParse(input, out _));
-        }
+        public void TryParsingFaulty(string input) => IsFalse(SemVer.TryParse(input, out _));
 
         [TestCaseSource(nameof(_compareToTestCases), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void CompareToTest(SemVer a, SemVer b, int expect)
-        {
-            AreEqual(expect, a.CompareTo(b));
-        }
+        public void CompareToTest(SemVer a, SemVer b, int expect) => AreEqual(expect, a.CompareTo(b));
 
         [TestCaseSource(nameof(_comparisons), Category = _comparison)]
         [TestOf(typeof(SemVer))]
@@ -386,66 +359,39 @@ namespace Enhancer.Test.SemanticVersion
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void LTNANull()
-        {
-            Throws<ArgumentNullException>(() => _ = (null as SemVer) < SemVer.Empty);
-        }
+        public void LTNANull() => Throws<ArgumentNullException>(() => _ = (null as SemVer) < SemVer.Empty);
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void LTNBNull()
-        {
-            Throws<ArgumentNullException>(() => _ = SemVer.Empty < (null as SemVer));
-        }
+        public void LTNBNull() => Throws<ArgumentNullException>(() => _ = SemVer.Empty < (null as SemVer));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void GTRANull()
-        {
-            Throws<ArgumentNullException>(() => _ = (null as SemVer) > SemVer.Empty);
-        }
+        public void GTRANull() => Throws<ArgumentNullException>(() => _ = (null as SemVer) > SemVer.Empty);
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void BTRBNull()
-        {
-            Throws<ArgumentNullException>(() => _ = SemVer.Empty > (null as SemVer));
-        }
+        public void BTRBNull() => Throws<ArgumentNullException>(() => _ = SemVer.Empty > (null as SemVer));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void LEQANull()
-        {
-            Throws<ArgumentNullException>(() => _ = (null as SemVer) <= SemVer.Empty);
-        }
+        public void LEQANull() => Throws<ArgumentNullException>(() => _ = (null as SemVer) <= SemVer.Empty);
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void LEQBNull()
-        {
-            Throws<ArgumentNullException>(() => _ = SemVer.Empty <= (null as SemVer));
-        }
+        public void LEQBNull() => Throws<ArgumentNullException>(() => _ = SemVer.Empty <= (null as SemVer));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void GEQANull()
-        {
-            Throws<ArgumentNullException>(() => _ = (null as SemVer) >= SemVer.Empty);
-        }
+        public void GEQANull() => Throws<ArgumentNullException>(() => _ = (null as SemVer) >= SemVer.Empty);
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_comparison)]
-        public void BEQBNull()
-        {
-            Throws<ArgumentNullException>(() => _ = SemVer.Empty >= (null as SemVer));
-        }
+        public void BEQBNull() => Throws<ArgumentNullException>(() => _ = SemVer.Empty >= (null as SemVer));
 
         [Test(TestOf = typeof(SemVer))]
         [Category(_formatting)]
-        public void ToStringFormatException()
-        {
-            Throws<FormatException>(() => SemVer.Empty.ToString("8", null));
-        }
+        public void ToStringFormatException() => Throws<FormatException>(() => SemVer.Empty.ToString("8", null));
 
         [Test(TestOf = typeof(SemVer))]
         public void InitialVersion()
@@ -496,10 +442,7 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(typeof(SemVerTest), nameof(_methodComparison), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void TypedCompareToTest(int expected, SemVer a, SemVer b)
-        {
-            AreEqual(expected, a.CompareTo(b));
-        }
+        public void TypedCompareToTest(int expected, SemVer a, SemVer b) => AreEqual(expected, a.CompareTo(b));
 
         [TestCaseSource(typeof(SemVerTest), nameof(_methodComparison), Category = _comparison)]
         [TestOf(typeof(SemVer))]
@@ -516,35 +459,20 @@ namespace Enhancer.Test.SemanticVersion
 
         [TestCaseSource(typeof(SemVerTest), nameof(_equalist), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void TypedInequals(SemVer version)
-        {
-            IsFalse(_equatalon.Equals(version));
-        }
+        public void TypedInequals(SemVer version) => IsFalse(_equatalon.Equals(version));
 
         [Test(TestOf = typeof(SemVer))]
-        public void TypedEquals()
-        {
-            IsTrue(_equatalon.Equals(_equaequal));
-        }
+        public void TypedEquals() => IsTrue(_equatalon.Equals(_equaequal));
 
         [TestCaseSource(typeof(SemVerTest), nameof(_equalist), Category = _comparison)]
         [TestOf(typeof(SemVer))]
-        public void ObjectInequals(SemVer version)
-        {
-            IsFalse(((object)_equatalon).Equals(version));
-        }
+        public void ObjectInequals(SemVer version) => IsFalse(((object)_equatalon).Equals(version));
 
         [Test(TestOf = typeof(SemVer))]
-        public void ObjectEquals()
-        {
-            IsTrue(((object)_equatalon).Equals(_equaequal));
-        }
+        public void ObjectEquals() => IsTrue(((object)_equatalon).Equals(_equaequal));
 
         [Test(TestOf = typeof(SemVer))]
-        public void ObjectEqualsFail()
-        {
-            IsFalse(SemVer.Empty.Equals(new object()));
-        }
+        public void ObjectEqualsFail() => IsFalse(SemVer.Empty.Equals(new object()));
 
         [TestCase("0.0.0")]
         [TestCase("1.0.0")]
